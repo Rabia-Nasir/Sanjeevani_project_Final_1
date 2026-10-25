@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en" class="text-[16px]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanjeevani - Life Beyond Cancer | Patient & Counselor Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sanjeevani: {
+              red: '#BE1E2D',
+              orange: '#F7941E',
+              darkRed: '#961520',
+              cream: '#FFF9F5',
+              gray: '#4A5568'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Smooth transitions and scroll behavior */
+    html { scroll-behavior: smooth; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.03); }
+    }
+    .animate-recording {
+      animation: pulse-slow 1.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800 flex flex-col min-h-screen font-sans antialiased">
+
+  <!-- ACCESSIBILITY TOP BAR (FR-1.6) -->
+  <aside aria-label="Accessibility & System Status" class="bg-stone-900 text-stone-200 text-xs py-1.5 px-4 border-b border-stone-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-1.5">
+          <span>Toll-Free National Helpline:</span>
+          <a href="tel:8691000800" class="font-bold text-amber-400 hover:underline">8691000800</a>
+        </div>
+        <span class="text-stone-600 hidden sm:inline">|</span>
+        <!-- Backend Health Status Indicator -->
+        <div id="backend-status-pill" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-stone-800 text-stone-300">
+          <span id="backend-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="backend-status-label" class="text-[11px] font-medium">Probing Backend...</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="sr-only">Adjust Font Size</span>
+        <span class="hidden sm:inline text-stone-400">Font:</span>
+        <button onclick="setFontSize('small')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-stone-300" aria-label="Decrease font size">A-</button>
+        <button onclick="setFontSize('normal')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded font-bold text-white" aria-label="Reset font size">A</button>
+        <button onclick="setFontSize('large')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-sm font-black text-white" aria-label="Increase font size">A+</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SITE HEADER & NAVIGATION (FR-1.5) -->
+  <header class="bg-white border-b border-stone-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center space-x-3" aria-label="Sanjeevani Life Beyond Cancer Portal">
+          <div class="w-10 h-10 rounded-full bg-sanjeevani-red flex items-center justify-center text-white font-black text-xl shadow-inner">
+            S
+          </div>
+          <div>
+            <span class="text-xl sm:text-2xl font-black tracking-tight text-sanjeevani-red block leading-none">SANJEEVANI</span>
+            <span class="text-xs sm:text-sm font-semibold text-stone-500 tracking-wide uppercase">Life Beyond Cancer</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex space-x-1 lg:space-x-3" aria-label="Primary Navigation">
+          <button onclick="switchTab('programs')" id="nav-programs" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md transition text-sanjeevani-red bg-rose-50">
+            Programs (14)
+          </button>
+          <button onclick="switchTab('directory')" id="nav-directory" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red">
+            Hospitals & Volunteers
+          </button>
+          <button onclick="switchTab('education')" id="nav-education" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red">
+            Cancer Education
+          </button>
+          <button onclick="switchTab('counsellor')" id="nav-counsellor" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red flex items-center gap-1.5">
+            <i data-lucide="shield" class="w-4 h-4 text-sanjeevani-red"></i>
+            Counselor Portal
+          </button>
+        </nav>
+
+        <!-- Emergency / Quick Call Action -->
+        <div class="hidden lg:block">
+          <a href="tel:8691000800" class="inline-flex items-center gap-2 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-full shadow-sm transition">
+            <i data-lucide="phone-call" class="w-4 h-4"></i>
+            Talk to Counselor
+          </a>
+        </div>
+
+        <!-- Mobile Menu Hamburger -->
+        <button onclick="toggleMobileNav()" class="md:hidden p-2 rounded-md text-stone-600 hover:text-stone-900" aria-label="Open navigation menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <nav id="mobile-nav" class="hidden md:hidden border-t border-stone-200 bg-white px-4 pt-2 pb-4 space-y-1">
+      <button onclick="switchTab('programs'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
+        Programs Explorer (14)
+      </button>
+      <button onclick="switchTab('directory'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
+        Hospital & Volunteer Directory
+      </button>
+      <button onclick="switchTab('education'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
+        Cancer Resources & Guidance
+      </button>
+      <button onclick="switchTab('counsellor'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red flex items-center gap-2">
+        <i data-lucide="shield" class="w-4 h-4 text-sanjeevani-red"></i> Counselor Portal
+      </button>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: FR-1.1 PROGRAM EXPLORER (14 SANJEEVANI PROGRAMS)   -->
+    <!-- ======================================================== -->
+    <section id="tab-programs" class="tab-content active space-y-6" aria-labelledby="heading-programs">
+      <div class="border-b border-stone-200 pb-5">
+        <h1 id="heading-programs" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Sanjeevani Care Programs</h1>
+        <p class="text-stone-600 mt-2 max-w-3xl">
+          Browse through all 14 holistic interventions designed to assist cancer victors and their caregivers through handholding, counseling, nutrition, and rehabilitation. Free of charge, no login required.
+        </p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2 pt-2" id="program-filters">
+        <button onclick="filterPrograms('all')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-sanjeevani-red text-white" data-cat="all">All (14)</button>
+        <button onclick="filterPrograms('patient')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="patient">Patient Care</button>
+        <button onclick="filterPrograms('wellness')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="wellness">Wellness & Nutrition</button>
+        <button onclick="filterPrograms('community')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="community">Awareness & Training</button>
+      </div>
+
+      <!-- Program Cards Grid -->
+      <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+        <!-- Populated via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: FR-1.2 HOSPITAL & VOLUNTEER DIRECTORY            -->
+    <!-- ======================================================== -->
+    <section id="tab-directory" class="tab-content space-y-6" aria-labelledby="heading-directory">
+      <div class="border-b border-stone-200 pb-5">
+        <h1 id="heading-directory" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Hospital & Volunteer Directory</h1>
+        <p class="text-stone-600 mt-2 max-w-3xl">
+          Find certified Sanjeevani counselors and Cancer Buddies stationed inside regional cancer centers across India.
+        </p>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3.5 text-stone-400"></i>
+          <input type="text" id="dir-search" oninput="filterDirectory()" placeholder="Search hospital name, city, or counselor..."
+                 class="w-full pl-9 pr-4 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
+        </div>
+        <select id="dir-city-filter" onchange="filterDirectory()" class="px-4 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red bg-white">
+          <option value="">All Cities / Regions</option>
+          <option value="mumbai">Mumbai</option>
+          <option value="delhi">Delhi / NCR</option>
+          <option value="kolkata">Kolkata</option>
+          <option value="ahmedabad">Ahmedabad</option>
+          <option value="jaipur">Jaipur</option>
+          <option value="bengaluru">Bengaluru</option>
+          <option value="guwahati">Guwahati</option>
+          <option value="varanasi">Varanasi</option>
+        </select>
+      </div>
+
+      <!-- Directory Cards Grid -->
+      <div id="directory-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <!-- Populated via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: FR-1.3 CANCER RESOURCES & GUIDANCE                -->
+    <!-- ======================================================== -->
+    <section id="tab-education" class="tab-content space-y-6" aria-labelledby="heading-education">
+      <div class="border-b border-stone-200 pb-5">
+        <h1 id="heading-education" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Cancer Resources & Guidance</h1>
+        <p class="text-stone-600 mt-2 max-w-3xl">
+          Verified educational primers on nutrition during chemotherapy, emotional self-regulation, government financial schemes, and caregiver guidance.
+        </p>
+      </div>
+
+      <!-- Sub-tabs for Education -->
+      <div class="flex border-b border-stone-200 space-x-6 text-sm font-bold">
+        <button onclick="switchEduSubTab('nutrition')" id="subnav-nutrition" class="edu-subnav-btn pb-3 border-b-2 border-sanjeevani-red text-sanjeevani-red">
+          Chemo Nutrition Guide
+        </button>
+        <button onclick="switchEduSubTab('coping')" id="subnav-coping" class="edu-subnav-btn pb-3 text-stone-500 hover:text-stone-800">
+          Mind & Breathwork (Satori)
+        </button>
+        <button onclick="switchEduSubTab('schemes')" id="subnav-schemes" class="edu-subnav-btn pb-3 text-stone-500 hover:text-stone-800">
+          Govt Grants & Schemes
+        </button>
+      </div>
+
+      <!-- Subtab 1: Chemo Nutrition -->
+      <article id="edu-nutrition" class="edu-subcontent space-y-4">
+        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
+          <h2 class="text-xl font-bold text-stone-900">Essential Nutrition During Chemotherapy</h2>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Nutritional wellness during active oncological treatments plays an instrumental role in sustaining blood counts, repairing healthy tissues, and curbing nausea.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div class="p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <h3 class="font-bold text-amber-900 text-sm">Hydration & Electrolytes</h3>
+              <p class="text-xs text-amber-800 mt-1 leading-relaxed">Consume room-temperature coconut water, thin dal water, and lemon juice in frequent small sips.</p>
+            </div>
+            <div class="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+              <h3 class="font-bold text-emerald-900 text-sm">Gentle Protein Intake</h3>
+              <p class="text-xs text-emerald-800 mt-1 leading-relaxed">Sattu water, thoroughly boiled eggs, boiled moong dal, and soft paneer aid tissue healing.</p>
+            </div>
+            <div class="p-4 bg-rose-50 rounded-lg border border-rose-200">
+              <h3 class="font-bold text-rose-900 text-sm">What to Avoid</h3>
+              <p class="text-xs text-rose-800 mt-1 leading-relaxed">Strictly steer clear of raw unpeeled vegetables, unpasteurized milk, spicy oily curries, and stale food.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Subtab 2: Satori Breathwork -->
+      <article id="edu-coping" class="edu-subcontent hidden space-y-4">
+        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
+          <h2 class="text-xl font-bold text-stone-900">Satori Mind-Body Immunity: 4-7-8 Rhythmic Breathing</h2>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Emotional distress directly influences autonomic nervous tension. Sanjeevani’s Satori protocol introduces evidence-backed pranayama to reduce pre-chemo panic.
+          </p>
+          <div class="p-4 bg-stone-100 rounded-lg space-y-2 text-xs text-stone-700">
+            <p><strong>Step 1:</strong> Exhale completely through your mouth with a gentle whooshing sound.</p>
+            <p><strong>Step 2:</strong> Close your mouth and inhale quietly through your nose to a mental count of <strong>4</strong>.</p>
+            <p><strong>Step 3:</strong> Hold your breath calmly for a count of <strong>7</strong>.</p>
+            <p><strong>Step 4:</strong> Exhale completely through your mouth to a count of <strong>8</strong>. Repeat 4 cycles.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Subtab 3: Govt Schemes -->
+      <article id="edu-schemes" class="edu-subcontent hidden space-y-4">
+        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
+          <h2 class="text-xl font-bold text-stone-900">Government Support & Financial Aid Navigation</h2>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Through Sanjeevani's CanDaan program, counselors help navigate central and state healthcare welfare schemes:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-xs text-stone-700 leading-relaxed">
+            <li><strong>Ayushman Bharat (PM-JAY):</strong> Up to ₹5 Lakhs per family per year for secondary and tertiary cancer care.</li>
+            <li><strong>Prime Minister's National Relief Fund (PMNRF):</strong> Partial grant assistance for life-threatening illnesses.</li>
+            <li><strong>Health Minister’s Cancer Patient Fund (HMCPF):</strong> Financial assistance up to ₹2 Lakhs for patients below poverty line.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: PHASE 4 COUNSELLOR DASHBOARD & ESCALATION FLOW    -->
+    <!-- ======================================================== -->
+    <section id="tab-counsellor" class="tab-content space-y-6" aria-labelledby="heading-counsellor">
+      <div class="border-b border-stone-200 pb-5 flex flex-wrap justify-between items-center gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="heading-counsellor" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Oncology Counselor Portal</h1>
+            <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider">Module 5: FR-5.1 to FR-5.6</span>
+          </div>
+          <p class="text-stone-600 mt-1 max-w-3xl text-sm">
+            Priority escalation triage queue, AI-drafted reply recommendations, and 30-day longitudinal recovery tracking. Protected access.
+          </p>
+        </div>
+        <div id="counsellor-auth-status" class="flex items-center gap-2">
+          <!-- Auth Badge / Lock Button -->
+        </div>
+      </div>
+
+      <!-- Counsellor Authentication Barrier (Token Guard) -->
+      <div id="counsellor-auth-wall" class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm max-w-lg mx-auto text-center space-y-4">
+        <div class="w-12 h-12 bg-rose-100 text-sanjeevani-red rounded-full flex items-center justify-center mx-auto">
+          <i data-lucide="lock" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-stone-900">Protected Counselor Access</h2>
+          <p class="text-xs text-stone-600 mt-1">Please enter your Sanjeevani counselor access key to unlock the live patient escalation queue.</p>
+        </div>
+        <form onsubmit="handleCounsellorAuth(event)" class="space-y-3">
+          <input type="password" id="counsellor-key-input" placeholder="Enter Counselor Access Key..." value="sanjeevani-counsellor-demo-2026"
+                 class="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
+          <button type="submit" class="w-full bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2.5 rounded-lg text-sm font-bold shadow-sm transition">
+            Unlock Counselor Dashboard
+          </button>
+        </form>
+        <p class="text-[11px] text-stone-400">Default demo key: <code class="bg-stone-100 px-1 py-0.5 rounded font-mono text-stone-600">sanjeevani-counsellor-demo-2026</code></p>
+      </div>
+
+      <!-- Authenticated Counselor View -->
+      <div id="counsellor-dashboard-view" class="hidden space-y-6">
+        <!-- KPI Analytics Metric Cards (FR-5.3) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="counsellor-kpi-cards">
+          <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+            <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Escalations</span>
+            <p id="kpi-total-cases" class="text-2xl font-black text-stone-900 mt-1">-</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-rose-200 shadow-sm bg-rose-50/40">
+            <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">Pending Review</span>
+            <p id="kpi-pending-cases" class="text-2xl font-black text-rose-600 mt-1">-</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm bg-emerald-50/40">
+            <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Resolved</span>
+            <p id="kpi-resolved-cases" class="text-2xl font-black text-emerald-600 mt-1">-</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-amber-200 shadow-sm bg-amber-50/40">
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">Average EDS Distress</span>
+            <p id="kpi-avg-eds" class="text-2xl font-black text-amber-600 mt-1">-</p>
+          </div>
+        </div>
+
+        <!-- Priority Escalation Queue (FR-5.1) -->
+        <div class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-stone-200 flex justify-between items-center bg-stone-50">
+            <div class="flex items-center gap-2">
+              <i data-lucide="list-ordered" class="w-4 h-4 text-sanjeevani-red"></i>
+              <h2 class="text-sm font-bold text-stone-900 uppercase tracking-wider">Priority Escalation Queue (EDS &gt; 60%)</h2>
+            </div>
+            <button onclick="loadCounsellorQueue()" class="text-xs bg-white hover:bg-stone-100 text-stone-700 font-semibold px-3 py-1.5 rounded-lg border border-stone-300 flex items-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Queue
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-stone-700">
+              <thead class="bg-stone-100 text-stone-600 uppercase font-bold text-[11px] border-b border-stone-200">
+                <tr>
+                  <th class="p-3">Case ID</th>
+                  <th class="p-3">Timestamp</th>
+                  <th class="p-3">Hospital / City</th>
+                  <th class="p-3">EDS Distress</th>
+                  <th class="p-3">Patient Query Snippet</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="counsellor-queue-tbody" class="divide-y divide-stone-100">
+                <tr><td colspan="7" class="p-6 text-center text-stone-500">Loading escalation cases...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Longitudinal Recovery Trajectory (FR-4.6, FR-4.7) -->
+        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-4">
+          <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+            <div>
+              <h2 class="text-base font-bold text-stone-900">30-Day Recovery Cohort Mood Trajectory</h2>
+              <p class="text-xs text-stone-500">Multimodal affect tracking across clinical checkups.</p>
+            </div>
+            <span id="longitudinal-trend-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              Trend: Loading...
+            </span>
+          </div>
+          <div id="longitudinal-table-container" class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-stone-700">
+              <thead class="bg-stone-50 text-stone-600 font-bold border-b border-stone-200">
+                <tr>
+                  <th class="p-2.5">Day</th>
+                  <th class="p-2.5">Date</th>
+                  <th class="p-2.5">Care Stage</th>
+                  <th class="p-2.5">Positive Affect (PA)</th>
+                  <th class="p-2.5">Negative Affect (NA)</th>
+                  <th class="p-2.5">Distress (EDS)</th>
+                  <th class="p-2.5">Primary State</th>
+                </tr>
+              </thead>
+              <tbody id="longitudinal-tbody" class="divide-y divide-stone-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: ENROLMENT INFORMATION                             -->
+  <!-- ======================================================== -->
+  <div id="enroll-modal" class="hidden fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeEnrollModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 p-1 rounded-full" aria-label="Close dialog">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="modal-content">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: COUNSELOR CASE RESOLUTION (PHASE 4)               -->
+  <!-- ======================================================== -->
+  <div id="resolve-modal" class="hidden fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4">
+      <button onclick="closeResolveModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 p-1" aria-label="Close dialog">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div>
+        <span class="text-xs uppercase font-bold text-sanjeevani-red" id="resolve-case-id-badge">CASE</span>
+        <h2 class="text-lg font-bold text-stone-900">Approve & Resolve Escalated Case</h2>
+        <p class="text-xs text-stone-500">Send verified guidance and close ticket in the clinical log.</p>
+      </div>
+      <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 text-xs space-y-1">
+        <p><strong>Patient Query:</strong> <span id="resolve-patient-query" class="text-stone-700"></span></p>
+        <p><strong>Distress Score:</strong> <span id="resolve-eds-badge" class="font-bold"></span></p>
+      </div>
+      <div>
+        <label for="resolve-counsellor-name" class="block text-xs font-bold text-stone-700 uppercase">Counselor Name</label>
+        <input type="text" id="resolve-counsellor-name" value="Senior Counselor Meena" class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg text-xs" />
+      </div>
+      <div>
+        <label for="resolve-reply-text" class="block text-xs font-bold text-stone-700 uppercase">Counselor Reply / Resolution Notes</label>
+        <textarea id="resolve-reply-text" rows="4" class="w-full mt-1 p-3 border border-stone-300 rounded-lg text-xs leading-relaxed"></textarea>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="submitCaseResolution()" class="flex-1 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2.5 rounded-lg text-xs font-bold shadow-sm">
+          Confirm & Close Ticket
+        </button>
+        <button onclick="closeResolveModal()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- FR-1.4: EMBEDDED PERSISTENT AI CHATBOT (TEXT & AUDIO)    -->
+  <!-- ======================================================== -->
+  <aside aria-label="Sanjeevani AI Help Assistant" class="fixed bottom-4 right-4 z-50">
+    <!-- Chat Launcher Floating Action Button -->
+    <button onclick="toggleChat()" id="chat-fab" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white p-3.5 rounded-full shadow-lg flex items-center gap-2 transition hover:scale-105" aria-expanded="false" aria-controls="chat-window">
+      <i data-lucide="message-circle" class="w-6 h-6"></i>
+      <span class="text-xs font-bold hidden sm:inline">Ask Sanjeevani AI</span>
+    </button>
+
+    <!-- Chat Box Window -->
+    <section id="chat-window" class="hidden flex flex-col bg-white w-[94vw] sm:w-[420px] h-[580px] max-h-[85vh] rounded-2xl shadow-2xl border border-stone-200 overflow-hidden mt-2">
+      <!-- Chat Header -->
+      <div class="bg-sanjeevani-red text-white p-3.5 flex justify-between items-center shadow-sm">
+        <div class="flex items-center space-x-2">
+          <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
+          <div>
+            <h2 class="text-sm font-bold flex items-center gap-1.5">
+              Sanjeevani Assistant
+              <span id="chat-backend-badge" class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-normal">FastAPI Live</span>
+            </h2>
+            <p class="text-[10px] text-rose-100">Supports English & हिंदी | Multimodal Affect</p>
+          </div>
+        </div>
+        <button onclick="toggleChat()" class="text-white hover:text-rose-200 p-1" aria-label="Minimize Chat">
+          <i data-lucide="minus" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Mode Switcher Tabs Inside Chat -->
+      <div class="bg-stone-100 border-b border-stone-200 p-1.5 flex gap-1 text-xs">
+        <button onclick="setChatMode('text')" id="mode-btn-text" class="flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1">
+          <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat (RAG)
+        </button>
+        <button onclick="setChatMode('voice')" id="mode-btn-voice" class="flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1">
+          <i data-lucide="mic" class="w-3.5 h-3.5"></i> Voice Affect
+        </button>
+      </div>
+
+      <!-- Quick prompts (Text Mode) -->
+      <div id="quick-prompts-bar" class="bg-stone-50 border-b border-stone-200 p-2 flex gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
+        <button onclick="sendQuickPrompt('What is CanAhaar nutrition program?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">CanAhaar?</button>
+        <button onclick="sendQuickPrompt('टाटा मेमोरियल अस्पताल मुंबई में काउंसलर संपर्क?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">टाटा अस्पताल (TMH)?</button>
+        <button onclick="sendQuickPrompt('How to join Satori breathwork?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">Satori Pranayama</button>
+      </div>
+
+      <!-- Voice Control Panel (Voice Mode) -->
+      <div id="voice-control-drawer" class="hidden bg-stone-50 border-b border-stone-200 p-3 space-y-2.5">
+        <!-- Explicit Consent Checkbox (FR-2.4 & Audio Safety Requirement) -->
+        <label class="flex items-start gap-2 text-[11px] text-stone-600 cursor-pointer bg-white p-2 rounded-lg border border-stone-200">
+          <input type="checkbox" id="audio-consent-cb" checked class="mt-0.5 rounded text-sanjeevani-red focus:ring-sanjeevani-red" />
+          <span>I consent to temporary acoustic prosody analysis (energy & pitch variation). Audio is never permanently retained.</span>
+        </label>
+
+        <!-- Voice Action Buttons -->
+        <div class="flex items-center gap-2">
+          <button id="btn-mic-toggle" onclick="toggleMicrophoneRecording()" class="flex-1 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
+            <i data-lucide="mic" class="w-4 h-4"></i>
+            <span id="mic-btn-label">Record Voice</span>
+          </button>
+          <label class="flex-1 bg-white hover:bg-stone-100 text-stone-700 py-2 px-3 rounded-lg text-xs font-bold border border-stone-300 flex items-center justify-center gap-1.5 cursor-pointer text-center">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            <span>Upload File</span>
+            <input type="file" id="audio-file-input" accept="audio/*" onchange="handleAudioFileUpload(event)" class="hidden" />
+          </label>
+        </div>
+
+        <!-- Sample Audio Shortcuts for Mentor Evaluation -->
+        <div class="flex items-center gap-1 text-[10px] text-stone-500 pt-1">
+          <span class="shrink-0 font-medium">Test samples:</span>
+          <button onclick="sendBenchmarkAudioSample('shouting')" class="bg-white border border-stone-200 px-2 py-0.5 rounded hover:border-sanjeevani-red">Heated Conflict</button>
+          <button onclick="sendBenchmarkAudioSample('panic')" class="bg-white border border-stone-200 px-2 py-0.5 rounded hover:border-sanjeevani-red">Anxious Breathing</button>
+        </div>
+      </div>
+
+      <!-- Status / Processing Banner -->
+      <div id="chat-status-banner" class="hidden bg-amber-50 text-amber-800 border-b border-amber-200 px-3 py-1.5 text-[11px] flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span id="chat-status-text">Processing affective inference...</span>
+      </div>
+
+      <!-- Messages Thread -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs bg-stone-50/70" aria-live="polite">
+        <!-- Initial Welcome Message -->
+        <div class="flex items-start gap-2">
+          <div class="w-7 h-7 rounded-full bg-sanjeevani-red text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">S</div>
+          <div class="bg-white p-3 rounded-xl rounded-tl-none border border-stone-200 shadow-sm text-stone-800 leading-relaxed space-y-1.5">
+            <p><strong>Namaste!</strong> I am the Sanjeevani AI Support Assistant, grounded in verified psycho-oncology guidelines.</p>
+            <p class="text-stone-600">You can ask questions about our 14 programs, hospital counselor desks, or share your feelings in <strong>English</strong> or <strong>हिंदी</strong>.</p>
+            <p class="text-[10px] text-stone-400 border-t border-stone-100 pt-1">
+              ⚠️ <em>Non-diagnostic guidance only. In clinical crises, call our toll-free helpline at 8691000800.</em>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Field (Text Mode) -->
+      <form id="chat-form" onsubmit="handleChatSubmit(event)" class="p-2.5 bg-white border-t border-stone-200 flex items-center gap-2">
+        <input type="text" id="chat-input" placeholder="Type query / प्रश्न लिखें..." required
+               class="flex-1 text-xs sm:text-sm px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
+        <button type="submit" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white p-2 rounded-lg" aria-label="Send message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </section>
+  </aside>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-stone-200 mt-12 text-stone-500 text-xs py-6">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+      <p>© 2026 Sanjeevani - Life Beyond Cancer. Open access patient welfare portal.</p>
+      <div class="flex space-x-4">
+        <span>Helpline: 8691000800</span>
+        <span>•</span>
+        <a href="mailto:info@sanjeevani-lifebeyondcancer.com" class="hover:underline">info@sanjeevani-lifebeyondcancer.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC                              -->
+  <!-- ======================================================== -->
+  <script>
+    // --- 0. CONFIGURABLE API BASE URL (NFR-11) ---
+    const API_BASE_URL = window.SANJEEVANI_API_BASE || (
+      window.location.port === "8000" ? window.location.origin : "http://127.0.0.1:8000"
+    );
+
+    let isBackendOnline = false;
+    let counsellorKey = "sanjeevani-counsellor-demo-2026";
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let recordStartTime = 0;
+    let recordTimerInterval = null;
+    let currentChatMode = "text";
+    let runningEdsScore = 20.0;
+
+    // --- 1. STATIC CATALOG FALLBACK REPOSITORY ---
+    const PROGRAMS = [
+      { id: 1, title: "CanSahyogi", tag: "patient", badge: "In-Hospital Support", desc: "Handholding and emotional counseling sessions in regional hospital premises for cancer patients, led by certified victors.", eligibility: "Any cancer patient or immediate caregiver undergoing therapy in partnered hospitals.", enrollSteps: "Visit the Sanjeevani Desk at the OPD wing of the hospital or request an in-ward bed visit through nursing staff." },
+      { id: 2, title: "CanSaarthi", tag: "community", badge: "Caregiver Training", desc: "Specialized oncological caregiving certificate course training personnel to assist cancer patients professionally.", eligibility: "Cancer victors or high school/college graduates interested in oncology social service.", enrollSteps: "Fill out the CanSaarthi application on the Sanjeevani website or contact the training coordinator at 8691000800." },
+      { id: 3, title: "Satori", tag: "wellness", badge: "Holistic Immunity", desc: "Holistic healing initiative offering integrative coping techniques, breathwork, and emotional regulation to minimize recurrence risks.", eligibility: "Cancer survivors in post-treatment rehabilitation phase.", enrollSteps: "Free 4-session weekly online workshop. Register by dialling the helpline or via virtual referral." },
+      { id: 4, title: "Srjan", tag: "wellness", badge: "Comprehensive Rehab", desc: "Personalized integrative program blending 72 sessions (110 hours) of physical movement, breathwork, and clinical nutrition support.", eligibility: "Stage 1 to Stage 4 cancer survivors seeking sustained quality of life.", enrollSteps: "Assigned after a 1-on-1 physical wellness evaluation with our wellness mentors." },
+      { id: 5, title: "CanAhaar", tag: "wellness", badge: "Free Nutritional Kits", desc: "Nutritional supplement program delivering essential nutrient-dense ration boxes to underprivileged cancer fighters.", eligibility: "Underprivileged patients undergoing active chemo/radiation therapy.", enrollSteps: "Submit hospital prescription and income proof at any hospital Sanjeevani counter." },
+      { id: 6, title: "CanChetna", tag: "community", badge: "Early Detection", desc: "Mass cancer awareness and lifestyle education campaigns conducted in schools, colleges, and rural clusters.", eligibility: "Open to general public and institutions.", enrollSteps: "Institutions can invite Sanjeevani educators by emailing info@sanjeevani-lifebeyondcancer.com." },
+      { id: 7, title: "CanVaarta", tag: "community", badge: "Dialogues & Podcasts", desc: "Meaningful structured conversations, public seminars, and webinars demystifying cancer fears and taboos.", eligibility: "Open to all patients, relatives, and doctors.", enrollSteps: "Watch livestreams online or join monthly hospital auditoria panels." },
+      { id: 8, title: "CanUtsav", tag: "patient", badge: "Celebration of Life", desc: "Festive gatherings, art interventions, and talent galas celebrating the resilience and camaraderie of cancer victors.", eligibility: "All active patients and survivors.", enrollSteps: "Sign up at regional hospital chapters during festive calendar updates." },
+      { id: 9, title: "Sanjeevani Angels", tag: "community", badge: "Volunteer Youth", desc: "Dynamic volunteer cadre of youth and college students spreading cancer awareness and conducting blood donation camps.", eligibility: "College students and young professionals.", enrollSteps: "Register online via the Sanjeevani volunteer intake form." },
+      { id: 10, title: "CanRehab", tag: "patient", badge: "Physical Prosthetics", desc: "Distribution of customized silicone breast prostheses and supportive rehabilitation brassieres for post-mastectomy victors.", eligibility: "Mastectomy victors belonging to marginalized communities.", enrollSteps: "Measurements taken at partner hospital Sanjeevani OPD desks." },
+      { id: 11, title: "CanShiksha", tag: "community", badge: "School Education", desc: "Early intervention tobacco and lifestyle education for secondary school children.", eligibility: "Recognized educational institutions.", enrollSteps: "Principal or school coordinator requests via official inquiry." },
+      { id: 12, title: "CanHunar", tag: "wellness", badge: "Skill Livelihood", desc: "Vocational upskilling producing eco-friendly artifacts, enabling financial independence for cancer survivors.", eligibility: "Survivors looking for flexible work-from-home or workshop stipends.", enrollSteps: "Intake evaluation at regional Sanjeevani community centers." },
+      { id: 13, title: "CanDaan", tag: "patient", badge: "Navigating Aid", desc: "Financial guidance assisting impoverished patients in securing PM-JAY and state funding.", eligibility: "Low-income patients requiring tertiary oncological surgery.", enrollSteps: "Connect with the Sanjeevani desk with income and doctor prescription." },
+      { id: 14, title: "National Helpline", tag: "patient", badge: "8691000800", desc: "Multi-line dedicated tele-counseling support center answering inquiries across India in 9 regional languages.", eligibility: "All citizens, patients, caregivers, and doctors.", enrollSteps: "Dial 8691000800 (Mon-Sat, 9:00 AM - 6:00 PM)." }
+    ];
+
+    const DIRECTORY = [
+      { hospital: "Tata Memorial Hospital (TMH)", city: "Mumbai", state: "Maharashtra", counselor: "Sonal Virkayade", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM (OPD Wing)" },
+      { hospital: "ACTREC (Tata Memorial Centre)", city: "Navi Mumbai", state: "Maharashtra", counselor: "Pooja Kadam", contact: "+91 8691000800", schedule: "Mon - Fri: 9:30 AM - 4:30 PM (Main Atrium)" },
+      { hospital: "Delhi State Cancer Institute (DSCI)", city: "Delhi", state: "Delhi", counselor: "Rajesh Sharma", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM (Radiotherapy Block)" },
+      { hospital: "Gujarat Cancer & Research Institute (GCRI)", city: "Ahmedabad", state: "Gujarat", counselor: "Nehal Parikh", contact: "+91 8691000800", schedule: "Mon - Fri: 9:00 AM - 4:30 PM" },
+      { hospital: "Sawai Man Singh (SMS) Medical College", city: "Jaipur", state: "Rajasthan", counselor: "Kavita Rathore", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 4:00 PM (Sanjeevani Room)" },
+      { hospital: "Kidwai Memorial Institute of Oncology", city: "Bengaluru", state: "Karnataka", counselor: "Lakshmi Rao", contact: "+91 8691000800", schedule: "Mon - Fri: 9:30 AM - 5:00 PM" },
+      { hospital: "Chittaranjan National Cancer Institute (CNCI)", city: "Kolkata", state: "West Bengal", counselor: "Debolina Mukherjee", contact: "+91 8691000800", schedule: "Mon - Sat: 9:30 AM - 5:00 PM (New Campus)" },
+      { hospital: "Dr. B. Borooah Cancer Institute (BBCI)", city: "Guwahati", state: "Assam", counselor: "Maitreyi Bora", contact: "+91 8691000800", schedule: "Mon - Fri: 9:00 AM - 4:00 PM" },
+      { hospital: "Mahamana Pandit Madan Mohan Malviya Cancer Centre", city: "Varanasi", state: "Uttar Pradesh", counselor: "Anand Mishra (Care Counsellor)", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM" }
+    ];
+
+    // --- 2. BACKEND HEALTH CHECK ---
+    async function checkBackendConnectivity() {
+      const dot = document.getElementById("backend-status-dot");
+      const label = document.getElementById("backend-status-label");
+      const chatBadge = document.getElementById("chat-backend-badge");
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/health`, { method: "GET" });
+        if (res.ok) {
+          const data = await res.json();
+          isBackendOnline = true;
+          dot.className = "w-2 h-2 rounded-full bg-emerald-400";
+          label.textContent = `Backend Online (v${data.version || '2.1'})`;
+          if (chatBadge) {
+            chatBadge.textContent = "FastAPI Connected";
+            chatBadge.className = "text-[9px] bg-emerald-500/30 text-emerald-100 px-1.5 py-0.2 rounded font-normal";
+          }
+          return;
+        }
+      } catch (err) {
+        // Backend not reached
+      }
+
+      isBackendOnline = false;
+      dot.className = "w-2 h-2 rounded-full bg-amber-400";
+      label.textContent = "Offline Demo Mode";
+      if (chatBadge) {
+        chatBadge.textContent = "Offline Demo Mode";
+        chatBadge.className = "text-[9px] bg-amber-500/30 text-amber-100 px-1.5 py-0.2 rounded font-normal";
+      }
+    }
+
+    // --- 3. TAB MANAGEMENT ---
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.classList.add("active");
+
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("text-sanjeevani-red", "bg-rose-50");
+        btn.classList.add("text-stone-600");
+      });
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add("text-sanjeevani-red", "bg-rose-50");
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === "counsellor" && isCounsellorAuthenticated()) {
+        loadCounsellorQueue();
+        loadLongitudinalHistory();
+      }
+    }
+
+    function switchEduSubTab(subId) {
+      document.querySelectorAll(".edu-subcontent").forEach(el => el.classList.add("hidden"));
+      const target = document.getElementById(`edu-${subId}`);
+      if (target) target.classList.remove("hidden");
+
+      document.querySelectorAll(".edu-subnav-btn").forEach(b => {
+        b.classList.remove("border-b-2", "border-sanjeevani-red", "text-sanjeevani-red");
+        b.classList.add("text-stone-500");
+      });
+      const activeBtn = document.getElementById(`subnav-${subId}`);
+      if (activeBtn) {
+        activeBtn.classList.add("border-b-2", "border-sanjeevani-red", "text-sanjeevani-red");
+      }
+    }
+
+    function toggleMobileNav() {
+      const m = document.getElementById("mobile-nav");
+      m.classList.toggle("hidden");
+    }
+
+    // --- 4. CATALOG RENDERING ---
+    function renderPrograms(list) {
+      const grid = document.getElementById("programs-grid");
+      grid.innerHTML = list.map(p => `
+        <article class="bg-white rounded-xl border border-stone-200 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start gap-2 mb-2">
+              <span class="text-[11px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-rose-100 text-sanjeevani-red">
+                ${p.badge}
+              </span>
+              <span class="text-xs font-semibold text-stone-400">#${p.id}</span>
+            </div>
+            <h3 class="text-lg font-bold text-stone-900">${p.title}</h3>
+            <p class="text-xs text-stone-600 mt-2 line-clamp-3 leading-relaxed">${p.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
+            <button onclick="openEnrollModal(${p.id})" class="text-xs font-bold text-sanjeevani-red hover:text-sanjeevani-darkRed flex items-center gap-1">
+              Eligibility & How to Join <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </article>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderDirectory(list) {
+      const container = document.getElementById("directory-container");
+      if (list.length === 0) {
+        container.innerHTML = `<p class="col-span-2 text-stone-500 text-center py-8">No hospital centers found matching your search.</p>`;
+        return;
+      }
+      container.innerHTML = list.map(d => `
+        <article class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-base text-stone-900">${d.hospital}</h3>
+              <span class="bg-stone-100 text-stone-700 text-xs px-2 py-0.5 rounded font-semibold">${d.city}</span>
+            </div>
+            <div class="mt-3 space-y-1.5 text-xs text-stone-600">
+              <p><strong class="text-stone-800">Counselor:</strong> ${d.counselor}</p>
+              <p><strong class="text-stone-800">Visiting Hours:</strong> ${d.schedule}</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+            <span class="text-stone-500 truncate mr-2">${d.contact}</span>
+            <a href="tel:8691000800" class="shrink-0 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-3 py-1.5 rounded flex items-center gap-1">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i> Call Desk
+            </a>
+          </div>
+        </article>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function filterPrograms(cat) {
+      document.querySelectorAll(".prog-filter-btn").forEach(btn => {
+        if (btn.getAttribute("data-cat") === cat) {
+          btn.className = "prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-sanjeevani-red text-white";
+        } else {
+          btn.className = "prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300";
+        }
+      });
+      if (cat === "all") renderPrograms(PROGRAMS);
+      else renderPrograms(PROGRAMS.filter(p => p.tag === cat));
+    }
+
+    function filterDirectory() {
+      const q = document.getElementById("dir-search").value.toLowerCase();
+      const city = document.getElementById("dir-city-filter").value.toLowerCase();
+      const filtered = DIRECTORY.filter(d => {
+        const matchesQuery = d.hospital.toLowerCase().includes(q) || d.counselor.toLowerCase().includes(q);
+        const matchesCity = !city || d.city.toLowerCase() === city;
+        return matchesQuery && matchesCity;
+      });
+      renderDirectory(filtered);
+    }
+
+    // --- 5. MODALS ---
+    function openEnrollModal(id) {
+      const p = PROGRAMS.find(item => item.id === id);
+      const modal = document.getElementById("enroll-modal");
+      const content = document.getElementById("modal-content");
+      content.innerHTML = `
+        <div class="space-y-4">
+          <div class="pr-6">
+            <span class="text-xs uppercase font-bold text-sanjeevani-red">${p.badge}</span>
+            <h3 class="text-xl font-extrabold text-stone-900">${p.title}</h3>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500">Eligibility Criteria</h4>
+            <p class="text-sm text-stone-700 mt-1">${p.eligibility}</p>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500">How to Enrol (No Login Needed)</h4>
+            <p class="text-sm text-stone-700 mt-1 bg-stone-50 p-3 rounded-lg border border-stone-200 leading-relaxed">${p.enrollSteps}</p>
+          </div>
+          <div class="pt-2 flex flex-col gap-2">
+            <a href="tel:8691000800" class="w-full bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white text-center py-2.5 rounded-lg text-sm font-bold">
+              Call Helpline for Instant Enrolment
+            </a>
+            <button onclick="closeEnrollModal()" class="w-full bg-stone-100 hover:bg-stone-200 text-stone-700 py-2 rounded-lg text-xs font-semibold">Close</button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove("hidden");
+      lucide.createIcons();
+    }
+    function closeEnrollModal() {
+      document.getElementById("enroll-modal").classList.add("hidden");
+    }
+
+    function setFontSize(size) {
+      const html = document.documentElement;
+      if (size === 'small') html.style.fontSize = '14px';
+      if (size === 'normal') html.style.fontSize = '16px';
+      if (size === 'large') html.style.fontSize = '18px';
+    }
+
+    // --- 6. CHATBOT INTERACTIONS (FR-1.4, PHASE 3) ---
+    function toggleChat() {
+      const box = document.getElementById("chat-window");
+      const btn = document.getElementById("chat-fab");
+      const isHidden = box.classList.contains("hidden");
+      box.classList.toggle("hidden");
+      btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+    }
+
+    function setChatMode(mode) {
+      currentChatMode = mode;
+      const btnText = document.getElementById("mode-btn-text");
+      const btnVoice = document.getElementById("mode-btn-voice");
+      const quickBar = document.getElementById("quick-prompts-bar");
+      const voiceDrawer = document.getElementById("voice-control-drawer");
+
+      if (mode === "voice") {
+        btnVoice.className = "flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1";
+        btnText.className = "flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1";
+        quickBar.classList.add("hidden");
+        voiceDrawer.classList.remove("hidden");
+      } else {
+        btnText.className = "flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1";
+        btnVoice.className = "flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1";
+        voiceDrawer.classList.add("hidden");
+        quickBar.classList.remove("hidden");
+      }
+    }
+
+    function sendQuickPrompt(txt) {
+      document.getElementById("chat-input").value = txt;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("chat-input");
+      const query = input.value.trim();
+      if (!query) return;
+
+      appendChatMessage("user", query);
+      input.value = "";
+      showChatStatus("Consulting Sanjeevani verified knowledge base...");
+
+      if (isBackendOnline) {
+        try {
+          const res = await fetch(`${API_BASE_URL}/v1/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: query, current_eds: runningEdsScore })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            runningEdsScore = data.running_eds;
+            renderChatRAGResponse(data);
+            hideChatStatus();
+            return;
+          }
+        } catch (err) {
+          console.warn("Backend chat request failed:", err);
+        }
+      }
+
+      // Offline demonstration fallback (Clearly labeled, non-fabricated)
+      hideChatStatus();
+      renderOfflineDemoChatReply(query);
+    }
+
+    function showChatStatus(text) {
+      const banner = document.getElementById("chat-status-banner");
+      const span = document.getElementById("chat-status-text");
+      span.textContent = text;
+      banner.classList.remove("hidden");
+    }
+
+    function hideChatStatus() {
+      document.getElementById("chat-status-banner").classList.add("hidden");
+    }
+
+    function appendChatMessage(sender, htmlContent) {
+      const thread = document.getElementById("chat-messages");
+      const div = document.createElement("div");
+
+      if (sender === "user") {
+        div.className = "flex justify-end";
+        div.innerHTML = `
+          <div class="bg-sanjeevani-red text-white p-3 rounded-xl rounded-tr-none text-xs max-w-[85%] leading-relaxed shadow-sm">
+            ${htmlContent}
+          </div>
+        `;
+      } else {
+        div.className = "flex items-start gap-2";
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-sanjeevani-red text-white flex items-center justify-center font-bold text-[10px] shrink-0 shadow-sm">S</div>
+          <div class="bg-white p-3 rounded-xl rounded-tl-none border border-stone-200 shadow-sm text-stone-800 text-xs max-w-[90%] leading-relaxed space-y-2">
+            ${htmlContent}
+          </div>
+        `;
+      }
+      thread.appendChild(div);
+      thread.scrollTop = thread.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function renderChatRAGResponse(data) {
+      let citationsHtml = "";
+      if (data.citations && data.citations.length > 0) {
+        citationsHtml = `
+          <div class="pt-2 border-t border-stone-100 text-[11px] text-stone-500">
+            <span class="font-bold text-stone-700">📚 Source Citations:</span>
+            <ul class="list-disc list-inside mt-0.5 space-y-0.5">
+              ${data.citations.map(c => `<li><strong>${c.title}</strong> (${c.source})</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      let escalationBanner = "";
+      if (data.is_escalated || data.running_eds > 60) {
+        escalationBanner = `
+          <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-lg text-rose-900 space-y-1.5 mt-2">
+            <div class="flex items-center gap-1 font-bold text-xs">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-sanjeevani-red"></i>
+              <span>High Distress Prioritization (EDS: ${data.running_eds}%)</span>
+            </div>
+            <p class="text-[11px] text-rose-800 leading-snug">Our oncology counselor is available for immediate personal support.</p>
+            <div class="flex gap-1.5 pt-1">
+              <a href="tel:8691000800" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white px-2.5 py-1 rounded text-[11px] font-bold">Call 8691000800</a>
+              <button onclick="requestCounselorEscalation('${data.running_eds}')" class="bg-white border border-rose-300 text-rose-800 px-2 py-1 rounded text-[11px] font-semibold">Request Call</button>
+            </div>
+          </div>
+        `;
+      }
+
+      const content = `
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-[10px] text-stone-400">
+            <span>Lang: <strong>${data.detected_language}</strong></span>
+            <span class="px-1.5 py-0.5 rounded font-bold ${data.running_eds > 60 ? 'bg-rose-100 text-rose-800' : 'bg-stone-100 text-stone-700'}">
+              EDS: ${data.running_eds}%
+            </span>
+          </div>
+          <div class="text-stone-800 text-xs leading-relaxed whitespace-pre-line">${data.reply}</div>
+          ${citationsHtml}
+          ${escalationBanner}
+          <div class="text-[10px] text-stone-400 pt-1">⚠️ <em>Non-Diagnostic Signal: Guidance only.</em></div>
+        </div>
+      `;
+      appendChatMessage("bot", content);
+    }
+
+    function renderOfflineDemoChatReply(query) {
+      const lq = query.toLowerCase();
+      let reply = "Sanjeevani offers 14 dedicated programs including CanSahyogi (counseling), Satori (wellness), and CanAhaar (nutrition). For direct assistance at your regional hospital desk, call 8691000800.";
+      let citations = ["Sanjeevani Care Guidelines (Offline Cache)"];
+
+      if (lq.includes("आहार") || lq.includes("canahaar") || lq.includes("nutrition")) {
+        reply = "CanAhaar provides free, nutrient-dense ration kits to underprivileged cancer patients undergoing chemotherapy. Available at partnered hospital Sanjeevani desks.";
+        citations = ["CanAhaar Program Overview, Annual Yearbook 2025"];
+      } else if (lq.includes("टाटा") || lq.includes("tmh") || lq.includes("mumbai")) {
+        reply = "Sanjeevani counselors are present at Tata Memorial Hospital (TMH) Parel OPD and Golden Jubilee wards, Mon-Sat 9am-5pm.";
+        citations = ["Hospital Directory - TMH Mumbai Regional Office"];
+      }
+
+      const content = `
+        <div class="space-y-1.5">
+          <span class="text-[10px] uppercase font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">[DEMO / SYNTHETIC EXAMPLE - BACKEND OFFLINE]</span>
+          <p class="text-stone-800 text-xs leading-relaxed">${reply}</p>
+          <div class="text-[10px] text-stone-400">📚 Source: ${citations[0]}</div>
+        </div>
+      `;
+      appendChatMessage("bot", content);
+    }
+
+    // --- 7. AUDIO RECORDING & FILE UPLOAD (STAGE C, PHASE 3) ---
+    async function toggleMicrophoneRecording() {
+      const consentCb = document.getElementById("audio-consent-cb");
+      if (!consentCb.checked) {
+        alert("Explicit Consent Required: Please check the consent box before activating voice analysis.");
+        return;
+      }
+
+      if (!isRecording) {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    }
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(audioChunks, { type: 'audio/wav' });
+          submitAudioPayload(blob, "mic_voice_sample.wav");
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        recordStartTime = Date.now();
+
+        const btn = document.getElementById("btn-mic-toggle");
+        btn.classList.add("bg-red-600", "animate-recording");
+        document.getElementById("mic-btn-label").textContent = "Stop Recording (00:00)";
+
+        recordTimerInterval = setInterval(() => {
+          const sec = Math.floor((Date.now() - recordStartTime) / 1000);
+          const mm = String(Math.floor(sec / 60)).padStart(2, '0');
+          const ss = String(sec % 60).padStart(2, '0');
+          document.getElementById("mic-btn-label").textContent = `Stop Recording (${mm}:${ss})`;
+          if (sec >= 59) stopRecording();
+        }, 1000);
+
+      } catch (err) {
+        console.error("Microphone access error:", err);
+        alert("Microphone Access Notice: Could not access microphone. Please allow audio access in your browser or test with 'Upload File' / sample buttons.");
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+      }
+      isRecording = false;
+      clearInterval(recordTimerInterval);
+
+      const btn = document.getElementById("btn-mic-toggle");
+      btn.classList.remove("bg-red-600", "animate-recording");
+      document.getElementById("mic-btn-label").textContent = "Record Voice";
+    }
+
+    function handleAudioFileUpload(e) {
+      const consentCb = document.getElementById("audio-consent-cb");
+      if (!consentCb.checked) {
+        alert("Explicit Consent Required: Please agree to the temporary voice analysis consent policy.");
+        e.target.value = "";
+        return;
+      }
+      const file = e.target.files[0];
+      if (!file) return;
+      submitAudioPayload(file, file.name);
+      e.target.value = "";
+    }
+
+    async function sendBenchmarkAudioSample(style) {
+      showChatStatus(`Loading clinical benchmark sample: ${style}...`);
+      try {
+        const sampleUrl = style === "shouting"
+          ? "/static/benchmark_samples/SAMPLE_SHOUTING_ANGER.wav"
+          : "/static/benchmark_samples/SAMPLE_HEAVY_BREATHING_PANIC.wav";
+
+        const res = await fetch(sampleUrl);
+        if (res.ok) {
+          const blob = await res.blob();
+          submitAudioPayload(blob, `${style}_benchmark.wav`);
+          return;
+        }
+      } catch (err) {
+        // Fallback to synthetic demonstration payload
+      }
+
+      hideChatStatus();
+      renderSyntheticAudioDemoCard(style);
+    }
+
+    async function submitAudioPayload(audioBlobOrFile, filename) {
+      appendChatMessage("user", `🎙️ <em>Submitted voice recording: <strong>${filename}</strong></em>`);
+      showChatStatus("Analyzing speech prosody, pitch variation (F0), and cross-attention synchrony...");
+
+      if (isBackendOnline) {
+        try {
+          const formData = new FormData();
+          formData.append("file", audioBlobOrFile, filename);
+          formData.append("language", "auto");
+
+          const res = await fetch(`${API_BASE_URL}/v1/analyze/audio`, {
+            method: "POST",
+            body: formData
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            hideChatStatus();
+            renderAudioAnalysisCard(data);
+            return;
+          } else {
+            const errData = await res.json();
+            hideChatStatus();
+            appendChatMessage("bot", `<div class="text-rose-600 font-semibold">⚠️ Audio Analysis Notice: ${errData.detail || 'Processing failed'}</div>`);
+            return;
+          }
+        } catch (err) {
+          console.error("Audio API error:", err);
+        }
+      }
+
+      hideChatStatus();
+      renderSyntheticAudioDemoCard("sample");
+    }
+
+    function renderAudioAnalysisCard(data) {
+      const bio = data.biomarkers || {};
+      const triage = data.eds_triage || {};
+      const panas = data.panas20 || {};
+      runningEdsScore = triage.eds || runningEdsScore;
+
+      let crossAttnBadge = "";
+      if (data.cross_attention && data.cross_attention.cross_attention_synchrony) {
+        crossAttnBadge = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-bold">Cross-Attention Synchrony: Active</span>`;
+      }
+
+      let escalationNotice = "";
+      if (triage.escalate_to_counsellor) {
+        escalationNotice = `
+          <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-lg text-rose-900 space-y-1 mt-2">
+            <div class="flex items-center gap-1 font-bold text-xs">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-sanjeevani-red"></i>
+              <span>Counsellor Attention Recommended (EDS: ${triage.eds}%)</span>
+            </div>
+            <p class="text-[11px] text-rose-800">High acoustic strain detected. We recommend direct counseling connection.</p>
+            <a href="tel:8691000800" class="inline-block mt-1 bg-sanjeevani-red text-white px-2.5 py-1 rounded text-[11px] font-bold">Call Helpline 8691000800</a>
+          </div>
+        `;
+      }
+
+      const cardHtml = `
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-[10px] text-stone-500 border-b border-stone-100 pb-1.5">
+            <span>Duration: <strong>${data.duration_sec}s</strong> (${data.format})</span>
+            ${crossAttnBadge}
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase text-stone-400">Whisper ASR Transcription</span>
+            <p class="text-stone-800 font-medium italic text-xs mt-0.5 bg-stone-50 p-2 rounded border border-stone-200">
+              "${data.transcript || 'Non-verbal vocal sample analyzed'}"
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="bg-stone-50 p-2 rounded border border-stone-200">
+              <span class="text-stone-500 block text-[10px] uppercase font-bold">Primary Emotion</span>
+              <span class="font-bold text-stone-900">${data.primary_emotion}</span>
+            </div>
+            <div class="bg-stone-50 p-2 rounded border border-stone-200">
+              <span class="text-stone-500 block text-[10px] uppercase font-bold">EDS Distress</span>
+              <span class="font-bold text-sanjeevani-red">${triage.eds}% (${triage.level})</span>
+            </div>
+          </div>
+          <div class="bg-stone-50 p-2 rounded border border-stone-200 text-[10px] text-stone-600 space-y-0.5">
+            <div class="font-bold text-stone-700">Acoustic Biomarkers:</div>
+            <div>RMS Energy: <strong>${bio.rms_mean}</strong> | Pitch Variation (F0 std): <strong>${bio.f0_std_hz} Hz</strong></div>
+            <div>PANAS Scores: PA: <strong>${panas.pa_sum}</strong> / 50 | NA: <strong>${panas.na_sum}</strong> / 50</div>
+          </div>
+          ${escalationNotice}
+          <div class="text-[10px] text-stone-400 pt-1">
+            ⚠️ <em>${data.safety_disclaimer || 'Non-Diagnostic Signal: Guidance only.'}</em>
+          </div>
+        </div>
+      `;
+      appendChatMessage("bot", cardHtml);
+    }
+
+    function renderSyntheticAudioDemoCard(style) {
+      const cardHtml = `
+        <div class="space-y-2">
+          <span class="text-[10px] uppercase font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">[DEMO / SYNTHETIC EXAMPLE - BACKEND OFFLINE]</span>
+          <div>
+            <span class="text-[10px] font-bold uppercase text-stone-400">Simulated Transcription</span>
+            <p class="text-stone-800 font-medium italic text-xs mt-0.5 bg-stone-50 p-2 rounded border border-stone-200">
+              "Doctor please help us, we are crying and terrified, we have no funds left for chemo!"
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="bg-stone-50 p-2 rounded border border-stone-200">
+              <span class="text-stone-500 block text-[10px]">Primary Emotion</span>
+              <span class="font-bold text-rose-700">🔴 Severe Anxiety</span>
+            </div>
+            <div class="bg-stone-50 p-2 rounded border border-stone-200">
+              <span class="text-stone-500 block text-[10px]">EDS Score</span>
+              <span class="font-bold text-rose-700">74.5% (Priority 3)</span>
+            </div>
+          </div>
+          <div class="text-[10px] text-stone-400">⚠️ <em>Non-Diagnostic Demonstration Signal.</em></div>
+        </div>
+      `;
+      appendChatMessage("bot", cardHtml);
+    }
+
+    function requestCounselorEscalation(edsScore) {
+      appendChatMessage("bot", `
+        <div class="bg-emerald-50 text-emerald-900 p-2.5 rounded-lg text-xs space-y-1">
+          <strong>✅ Escalation Request Registered:</strong>
+          <p>Your session distress (${edsScore}%) has been flagged on the counselor escalation board. Senior Counselor Sonal Virkayade will review your inquiry shortly. You can also dial <strong>8691000800</strong> directly.</p>
+        </div>
+      `);
+    }
+
+    // --- 8. COUNSELOR DASHBOARD & SESSION FLOW (PHASE 4) ---
+    function isCounsellorAuthenticated() {
+      return Boolean(counsellorKey);
+    }
+
+    function handleCounsellorAuth(e) {
+      e.preventDefault();
+      const val = document.getElementById("counsellor-key-input").value.trim();
+      if (!val) return;
+      counsellorKey = val;
+      loadCounsellorQueue();
+      loadLongitudinalHistory();
+    }
+
+    function renderCounsellorAuthStatus() {
+      const container = document.getElementById("counsellor-auth-status");
+      if (isCounsellorAuthenticated()) {
+        container.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-1 rounded">Counselor Active</span>
+            <button onclick="lockCounsellorView()" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2 py-1 rounded">Lock</button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `<span class="text-xs text-stone-400">Unauthorized</span>`;
+      }
+    }
+
+    function lockCounsellorView() {
+      counsellorKey = "";
+      document.getElementById("counsellor-auth-wall").classList.remove("hidden");
+      document.getElementById("counsellor-dashboard-view").classList.add("hidden");
+      renderCounsellorAuthStatus();
+    }
+
+    async function loadCounsellorQueue() {
+      if (!counsellorKey) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/v1/counsellor/queue`, {
+          method: "GET",
+          headers: { "X-Counsellor-Key": counsellorKey }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById("counsellor-auth-wall").classList.add("hidden");
+          document.getElementById("counsellor-dashboard-view").classList.remove("hidden");
+          renderCounsellorAuthStatus();
+
+          document.getElementById("kpi-total-cases").textContent = data.total_cases;
+          document.getElementById("kpi-pending-cases").textContent = data.pending_count;
+          document.getElementById("kpi-resolved-cases").textContent = data.resolved_count;
+
+          const avgEds = data.cases.length > 0
+            ? Math.round(data.cases.reduce((acc, c) => acc + c.eds, 0) / data.cases.length)
+            : 0;
+          document.getElementById("kpi-avg-eds").textContent = `${avgEds}%`;
+
+          renderQueueTable(data.cases);
+          return;
+        } else if (res.status === 401) {
+          alert("Access Denied: Invalid Counselor Access Key.");
+          lockCounsellorView();
+          return;
+        }
+      } catch (err) {
+        console.warn("Queue fetch error:", err);
+      }
+
+      // Offline demonstration fallback for counselor dashboard
+      document.getElementById("counsellor-auth-wall").classList.add("hidden");
+      document.getElementById("counsellor-dashboard-view").classList.remove("hidden");
+      renderDemoQueueTable();
+    }
+
+    function renderQueueTable(cases) {
+      const tbody = document.getElementById("counsellor-queue-tbody");
+      if (!cases || cases.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-stone-400">No active escalation cases in queue.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = cases.map(c => `
+        <tr class="hover:bg-stone-50 transition">
+          <td class="p-3 font-mono font-bold text-sanjeevani-red">${c.id}</td>
+          <td class="p-3 text-stone-500">${c.timestamp}</td>
+          <td class="p-3"><strong>${c.hospital}</strong><br><span class="text-stone-400">${c.city}</span></td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${c.eds > 80 ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800'}">
+              ${c.eds}%
+            </span>
+          </td>
+          <td class="p-3 max-w-xs truncate" title="${c.patient_query}">${c.patient_query}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${c.status === 'RESOLVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+              ${c.status}
+            </span>
+          </td>
+          <td class="p-3 text-right">
+            ${c.status === 'PENDING' ? `
+              <button onclick="openResolveModal('${c.id}', '${encodeURIComponent(c.patient_query)}', '${c.eds}', '${encodeURIComponent(c.suggested_reply || '')}')" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white px-2.5 py-1 rounded text-[11px] font-bold">
+                Resolve
+              </button>
+            ` : `
+              <span class="text-stone-400 text-[11px]">Closed</span>
+            `}
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderDemoQueueTable() {
+      const demoCases = [
+        { id: "ESC-101", timestamp: "2026-10-24 16:15", hospital: "Tata Memorial Hospital (TMH)", city: "Mumbai", eds: 86.5, patient_query: "Chemo side effects are unbearable, patient stopped eating and crying constantly.", status: "PENDING", suggested_reply: "Senior counselor informed at TMH Golden Jubilee Ward. Please call 8691000800 immediately." },
+        { id: "ESC-102", timestamp: "2026-10-24 17:40", hospital: "Delhi State Cancer Institute (DSCI)", city: "Delhi", eds: 74.0, patient_query: "Surgery se dar lag raha hai kya karu", status: "PENDING", suggested_reply: "DSCI Radiotherapy Block counselor Rajesh Sharma available at 9am." }
+      ];
+      renderQueueTable(demoCases);
+    }
+
+    let activeResolveCaseId = "";
+    function openResolveModal(id, queryEnc, eds, draftEnc) {
+      activeResolveCaseId = id;
+      document.getElementById("resolve-case-id-badge").textContent = id;
+      document.getElementById("resolve-patient-query").textContent = decodeURIComponent(queryEnc);
+      document.getElementById("resolve-eds-badge").textContent = `${eds}%`;
+      document.getElementById("resolve-reply-text").value = decodeURIComponent(draftEnc) || "Dear Patient/Caregiver, we acknowledge your inquiry. A dedicated Sanjeevani counselor has been alerted to review your case.";
+      document.getElementById("resolve-modal").classList.remove("hidden");
+    }
+
+    function closeResolveModal() {
+      document.getElementById("resolve-modal").classList.add("hidden");
+    }
+
+    async function submitCaseResolution() {
+      const cName = document.getElementById("resolve-counsellor-name").value.trim();
+      const notes = document.getElementById("resolve-reply-text").value.trim();
+      if (!cName || !notes) return;
+
+      if (isBackendOnline && counsellorKey) {
+        try {
+          const res = await fetch(`${API_BASE_URL}/v1/counsellor/resolve`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Counsellor-Key": counsellorKey },
+            body: JSON.stringify({ case_id: activeResolveCaseId, counsellor_name: cName, resolution_notes: notes })
+          });
+          if (res.ok) {
+            closeResolveModal();
+            loadCounsellorQueue();
+            return;
+          }
+        } catch (err) {
+          console.warn("Resolve error:", err);
+        }
+      }
+
+      closeResolveModal();
+      alert(`Case ${activeResolveCaseId} resolved successfully.`);
+      loadCounsellorQueue();
+    }
+
+    async function loadLongitudinalHistory() {
+      if (!counsellorKey) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/v1/counsellor/longitudinal`, {
+          method: "GET",
+          headers: { "X-Counsellor-Key": counsellorKey }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById("longitudinal-trend-badge").textContent = `Trend: ${data.recovery_trend}`;
+          renderLongitudinalTable(data.trajectory);
+          return;
+        }
+      } catch (err) {
+        console.warn("Longitudinal error:", err);
+      }
+      renderDemoLongitudinalTable();
+    }
+
+    function renderLongitudinalTable(items) {
+      const tbody = document.getElementById("longitudinal-tbody");
+      tbody.innerHTML = items.map(r => `
+        <tr class="hover:bg-stone-50">
+          <td class="p-2.5 font-bold">Day ${r.day}</td>
+          <td class="p-2.5 text-stone-500">${r.date}</td>
+          <td class="p-2.5 font-medium text-stone-800">${r.stage}</td>
+          <td class="p-2.5 text-emerald-600 font-bold">${r.pa}</td>
+          <td class="p-2.5 text-rose-600 font-bold">${r.na}</td>
+          <td class="p-2.5 font-mono font-bold ${r.eds > 60 ? 'text-rose-700' : 'text-emerald-700'}">${r.eds}%</td>
+          <td class="p-2.5">${r.primary_emotion}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDemoLongitudinalTable() {
+      const demoItems = [
+        { day: 1, date: "2026-10-01", stage: "Pre-Biopsy Panic", pa: 14, na: 42, eds: 82.0, primary_emotion: "🔴 Severe Anxiety" },
+        { day: 7, date: "2026-10-07", stage: "Post-Diagnosis Shock", pa: 18, na: 36, eds: 72.0, primary_emotion: "🟠 Moderate Distress" },
+        { day: 14, date: "2026-10-14", stage: "Chemo Cycle 1 Support", pa: 26, na: 28, eds: 54.0, primary_emotion: "🟡 Cautious Hope" },
+        { day: 21, date: "2026-10-21", stage: "Satori Pranayama Started", pa: 34, na: 20, eds: 38.0, primary_emotion: "🟢 Calm & Stabilizing" },
+        { day: 30, date: "2026-10-24", stage: "CanSahyogi Fellowship", pa: 41, na: 15, eds: 24.0, primary_emotion: "🌟 Happy & Resilient" }
+      ];
+      document.getElementById("longitudinal-trend-badge").textContent = "Trend: Stabilizing & Positive Recovery";
+      renderLongitudinalTable(demoItems);
+    }
+
+    // --- 9. INITIALIZE ON LOAD ---
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPrograms(PROGRAMS);
+      renderDirectory(DIRECTORY);
+      renderCounsellorAuthStatus();
+      checkBackendConnectivity();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

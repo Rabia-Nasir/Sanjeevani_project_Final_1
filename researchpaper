@@ -1,0 +1,51 @@
+TOPIC SUMMARY:
+Affective computing plays an important role in our daily conversations and helps people convey their underlying intentions. With the rapid advancement of embodied artificial intelligence (AI), affective computing has attracted growing interest from academia and industry, as it contributes significantly to enhancing the emotional intelligence of robots and enabling them to better understand human instructions.
+
+Affective computing has been developed and studied for a long time, and previous work in this field has mainly focused on a fixed emotion space, such as basic emotions or dimensional emotions. Recently, multimodal large language models (MLLMs) have provided new opportunities for affective computing. Specifically, MLLMs possess a rich vocabulary, thereby enabling recognition beyond basic emotion categories. At the same time, they can help interpret multimodal cues (e.g., gestures, facial expressions, and vocal tones), allowing a shift from simple emotional word recognition to evidence-based emotion understanding, which enhances the interpretability and reliability of prediction results. This shift in research trends also opens up new research directions and topics, such as generative emotions (e.g. open-vocabulary emotions and descriptive emotions), emotion hallucinations and conflicts in MLLMs, and effective approaches to constructing emotion foundation models.
+
+This special issue seeks to align with the current research trend of MLLM-driven affective computing and to explore both the opportunities and challenges in this field. In particular, we emphasize advances in emotion theory, dataset construction, training strategies, model architectures, and evaluation benchmarks. We also welcome contributions focusing on downstream applications in embodied AI and emotional support. Our goal is to bring together researchers from the community to discuss the opportunities and challenges of this emerging research direction, and to drive affective computing into its next stage of development.
+
+In this special issue, we welcome submissions on topics including, but not limited to:
+
+Emotion recognition and reasoning in the era of multimodal large language model
+ Generative emotion understanding based on MLLM-driven approaches
+Open-vocabulary or descriptive emotion recognition based on MLLMs
+Zero-shot, few-shot, and chain-of-thought prompting techniques for affective computing 1
+Emotion foundation models and exploration of their scaling laws
+Instruction datasets, model framework, and supervised fine-tuning strategies for multi modal emotion recognition
+Reinforcement learning and reward design for understanding human emotions
+Datasets and benchmarks for evaluating LLMs’ emotion recognition performance
+Interpretability of deep learning methods in affective computing
+Multi-agent frameworks and their applications in emotion recognition and emotional support
+LLM-driven affective computing in embodied AI
+Emotion hallucinations and conflicts in large language models
+Theory of mind and its applications in affective computing
+Fairness and bias mitigation in AI for affective computing
+Responsive and trustworthy AI in affective computing
+Multimodal and conversational emotion recognition
+SUBMISSION GUIDELINES:
+For author information and guidelines on submission criteria, visit the TAC Author Information page. When submitting your paper, please be sure to select the special issue or special section name. Manuscripts should not be published or currently submitted for publication elsewhere. Please submit only full papers intended for review, not abstracts, to the IEEE Author Portal submission system and select the article type: “Affective Computing Meets Multimodal Large and Reasoning Language Models”
+In addition to submitting your paper to TAFFC, you are also encouraged to upload the data related to your paper to IEEE DataPort. IEEE DataPort is IEEE’s data platform that supports the storage and publishing of datasets while also providing access to thousands of research datasets. Uploading your dataset to IEEE DataPort will strengthen your paper and support research reproducibility. Your paper and the dataset can be linked, providing a good opportunity for you to increase the number of citations you receive. Data can be uploaded to IEEE DataPort prior to submitting your paper or concurrent with the paper submission. Thank you!
+All submissions will undergo rigorous peer review in accordance with IEEE TAFFC standards.
+i want to make research paper as well so i want implementation on this topic so act according to the given theme
+The rise of Generative Artificial Intelligence (GenAI) is profoundly reshaping the landscape of affective computing. As AI systems increasingly generate language, images, music, stories, and interactive responses, they are no longer merely tools for sensing or analyzing human affect, but active participants in shaping how people feel, create, learn, connect, and make meaning. This shift opens a new space for effective computing to study not only affective signals, representations, or emotional states, but also the affective and aesthetic experiences that emerge through human–AI interaction.
+At the same time, the growing presence of GenAI in everyday life brings new social opportunities and challenges. GenAI systems are increasingly used in healthcare communication, mental well-being, education, cultural expression, accessibility, companionship, caregiving, and creative practice. In these contexts, affective experiences are not limited to immediate emotional responses, but often involve aesthetic and experiential qualities, including resonance, immersion, curiosity, engagement, inspiration, meaning-making, creativity, and human–AI co-creation. Understanding how these experiences are evoked, supported, evaluated, and responsibly shaped by GenAI systems is essential for designing technologies that promote social connection, inclusion, well-being, creative empowerment, and human flourishing, while also addressing risks such as over-dependence, manipulation, cultural bias, loss of autonomy, and unequal access.
+This special issue aims to advance experience-centered affective GenAI for social good. We welcome interdisciplinary contributions that examine how GenAI systems can support, enrich, evaluate, and responsibly shape affective and aesthetic experiences in socially beneficial contexts. Rather than limiting affective computing to the recognition or interpretation of emotional states, this special issue foregrounds lived experiences such as empathy, reflection, resonance, immersion, curiosity, engagement, meaning-making, creativity, and human–AI co-creation. By bringing together perspectives from affective computing, computational aesthetics, human–computer interaction, digital health, education technology, and multimodal AI, this special issue seeks to promote GenAI systems that are emotionally meaningful, aesthetically engaging, inclusive, trustworthy, and beneficial to society.
+Topics of Interest We welcome submissions on topics including, but not limited to:
+Experience-centered theories and frameworks for affective GenAI systems
+Aesthetic affect in GenAI-mediated interaction, creativity, and communication
+GenAI for resonance, immersion, curiosity, engagement, and inspiration
+Human–AI co-creation for meaning-making, reflection, and creative empowerment
+Affective and aesthetic GenAI for art, design, music, and storytelling
+GenAI-supported psychological well-being, self-reflection, and affective expression
+Therapeutic creativity, expressive writing, and arts-based affective GenAI interventions
+Patient-centered GenAI for empathy, trust, and affective healthcare communication
+Affective GenAI for motivation, curiosity, engagement, and belonging in education
+Inclusive GenAI for accessibility, affective support, and diverse user needs
+GenAI-mediated companionship, loneliness reduction, and social connection
+Affective GenAI for aging, caregiving, and family communication
+GenAI for affective and aesthetic experiences in cultural expression and heritage
+Evaluation methods for affective, aesthetic, and experiential qualities of GenAI systems
+Responsible and trustworthy GenAI for affective well-being, autonomy, inclusion, and human flourishing
+SUBMISSION GUIDELINES:
+For author information and guidelines on submission criteria, visit the TAC Author Information page. When submitting your paper, please be sure to select the special issue or special section name. Manuscripts should not be published or currently submitted for publication elsewhere. Please submit only full papers intended for review, not abstracts, to the IEEE Author Portal submission system and select the article type: “AEGIS: Affective Experience-centered GenAI for Social Good.”

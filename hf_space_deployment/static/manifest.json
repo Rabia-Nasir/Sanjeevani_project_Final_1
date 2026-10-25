@@ -1,0 +1,23 @@
+{
+  "name": "Sanjeevani AI • CanSupport Platform",
+  "short_name": "SanjeevaniAI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#be1e2d",
+  "description": "Multimodal Affective Computing & CanSupport RAG Platform for Cancer Patient Care",
+  "icons": [
+    {
+      "src": "https://www.sanjeevani-lifebeyondcancer.com/sites/default/files/sanjeevani-logo-new.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://www.sanjeevani-lifebeyondcancer.com/sites/default/files/sanjeevani-logo-new.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

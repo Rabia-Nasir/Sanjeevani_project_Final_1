@@ -1,0 +1,34 @@
+[
+  {
+    "category": "anxious_fearful",
+    "filename": "patient_prescan_terror_hindi_01.wav",
+    "path": "C:\\Users\\User\\OneDrive\\Desktop\\pnb\\python code\\datasets\\hindustani_ser\\anxious_fearful\\patient_prescan_terror_hindi_01.wav",
+    "description": "Hindi patient awaiting PET-CT results: 'Bohot dar lag raha hai, report kya aayegi'",
+    "sampling_rate": 16000,
+    "duration_sec": 4.0
+  },
+  {
+    "category": "sad_depressed",
+    "filename": "patient_postchemo_exhaustion_hindi_02.wav",
+    "path": "C:\\Users\\User\\OneDrive\\Desktop\\pnb\\python code\\datasets\\hindustani_ser\\sad_depressed\\patient_postchemo_exhaustion_hindi_02.wav",
+    "description": "Hindi patient post-chemo cycle 3: 'Bohot kamzori hai, kuch khaya nahi ja raha'",
+    "sampling_rate": 16000,
+    "duration_sec": 4.0
+  },
+  {
+    "category": "happy_relieved",
+    "filename": "patient_remission_relief_hindi_03.wav",
+    "path": "C:\\Users\\User\\OneDrive\\Desktop\\pnb\\python code\\datasets\\hindustani_ser\\happy_relieved\\patient_remission_relief_hindi_03.wav",
+    "description": "Hindi patient celebrating good scan: 'Doctor ne bola hai report bilkul clean hai'",
+    "sampling_rate": 16000,
+    "duration_sec": 4.0
+  },
+  {
+    "category": "neutral_calm",
+    "filename": "patient_routine_checkin_hindi_04.wav",
+    "path": "C:\\Users\\User\\OneDrive\\Desktop\\pnb\\python code\\datasets\\hindustani_ser\\neutral_calm\\patient_routine_checkin_hindi_04.wav",
+    "description": "Hindi patient routine CanSupport check-in: 'Dawa chal rahi hai time par'",
+    "sampling_rate": 16000,
+    "duration_sec": 4.0
+  }
+]

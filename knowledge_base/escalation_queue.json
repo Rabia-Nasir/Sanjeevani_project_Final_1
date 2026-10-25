@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ESC-101",
+    "timestamp": "2026-10-24 16:15",
+    "session_id": "SESS-MUM-892",
+    "patient_name": "Anonymous Caregiver",
+    "city": "Mumbai",
+    "hospital": "Tata Memorial Hospital (TMH)",
+    "patient_query": "Chemo side effects are unbearable, patient has stopped eating and we are crying constantly.",
+    "language": "English",
+    "eds": 86.5,
+    "urgency": "🔴 Priority Review",
+    "status": "RESOLVED",
+    "suggested_reply": "Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please offer sips of room-temperature coconut water, and call our direct desk at 8691000800 immediately.",
+    "counsellor_action": "Resolved with reply: 'Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please call our direct desk at 8691000800 immediately.'"
+  },
+  {
+    "id": "ESC-102",
+    "timestamp": "2026-10-24 17:40",
+    "session_id": "SESS-DEL-431",
+    "patient_name": "Anonymous Patient",
+    "city": "Delhi",
+    "hospital": "Delhi State Cancer Institute (DSCI)",
+    "patient_query": "Mujhe kal surgery ke liye admit hona hai, bohot dar lag raha hai kya karu",
+    "language": "Hinglish",
+    "eds": 74.0,
+    "urgency": "🟠 Attention Recommended",
+    "status": "RESOLVED",
+    "suggested_reply": "Namaste. Surgery se pehle dar lagna bilkul swabhavik hai. DSCI Radiotherapy Block me hamare counselor Rajesh Sharma subah 9 baje upalabdha hain. Aap 4-7-8 deep breathing karein aur helpline 8691000800 par baat karein.",
+    "counsellor_action": "Resolved with reply: 'Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please call our direct desk at 8691000800 immediately.'"
+  },
+  {
+    "id": "ESC-103",
+    "timestamp": "2026-10-24 18:20",
+    "session_id": "SESS-KOL-219",
+    "patient_name": "Anonymous Patient",
+    "city": "Kolkata",
+    "hospital": "Chittaranjan National Cancer Institute (CNCI)",
+    "patient_query": "Treatment cost is too high, we have no funds left for radiation cycle 3",
+    "language": "English",
+    "eds": 78.5,
+    "urgency": "🟠 Attention Recommended",
+    "status": "RESOLVED",
+    "suggested_reply": "We hear your financial distress. Under Sanjeevani's CanDaan program, we navigate Ayushman Bharat (PM-JAY) and PMNRF government funds. Counselor Debolina Mukherjee at CNCI New Campus can help submit your documentation tomorrow morning.",
+    "counsellor_action": "Resolved with reply: 'Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please call our direct desk at 8691000800 immediately.'"
+  }
+]

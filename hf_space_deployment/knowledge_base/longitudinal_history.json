@@ -1,0 +1,47 @@
+[
+  {
+    "day": 1,
+    "date": "2026-10-01",
+    "stage": "Pre-Biopsy Panic",
+    "pa": 14,
+    "na": 42,
+    "eds": 82.0,
+    "primary_emotion": "🔴 Severe Anxiety"
+  },
+  {
+    "day": 7,
+    "date": "2026-10-07",
+    "stage": "Post-Diagnosis Shock",
+    "pa": 18,
+    "na": 36,
+    "eds": 72.0,
+    "primary_emotion": "🟠 Moderate Distress"
+  },
+  {
+    "day": 14,
+    "date": "2026-10-14",
+    "stage": "Chemo Cycle 1 Support",
+    "pa": 26,
+    "na": 28,
+    "eds": 54.0,
+    "primary_emotion": "🟡 Cautious Hope"
+  },
+  {
+    "day": 21,
+    "date": "2026-10-21",
+    "stage": "Satori Pranayama Started",
+    "pa": 34,
+    "na": 20,
+    "eds": 38.0,
+    "primary_emotion": "🟢 Calm & Stabilizing"
+  },
+  {
+    "day": 30,
+    "date": "2026-10-24",
+    "stage": "CanSahyogi Fellowship",
+    "pa": 41,
+    "na": 15,
+    "eds": 24.0,
+    "primary_emotion": "🌟 Happy & Resilient"
+  }
+]

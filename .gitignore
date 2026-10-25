@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Gradio
+.gradio/
+
+# Environment & Secrets (NEVER COMMIT)
+.env
+*.pem
+*.key
+
+# Temporary & Testing
+scratch/
+scratch_audio_test/
+*.tmp
+*.temp
+*.log
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Large model / weights files (if any are saved locally)
+*.bin
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl

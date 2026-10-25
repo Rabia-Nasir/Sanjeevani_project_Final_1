@@ -1,0 +1,398 @@
+=== PAGE 1 ===
+SOFTWARE REQUIREMENTS SPECIFICATION  
+CanSupport AI  
+ 
+Affective Computing -Enhanced RAG for Cancer Patient Engagement: An Emotion -Aware Support System for 
+NGOs  
+  
+
+=== PAGE 2 ===
+Table of Contents  
+1. Introduction  
+2. Overall Description  
+3. System Features (Functional Requirements)  
+4. External Interface Requirements  
+5. System Architecture Overview  
+6. Non -Functional Requirements  
+7. Data Requirements  
+8. Emotional Distress Score (EDS) Specification  
+9. Appendix  
+  
+
+=== PAGE 3 ===
+CanSupport AI — SRS 
+3 1. Introduction  
+1.1 Purpose  
+This Software Requirements Specification (SRS) defines the functional and non -functional requirements 
+for CanSupport AI, an AI -powered patient engagement platform being developed for Sanjeevani – Life 
+Beyond Cancer, a Mumbai -based NGO supporting cancer pat ients across India. The document is 
+intended to guide design, development, testing, and academic evaluation of the system over a three -
+month project timeline.  
+1.2 Document Conventions  
+Functional requirements are labelled FR -<module>.<number> (e.g., FR -3.2) and prioritised as High, 
+Medium, or Low. Non -functional requirements are labelled NFR -<number>. "Shall" denotes a mandatory 
+requirement; "should" denotes a recommended one.  
+1.3 Intended Audience and Reading Suggestions  
+This document is intended for the student development team and project guide/evaluator  who may 
+review functional scope. Sections 1 –2 provide context; Section 3 is the core functional specification; 
+Sections 4 –8 cover interfaces, quality attributes, data, and the emotional -scoring model; Section 9 is a 
+supporting appendix.  
+1.4 Project Scope  
+CanSupport AI will provide a public, login -free patient portal with an AI chatbot capable of answering 
+questions about Sanjeevani's programs, hospitals, and volunteers in English and Hindi. Answers are 
+grounded in Sanjeevani's  own verified content using Retrieval -Augmented Generation (RAG), preventing 
+fabricated information. The system additionally analyses the emotional tone of patient messages to 
+adapt its responses and to escalate conversations showing signs of significant d istress to a human 
+counsellor. An admin dashboard gives Sanjeevani staff visibility into query volume, response 
+performance, and aggregate emotional trends. The system does not replace counsellors, does not 
+provide medical diagnosis or treatment advice, and does not perform any clinical psychological 
+assessment.  
+1.5 Definitions, Acronyms and Abbreviations  
+• RAG — Retrieval -Augmented Generation: a technique that grounds LLM output in retrieved source 
+documents.  
+• NLP — Natural Language Processing.  
+• LLM — Large Language Model.  
+• EDS — Emotional Distress Score, an experimental support -prioritisation metric defined in Section 8.  
+• SLA — Service Level Agreement (here, an internal response -time target).  
+• Knowledge Base — the indexed corpus of Sanjeevani's website, program documents, annual 
+reports, and hospital/volunteer data.  
+
+=== PAGE 4 ===
+CanSupport AI — SRS 
+4 1.6 References  
+• CanSupport AI Project Synopsis (internal document).  
+• Sanjeevani – Life Beyond Cancer, organisational program materials and annual reports.  
+• Digital Personal Data Protection Act, 2023 (India).  
+2. Overall Description  
+2.1 Product Perspective  
+CanSupport  AI is a new, standalone web platform. It is not a replacement for Sanjeevani's counselling 
+staff but a self -service and triage layer in front of them: it answers what it can verify, and routes the rest 
+— along with an AI -drafted reply and, where relevant,  an emotional -urgency flag — to a human.  
+2.2 Product Functions  
+• Browse Sanjeevani programs and find nearby volunteers/counsellors without registering.  
+• Ask free -text questions in English or Hindi and receive grounded, verified answers within seconds.  
+• Have the system recognise emotional signals (fear, confusion, distress, etc.) and adapt tone and 
+content accordingly.  
+• Automatically escalate conversations showing sustained or severe distress to a counsellor.  
+• Give Sanjeevani staff a dashboard of query volume, response times, and aggregate emotional 
+trends.  
+2.3 User Classes and Characteristics  
+User Class  Description  Characteristics  
+Patient / Caregiver  Individual diagnosed with cancer, or a 
+family member/caregiver, seeking 
+program information, hospital contacts, 
+or emotional support.  No login required; varies widely in 
+digital and health literacy; may write 
+in English, Hindi, or Hinglish.  
+Sanjeevani Counsellor  Trained staff member who receives 
+escalated queries and distress alerts and 
+responds to patients directly.  Uses the admin dashboard daily; 
+needs fast triage and low -friction 
+reply tools.  
+Programme 
+Supervisor  Oversees multiple counsellors and 
+hospital centres.  Needs queue -wide visibility, 
+analytics, and workload distribution 
+tools.  
+System Administrator  Manages the knowledge base, user 
+roles, and system configuration.  Technical user responsible for 
+content accuracy and platform 
+uptime.  
+ 
+2.4 Operating Environment  
+
+=== PAGE 5 ===
+CanSupport AI — SRS 
+5 Patient -facing portal: modern mobile and desktop browsers (Chrome, Safari, Edge, Firefox — last two 
+major versions), responsive from 320px width upward. Backend: cloud -hosted web application and API 
+layer, vector database for the knowledge base, and an LLM  accessed via API. Admin dashboard: desktop -
+optimised  browser application with role -based login.  
+2.5 Design and Implementation Constraints  
+• All chatbot answers must be grounded in the Sanjeevani knowledge base; the system shall not 
+answer from unconstrained LLM general knowledge (see FR -3.3).  
+• The platform must support English and Hindi at minimum, including code -mixed (Hinglish) input.  
+• Emotion and distress detection shall be presented strictly as support/prioritisation signals, never as 
+a clinical diagnosis (see FR -4.6).  
+• The system must be deliverable within a three -month academic project timeline.  
+2.6 User Documentation  
+A brief in -portal help/FAQ section for patients, and a counsellor/admin user guide covering the 
+escalation queue, reply workflow, and dashboard, will be delivered alongside the system.  
+2.7 Assumptions and Dependencies  
+• Sanjeevani will provide access to program documents, annual reports, and current volunteer -
+hospital data for the knowledge base.  
+• An LLM API (or comparable hosted model) and a vector database are available for use during 
+development.  
+• Counsellors have basic computer literacy sufficient to use a web dashboard.  
+• Internet connectivity is assumed on the patient's device; the system does not address fully offline 
+use. 
+3. System Features (Functional Requirements)  
+Requirements are grouped by the five functional modules of the system.  
+3.1 Module 1 — Patient Portal  
+ID Requirement  Description  Priority  
+FR-1.1 Program Explorer  Patients can browse all 14 Sanjeevani programs with 
+descriptions, eligibility criteria, and enrolment steps, 
+without login.  High 
+FR-1.2 Hospital & Volunteer 
+Directory  Patients can search by city or hospital name to find 
+active Sanjeevani volunteers/counsellors, contact 
+details, and visiting schedule.  High 
+FR-1.3 Cancer Education 
+Resources  Static and curated educational content on cancer 
+types, treatment stages, and survivorship, sourced 
+from verified Sanjeevani material.  Medium  
+
+=== PAGE 6 ===
+CanSupport AI — SRS 
+6 ID Requirement  Description  Priority  
+FR-1.4 Embedded AI Chatbot  A persistent chat widget accessible from every portal 
+page, supporting free -text queries in English and 
+Hindi.  High 
+FR-1.5 Mobile 
+Responsiveness  The portal renders correctly on screen widths from 
+320px (mobile) to desktop, with no login/registration 
+barrier.  High 
+FR-1.6 Accessibility Basics  Support for readable font scaling and screen -reader -
+compatible markup for low -literacy and elderly users.  Medium  
+ 
+3.2 Module 2 — NLP Query Understanding  
+ID Requirement  Description  Priority  
+FR-2.1 Intent Classification  Classify each incoming message into one of: program 
+information, hospital lookup, enrolment request, or 
+emotional support request.  High 
+FR-2.2 Entity Extraction  Extract key entities such as hospital name, city, 
+cancer type, and program name mentioned in the 
+query.  High 
+FR-2.3 Language Detection  Automatically detect whether the query is in English, 
+Hindi, or Hinglish (code -mixed), and route the 
+response in the same language.  High 
+FR-2.4 Urgency/Distress 
+Flagging  Flag messages containing language suggestive of 
+urgency or distress for priority handling by 
+downstream modules.  High 
+FR-2.5 Query Normalisation  Normalise spelling variants, transliterations, and 
+informal phrasing before passing the query to 
+retrieval.  Medium  
+ 
+3.3 Module 3 — RAG -Based Answer Generation  
+ID Requirement  Description  Priority  
+FR-3.1 Knowledge Base 
+Ingestion  Ingest and index Sanjeevani's  website content, 
+program documents, annual reports, and volunteer -
+hospital data into a searchable vector store.  High 
+FR-3.2 Semantic Retrieval  Retrieve the most relevant knowledge -base passages 
+for a given query using embedding -based similarity 
+search.  High 
+FR-3.3 Grounded Answer 
+Generation  Generate a response using an LLM constrained to the 
+retrieved passages only; the system must not answer 
+from unverified general knowledge.  High 
+
+=== PAGE 7 ===
+CanSupport AI — SRS 
+7 ID Requirement  Description  Priority  
+FR-3.4 Confidence Scoring  Assign a confidence score to each generated answer 
+based on retrieval relevance; low -confidence answers 
+trigger escalation instead of a guess.  High 
+FR-3.5 Source Traceability  Every generated answer must be traceable to the 
+specific knowledge -base document(s) used, for audit 
+and correction purposes.  Medium  
+FR-3.6 Knowledge Base 
+Refresh  Administrators can add, update, or remove source 
+documents; the index refreshes without retraining 
+any model.  Medium  
+ 
+3.4 Module 4 — Affective Computing and Emotional Support  
+This module is the platform's key differentiator. Rather than treating every query identically, it detects 
+emotional signals in patient messages, tracks them across a conversation, and uses them to adapt how 
+— not just what — the system answers, while ensu ring genuinely distressed patients reach a human 
+quickly.  
+ID Requirement  Description  Priority  
+FR-4.1 Emotion Signal 
+Detection  Classify each patient message for emotional signals: 
+fear, sadness, confusion, frustration, hope, 
+uncertainty, and urgency/distress.  High 
+FR-4.2 Emotion -Adaptive 
+Response Strategy  Use the detected emotion, together with the 
+retrieved knowledge, to select a response style (e.g., 
+simplified reassuring language plus counselling 
+resources vs. a direct factual answer).  High 
+FR-4.3 Conversation -Level 
+Distress Tracking  Track emotional signals across the turns of a single 
+conversation to detect escalating or sustained 
+distress, not just single -message sentiment.  High 
+FR-4.4 Emotional Distress 
+Score (EDS)  Compute a running EDS per conversation from 
+emotion intensity, negative sentiment, repeated 
+distress signals, and escalation phrases (see Section 
+8). High 
+FR-4.5 Automatic Human 
+Escalation  When EDS crosses the high -distress threshold, 
+immediately flag the conversation for priority 
+counsellor review via the admin dashboard.  High 
+FR-4.6 Non -Diagnostic 
+Labelling  All emotion and EDS outputs must be labelled as 
+support/prioritisation  signals only, and must never be 
+presented as a clinical or psychiatric diagnosis.  High 
+FR-4.7 Longitudinal 
+Emotional Profile 
+(Anonymised)  Maintain an anonymised, aggregate view of 
+emotional trends across a patient's journey stages 
+(diagnosis, treatment, post -treatment) for reporting 
+purposes only.  Medium  
+
+=== PAGE 8 ===
+CanSupport AI — SRS 
+8  
+3.5 Module 5 — Counsellor / Admin Dashboard  
+ID Requirement  Description  Priority  
+FR-5.1 Escalation Queue  Display all chatbot -escalated and distress -escalated 
+conversations in a prioritised  queue, ordered by 
+urgency and EDS.  High 
+FR-5.2 AI-Drafted Reply 
+Suggestion  For each escalated query, present a counsellor with 
+an AI -drafted reply, editable before sending in one 
+click.  High 
+FR-5.3 Analytics Dashboard  Show query volume by program, hospital, city, 
+language, and time period, plus average and median 
+response time.  High 
+FR-5.4 Emotional Trend 
+Reporting  Show aggregate, anonymised emotional -signal trends 
+(e.g., anxiety spikes around chemotherapy -stage 
+queries) to management.  Medium  
+FR-5.5 Role -Based Access 
+Control  Restrict dashboard access by role: counsellor (own 
+queue), supervisor (all queues + analytics), admin (full 
+configuration).  High 
+FR-5.6 Audit Log  Log every AI -generated answer, escalation, and 
+counsellor action with a timestamp for accountability 
+and quality review.  Medium  
+4. External Interface Requirements  
+4.1 User Interfaces  
+• Patient Portal: responsive React web application; persistent chat widget; language toggle 
+(English/Hindi).  
+• Admin Dashboard: desktop web application with escalation queue, analytics views, and role -based 
+screens.  
+4.2 Hardware Interfaces  
+None beyond standard client devices (smartphone, tablet, desktop/laptop) with a modern web browser 
+and internet access. No specialised hardware is required.  
+4.3 Software Interfaces  
+• LLM API for grounded answer generation (Module 3) and emotion -adaptive response drafting 
+(Module 4).  
+• Vector database / search index for knowledge -base retrieval.  
+• NLP/emotion -classification service (may be a hosted API or a fine -tuned in -house model).  
+
+=== PAGE 9 ===
+CanSupport AI — SRS 
+9 • Translation/language -detection service for English –Hindi support.  
+4.4 Communication Interfaces  
+All client–server communication shall use HTTPS. API calls between internal services (NLP, retrieval, LLM, 
+dashboard) use authenticated REST or equivalent internal protocols.  
+5. System Architecture Overview  
+The end -to-end processing pipeline for a single patient message is as follows:  
+• 1. Patient submits a message via the portal chat widget.  
+• 2. NLP layer performs language detection, intent classification, and entity extraction (Module 2).  
+• 3. Affective computing layer analyses emotional signals and updates the conversation's running 
+Emotional Distress Score (Module 4).  
+• 4. The query, together with detected intent and emotional context, is used to retrieve relevant 
+passages from the knowledge base (Module 3).  
+• 5. The LLM generates a response grounded in the retrieved passages, adapted in tone and content 
+to the detected emotional state.  
+• 6. If retrieval confidence is low, or EDS crosses a distress threshold, the conversation is routed to 
+the counsellor escalation queue with an AI -drafted reply (Module 5).  
+• 7. The response is returned to the patient; all steps are logged for the audit trail and analytics.  
+6. Non -Functional Requirements  
+6.1 Performance  
+• NFR-1: The chatbot  shall return a response within 5 seconds under normal load for at least 95% of 
+queries.  
+• NFR-2: The platform shall support at least 200 concurrent chat sessions without degradation, 
+scalable via cloud infrastructure.  
+6.2 Security and Privacy  
+• NFR-3: All data in transit shall be encrypted via HTTPS/TLS; sensitive data at rest shall be encrypted.  
+• NFR-4: The patient portal shall not require login or collect identifying information beyond what a 
+patient voluntarily provides in a message.  
+• NFR-5: Dashboard access shall be role -based and authenticated (see FR -5.5).  
+• NFR-6: Personal and health -related information shall be handled in line with India's Digital Personal 
+Data Protection Act, 2023.  
+6.3 Usability and Accessibility  
+• NFR-7: The portal shall be usable by patients with limited digital literacy, using plain -language UI 
+copy in both English and Hindi.  
+
+=== PAGE 10 ===
+CanSupport AI — SRS 
+10 • NFR-8: Text shall meet basic accessibility contrast and scaling standards for elderly and low -vision 
+users.  
+6.4 Reliability and Availability  
+• NFR-9: The platform shall target 99% uptime during business hours.  
+• NFR-10: If the LLM or retrieval service is unavailable, the chatbot shall degrade gracefully to a static 
+FAQ and offer a direct escalation option rather than failing silently.  
+6.5 Scalability  
+• NFR-11: The knowledge base shall be updatable (add/edit/remove documents) without retraining 
+any model, per FR -3.6. 
+6.6 Maintainability  
+• NFR-12: Modules 2 –5 shall be loosely coupled services so that the NLP, retrieval, affective -
+computing, or dashboard components can be updated independently.  
+6.7 Ethical AI and Safety Requirements  
+• NFR-13: The system shall never present emotion detection or the EDS as a clinical or psychiatric 
+diagnosis, per FR -4.6. 
+• NFR-14: The system shall never fabricate program eligibility, medical, or financial -assistance 
+information not present in the verified knowledge base.  
+• NFR-15: Conversations flagged as high -distress (EDS 81 –100) shall be surfaced to a human 
+counsellor as a priority action, not resolved by AI alone.  
+• NFR-16: All AI -generated content directed at patients shall be reviewable and correctable by 
+Sanjeevani staff.  
+7. Data Requirements  
+7.1 Knowledge Base Data  
+Sourced from Sanjeevani's  website, the 14 program documents, annual reports, and volunteer -hospital 
+directory data. Each source document is indexed with metadata (program, hospital, region, last -updated 
+date) to support traceability (FR -3.5) and targeted refresh (FR -3.6).  
+7.2 Patient Interaction Data  
+Conversation transcripts, detected intent, detected language, emotion labels, and EDS values are stored 
+per conversation to support escalation, analytics, and quality review. Conversations are not linked to 
+patient identity unless the patient voluntarily p rovides contact details for follow -up. 
+7.3 Data Retention and Privacy  
+
+=== PAGE 11 ===
+CanSupport AI — SRS 
+11 Interaction data used for aggregate analytics and emotional -trend reporting (FR -4.7, FR -5.4) shall be 
+anonymised  before being surfaced on the management dashboard. Retention periods and deletion 
+procedures for raw conversation logs shall follow Sanjeevani's data policy and applicable Indian data -
+protection law.  
+8. Emotional Distress Score (EDS) Specification  
+The EDS is an experimental, non -clinical metric used solely to help prioritise  counsellor attention. It is 
+computed per conversation from four weighted inputs: emotion intensity, negative sentiment, repeated 
+distress signals across turns, and the presence of explicit escalation phrases. It is reported to counsellors 
+as a prioritisat ion aid only and must always be labelled as such (FR -4.6, NFR -13). 
+EDS Range  Category  System Action  
+0 – 30 Normal conversation  No action; standard chatbot flow continues.  
+31 – 60 Emotional support 
+recommended  Chatbot  offers counselling -resource information 
+alongside its answer.  
+61 – 80 Counsellor attention 
+recommended  Conversation is added to the escalation queue for 
+review within the standard SLA.  
+81 – 100 Priority human review  Conversation is flagged 🔴 for immediate 
+counsellor attention; AI continues to respond 
+supportively while awaiting human contact.  
+9. Appendix  
+9.1 Use Case Summary  
+• UC-1: A newly diagnosed patient asks a general "what do I do first" question and receives 
+programme  guidance plus nearby volunteer contacts.  
+• UC-2: A caregiver asks about financial assistance for chemotherapy and receives grounded 
+eligibility information or escalation if the knowledge base is inconclusive.  
+• UC-3: A patient expresses fear the night before chemotherapy; the system responds with 
+simplified, reassuring information and offers counselling resources.  
+• UC-4: A patient's messages show escalating distress across a conversation; the system raises EDS, 
+continues to respond supportively, and immediately flags the conversation for priority counsellor 
+review.  
+• UC-5: Sanjeevani management reviews the dashboard to see which programs and hospitals 
+generate the most queries, and which stages of the patient journey show elevated anxiety.  
+9.2 Assumptions Log  
+Recorded assumptions (availability of Sanjeevani  content, LLM/vector -database access, counsellor 
+digital literacy, and internet -connected patient devices) are listed in Section 2.7 and will be revisited if 
+project constraints change.  
+
+=== PAGE 12 ===
+CanSupport AI — SRS 
+12 9.3 Glossary  
+See Section 1.5 for core definitions and acronyms used throughout this document.  
+

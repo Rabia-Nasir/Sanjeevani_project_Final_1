@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: sanjeevani-affective-ai
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: starter # 2GB RAM recommended for PyTorch + Whisper + RoBERTa. Free tier (512MB) will hit OOM if loading all weights.
+    region: oregon
+    branch: main
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: COUNSELLOR_AUTH_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "false"
+      - key: DEVICE
+        value: cpu
+      - key: MAX_AUDIO_SIZE_BYTES
+        value: "15728640"

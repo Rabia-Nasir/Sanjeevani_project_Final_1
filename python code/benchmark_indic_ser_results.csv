@@ -1,0 +1,5 @@
+Test Case,Clinical Scenario,Expected,Valence,Arousal,Dominance,PA Score (out of 50),NA Score (out of 50),Distress %,Jitter / Tremor,F0 Std (Hz)
+CASE_1_HINDI_ACUTE_PANIC,Pre-Scan Terror & Tremor (Tata Memorial OPD),Severe Acute Distress (Scared/Jittery),0.6,0.95,0.211,15.24,21.04,58%,0.0114,134.4
+CASE_2_HINDI_CHEMO_FATIGUE,"Post-Chemotherapy Nausea, Agitation & Weakness",Exhausted / Depressive Distressed,0.606,0.765,0.85,16.18,16.54,51%,0.0107,0.7
+CASE_3_HINDI_REMISSION_JOY,Post-Doctor Consultation: Normal PET Scan Report,"Relief, Excited, Strong (High PA)",0.642,0.718,0.85,19.84,10.0,34%,0.0066,0.1
+CASE_4_HINDI_MASKED_FEAR,"Patient smiles to reassure family, but voice trembles","Masked Distress (Verbal denial, Vocal tremor)",0.582,0.95,0.426,14.89,20.23,58%,0.0135,132.1

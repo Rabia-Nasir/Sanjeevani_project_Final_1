@@ -1,0 +1,49 @@
+# Version Control & IDE
+.git
+.gitignore
+.agents
+.gemini
+.vscode
+.idea
+
+# Python Artifacts & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Gradio Cache & Temp Directories
+.gradio/
+.pytest_cache/
+scratch/
+scratch_audio_test/
+*.tmp
+*.log
+
+# Sensitive Credentials
+.env
+*.pem
+*.key
+
+# Temporary Audio Dumps
+sanjeevani_aud_*
+temp_*
