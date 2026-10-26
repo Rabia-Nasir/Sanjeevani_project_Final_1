@@ -12,8 +12,8 @@ Anyone can clone and run this project immediately on their computer (Windows, ma
 ### Windows (1-Click)
 1. Clone the repository:
    ```cmd
-   git clone https://github.com/Rabia-Nasir/Sanjeevani_project_Final.git
-   cd Sanjeevani_project_Final
+   git clone https://github.com/Rabia-Nasir/Sanjeevani_project_Final_1.git
+   cd Sanjeevani_project_Final_1
    ```
 2. Double-click **`run.bat`** (or in Command Prompt / PowerShell run `.\run.bat`).
 3. That's it! It automatically verifies dependencies, starts the platform, and opens the Patient Portal in your browser.
@@ -23,8 +23,8 @@ Anyone can clone and run this project immediately on their computer (Windows, ma
 ### Mac / Linux (1-Click)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Rabia-Nasir/Sanjeevani_project_Final.git
-   cd Sanjeevani_project_Final
+   git clone https://github.com/Rabia-Nasir/Sanjeevani_project_Final_1.git
+   cd Sanjeevani_project_Final_1
    ```
 2. Run the shell script:
    ```bash
