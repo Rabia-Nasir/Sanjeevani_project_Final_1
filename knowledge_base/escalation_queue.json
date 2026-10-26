@@ -1,5 +1,35 @@
 [
   {
+    "id": "ESC-105",
+    "timestamp": "2026-10-25 21:43",
+    "session_id": "SESS-LIVE-005",
+    "patient_name": "Live Patient / Caregiver",
+    "city": "National Tele-Desk",
+    "hospital": "Sanjeevani Care Desk",
+    "patient_query": "Mujhe chemo ke baad 102 bukhar ho gaya hai aur bahut dar lag raha hai, counsellor se baat karni hai",
+    "language": "Hinglish",
+    "eds": 95.0,
+    "urgency": "🔴 Priority Review",
+    "status": "RESOLVED",
+    "suggested_reply": "Hello. We understand the emotional distress you are experiencing. A dedicated Sanjeevani counselor at Sanjeevani Care Desk has been alerted to review your inquiry. You can also dial our national helpline at 8691000800 for immediate support.",
+    "counsellor_action": "Resolved with reply: 'Resolved by Senior Oncologist Dr. Sharma: Patient escorted to casualty emergency ward for IV antibiotics.'"
+  },
+  {
+    "id": "ESC-104",
+    "timestamp": "2026-10-25 21:43",
+    "session_id": "SESS-LIVE-004",
+    "patient_name": "Live Patient / Caregiver",
+    "city": "National Tele-Desk",
+    "hospital": "Sanjeevani Care Desk",
+    "patient_query": "Mujhe chemo ke baad 102 bukhar ho gaya hai aur bahut dar lag raha hai, counsellor se baat karni hai",
+    "language": "Hinglish",
+    "eds": 95.0,
+    "urgency": "🔴 Priority Review",
+    "status": "PENDING",
+    "suggested_reply": "Hello. We understand the emotional distress you are experiencing. A dedicated Sanjeevani counselor at Sanjeevani Care Desk has been alerted to review your inquiry. You can also dial our national helpline at 8691000800 for immediate support.",
+    "counsellor_action": "Pending Counselor Review"
+  },
+  {
     "id": "ESC-101",
     "timestamp": "2026-10-24 16:15",
     "session_id": "SESS-MUM-892",
@@ -10,9 +40,9 @@
     "language": "English",
     "eds": 86.5,
     "urgency": "🔴 Priority Review",
-    "status": "RESOLVED",
+    "status": "PENDING",
     "suggested_reply": "Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please offer sips of room-temperature coconut water, and call our direct desk at 8691000800 immediately.",
-    "counsellor_action": "Resolved with reply: 'Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please call our direct desk at 8691000800 immediately.'"
+    "counsellor_action": "Pending Counselor Review"
   },
   {
     "id": "ESC-102",
@@ -25,9 +55,9 @@
     "language": "Hinglish",
     "eds": 74.0,
     "urgency": "🟠 Attention Recommended",
-    "status": "RESOLVED",
+    "status": "PENDING",
     "suggested_reply": "Namaste. Surgery se pehle dar lagna bilkul swabhavik hai. DSCI Radiotherapy Block me hamare counselor Rajesh Sharma subah 9 baje upalabdha hain. Aap 4-7-8 deep breathing karein aur helpline 8691000800 par baat karein.",
-    "counsellor_action": "Resolved with reply: 'Dear Caregiver, we understand your extreme anxiety seeing your loved one unable to eat. Senior counselor Sonal Virkayade at TMH Golden Jubilee Ward has been informed. Please call our direct desk at 8691000800 immediately.'"
+    "counsellor_action": "Pending Counselor Review"
   },
   {
     "id": "ESC-103",

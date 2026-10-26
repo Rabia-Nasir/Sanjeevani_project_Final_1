@@ -2719,6 +2719,18 @@ def handle_patient_chat(user_msg, history, api_key):
     # Diagnostic badge HTML
     eds_val = res["eds"]
     eds_col = "#059669" if eds_val <= 30 else ("#d97706" if eds_val <= 60 else ("#ea580c" if eds_val <= 80 else "#dc2626"))
+    esc_badge_html = ""
+    if res.get("is_escalated"):
+        esc_badge_html = f"""
+        <div style="margin-top:10px; padding:10px 14px; background:#fef2f2; border:1.5px solid #f87171; border-radius:8px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🚨</span>
+            <div>
+                <div style="color:#991b1b; font-size:12px; font-weight:800;">Case Flagged to Counsellor Dashboard Queue</div>
+                <div style="color:#7f1d1d; font-size:11px;">Automatically routed to Tab 4 Priority Queue (EDS: {eds_val}%)</div>
+            </div>
+        </div>
+        """
+
     diag_html = f"""
     <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
         <div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:8px;">
@@ -2745,6 +2757,7 @@ def handle_patient_chat(user_msg, history, api_key):
             <div style="font-size:11.5px; color:{eds_col}; font-weight:600; margin-top:6px;">
                 Triage Tier: {res['triage_tier']}
             </div>
+            {esc_badge_html}
         </div>
     </div>
     """

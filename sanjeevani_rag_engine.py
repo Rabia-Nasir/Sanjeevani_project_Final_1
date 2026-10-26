@@ -30,14 +30,23 @@ MEDICAL_EMERGENCY_TRIGGERS = [
     "unbearable pain", "bardasht se bahar dard", "severe agony", "excruciating pain",
     "continuous vomiting", "lagatar ulti", "cannot keep water down", "pani nahi ruk raha",
     "seizure", "daura", "loss of consciousness", "behosh", "unconscious",
-    "sudden numbness", "loss of bladder", "paralysis"
+    "sudden numbness", "loss of bladder", "paralysis", "emergency", "urgent",
+    "casualty", "critical", "ambulance"
+]
+
+# 3. Direct Counsellor / Human Support Triggers (SRS FR-5.1)
+COUNSELLOR_REQUEST_TRIGGERS = [
+    "counsellor", "counselor", "kaunsler", "kaunsilar", "talk to human", "speak with someone",
+    "call me", "doctor se baat", "senior counsellor", "counselling", "counseling",
+    "human help", "escalate", "need to talk", "baat karni hai", "helpdesk", "connect me",
+    "dashboard", "triage queue", "counsellor dashboard", "counselor dashboard"
 ]
 
 HIGH_DISTRESS_TRIGGERS = [
     "very scared", "terrified", "panic", "hopeless", "crying", "lost all hope",
     "bohot dar lag raha", "ghabrahat", "rona aa raha", "dar lagta hai",
     "kya karu kuch samajh nahi", "family in debt", "no money for chemo",
-    "paise nahi hain", "chemo side effects unbearable"
+    "paise nahi hain", "chemo side effects unbearable", "bahut dar", "bohot dar"
 ]
 
 MODERATE_CONCERN_TRIGGERS = [
@@ -189,6 +198,7 @@ class SanjeevaniRAGEngine:
         ql = query.lower()
         delta = 0.0
         is_emergency = False
+        is_counsellor_req = any(trig in ql for trig in COUNSELLOR_REQUEST_TRIGGERS)
 
         if any(trig in ql for trig in MEDICAL_EMERGENCY_TRIGGERS):
             delta += 70.0
@@ -196,10 +206,12 @@ class SanjeevaniRAGEngine:
         elif any(trig in ql for trig in PSYCHIATRIC_CRISIS_TRIGGERS):
             delta += 70.0
             is_emergency = True
+        elif is_counsellor_req:
+            delta += 55.0
         elif any(trig in ql for trig in HIGH_DISTRESS_TRIGGERS):
-            delta += 35.0
+            delta += 50.0
         elif any(trig in ql for trig in MODERATE_CONCERN_TRIGGERS):
-            delta += 15.0
+            delta += 20.0
         else:
             delta -= 8.0
 
@@ -209,6 +221,8 @@ class SanjeevaniRAGEngine:
         new_eds = max(5.0, min(100.0, current_eds + delta))
         if is_emergency:
             new_eds = max(90.0, new_eds)
+        elif is_counsellor_req or any(trig in ql for trig in HIGH_DISTRESS_TRIGGERS):
+            new_eds = max(72.0, new_eds)
 
         if new_eds <= 30:
             tier = "Normal (Standard Chatbot)"

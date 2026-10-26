@@ -16,6 +16,7 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from sanjeevani_rag_engine import get_rag_engine
+from counsellor_dashboard import get_counsellor_manager
 from backend.schemas.rag_schemas import ChatRequest, ChatResponse, PassageCitation
 from backend.core.config import settings
 from backend.core.logging import logger, mask_text_summary
@@ -24,6 +25,7 @@ class RAGInferenceService:
     def __init__(self):
         logger.info("Initializing RAGInferenceService (reusing verified SanjeevaniRAGEngine)...")
         self.rag_engine = get_rag_engine()
+        self.counsellor_mgr = get_counsellor_manager()
         self.version = "Sanjeevani-RAG-v2.1"
 
     def answer_chat(self, req: ChatRequest, request_id: str) -> ChatResponse:
@@ -74,14 +76,26 @@ class RAGInferenceService:
         if not sources_list and rag_output.get("citations"):
             sources_list = list(rag_output["citations"])
 
-        # 7. AI-drafted reply suggestion if escalated
+        # 7. AI-drafted reply suggestion if escalated & live insert into Counsellor Dashboard Queue
         suggested_counsellor = None
         if is_escalated:
-            suggested_counsellor = (
-                f"Dear Patient/Caregiver, we acknowledge your inquiry regarding '{query[:60]}...'. "
-                f"Senior counsellor at Sanjeevani has been flagged (Urgency: {tier}). "
-                f"Please call our direct national helpline at +91 8691000800 for immediate one-on-one handholding."
-            )
+            try:
+                esc_item = self.counsellor_mgr.add_escalation(
+                    query=query,
+                    eds=new_eds,
+                    lang=lang,
+                    city="National Tele-Desk",
+                    hospital="Sanjeevani Care Desk"
+                )
+                suggested_counsellor = esc_item.get("suggested_reply")
+                logger.info(f"Chat escalated to Counsellor Queue: {esc_item.get('id')} (EDS: {new_eds})", extra={"request_id": request_id})
+            except Exception as e:
+                logger.error(f"Failed to add chat escalation to queue: {e}", extra={"request_id": request_id})
+                suggested_counsellor = (
+                    f"Dear Patient/Caregiver, we acknowledge your inquiry regarding '{query[:60]}...'. "
+                    f"Senior counsellor at Sanjeevani has been flagged (Urgency: {tier}). "
+                    f"Please call our direct national helpline at +91 8691000800 for immediate one-on-one handholding."
+                )
 
         elapsed_ms = round((time.perf_counter() - t0) * 1000.0, 2)
 
