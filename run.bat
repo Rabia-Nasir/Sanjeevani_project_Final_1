@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 > nul
 title Sanjeevani AI Platform
 echo ======================================================================
@@ -10,7 +10,18 @@ echo.
 for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8000 "') do taskkill /f /pid %%a >nul 2>&1
 for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":7860 "') do taskkill /f /pid %%a >nul 2>&1
 
-echo [1/2] Starting Sanjeevani AI Platform (FastAPI + Gradio Dashboard)...
+:: Check if dependencies need installation
+python -c "import fastapi, uvicorn, gradio, librosa" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [1/2] Installing required dependencies from requirements.txt...
+    pip install -r requirements.txt
+    echo.
+) else (
+    echo [1/2] Dependencies verified.
+    echo.
+)
+
+echo [2/2] Starting Sanjeevani AI Platform (FastAPI + Gradio Dashboard)...
 echo  - Patient Portal:  http://localhost:8000/portal
 echo  - REST API Docs:   http://localhost:8000/docs
 echo  - Evaluation UI:   http://localhost:7860
