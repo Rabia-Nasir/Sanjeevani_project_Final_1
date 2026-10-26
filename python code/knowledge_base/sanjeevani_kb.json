@@ -590,5 +590,44 @@
       "text": "Early warning signs of common cancers: 1) Breast: painless lump, dimpling of breast skin, nipple inversion or discharge. Practice monthly Breast Self-Examination (BSE) 5-7 days after period ends. 2) Oral: non-healing mouth ulcer lasting over 2 weeks, white/red patches (leukoplakia), difficulty swallowing or opening mouth. 3) Cervical: unusual bleeding between periods or after intercourse, persistent foul discharge. 4) Colorectal/Lung: persistent cough lasting over 3 weeks with blood, sudden unexplained weight loss, change in bowel habits.",
       "source": "CanChetna Public Awareness Handbook, Sanjeevani"
     }
+  },
+  {
+    "type": "clinical_guideline",
+    "id": "CLIN-06",
+    "title": "Oncological Emergencies & Immediate Oncologist Escalation Protocol",
+    "category": "Emergency Clinical Protocol",
+    "text": "Oncological Emergencies & Immediate Oncologist Escalation Protocol (Emergency Clinical Protocol): RED FLAG SYMPTOMS REQUIRING IMMEDIATE ONCOLOGIST CONTACT: 1) Febrile Neutropenia: Temperature 100.4 F (38 C) or above during or following chemotherapy is a medical emergency requiring intravenous antibiotics within 1 hour. 2) Respiratory Distress: Sudden severe shortness of breath or chest pain. 3) Severe Active Bleeding: Coughing blood, vomiting blood, or uncontrolled surgical wound hemorrhage. 4) Intractable Vomiting/Dehydration: Inability to retain oral fluids for over 24 hours. 5) Acute Intractable Pain: Sudden pain escalation unresponsive to prescribed analgesics. 6) Neurological Emergencies: Sudden confusion, seizures, or limb numbness/bladder control loss (suspected spinal cord compression). PATIENT ACTION: Immediately call your primary treating oncologist, contact the 24/7 hospital emergency triage desk, or dial 112/108 ambulance. Sanjeevani provides supportive cancer handholding only and cannot diagnose or treat acute clinical emergencies.",
+    "metadata": {
+      "id": "CLIN-06",
+      "title": "Oncological Emergencies & Immediate Oncologist Escalation Protocol",
+      "category": "Emergency Clinical Protocol",
+      "keywords": [
+        "emergency",
+        "medical emergency",
+        "fever",
+        "bukhar",
+        "chemo fever",
+        "bleeding",
+        "saans",
+        "chest pain",
+        "vomiting",
+        "ulti",
+        "oncologist",
+        "doctor",
+        "hospital emergency",
+        "casualty",
+        "112",
+        "108",
+        "neutropenia",
+        "infection",
+        "acute pain",
+        "dard",
+        "emergency contact"
+      ],
+      "description": "Protocol for acute oncology complications directing patients to treating oncologists and hospital casualty.",
+      "action_required": "Immediate contact with primary treating oncologist or nearest hospital casualty.",
+      "emergency_helplines": "National Emergency: 112, Ambulance: 108, Sanjeevani Crisis Line: +91 8691000800",
+      "source": "Sanjeevani Oncology Safety Guidelines & CanSupport Clinical Safety SRS FR-4.5"
+    }
   }
 ]

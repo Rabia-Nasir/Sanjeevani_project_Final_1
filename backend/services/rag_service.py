@@ -39,7 +39,8 @@ class RAGInferenceService:
         # 1. Use verified SanjeevaniRAGEngine grounded answer pipeline
         rag_output = self.rag_engine.generate_grounded_answer(
             query=query,
-            eds=req.current_eds or 20.0
+            eds=req.current_eds or 20.0,
+            api_key=getattr(req, "api_key", None)
         )
 
         reply = rag_output["answer"]

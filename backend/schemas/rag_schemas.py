@@ -11,6 +11,7 @@ class ChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None, description="Optional multi-turn session ID")
     current_eds: Optional[float] = Field(default=20.0, ge=0.0, le=100.0, description="Previous running EDS score")
     acoustic_stress: Optional[float] = Field(default=0.0, ge=0.0, le=100.0, description="Acoustic stress signal from voice if available")
+    api_key: Optional[str] = Field(default=None, description="Optional Grok / Groq / OpenAI API key for live generation")
 
     @field_validator("message")
     @classmethod

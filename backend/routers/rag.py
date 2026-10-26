@@ -18,6 +18,12 @@ router = APIRouter(prefix="/v1", tags=["RAG Conversational Chatbot"])
     summary="Ask Sanjeevani RAG chatbot a question",
     description="Grounded in 14 verified Sanjeevani programs with language detection and turn-level EDS triage."
 )
+@router.post(
+    "/chat/message",
+    response_model=ChatResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False
+)
 def chat_endpoint(payload: ChatRequest, request: Request) -> ChatResponse:
     request_id = getattr(request.state, "request_id", str(uuid.uuid4()))
     try:
