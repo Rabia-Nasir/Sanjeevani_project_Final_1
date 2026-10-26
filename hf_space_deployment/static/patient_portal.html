@@ -1,1432 +1,2131 @@
 <!DOCTYPE html>
-<html lang="en" class="text-[16px]">
+<html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sanjeevani - Life Beyond Cancer | Patient & Counselor Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Sanjeevani - Clinical Affective Intelligence Platform</title>
+
+  <!-- Progressive Web App (PWA) Manifest & Apple Touch Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1d1d1f" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sanjeevani">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png">
+
+  <!-- Typography: Google Sans (Primary) & Inter (Secondary) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['"Google Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            inter: ['"Inter"', 'sans-serif'],
+            mono: ['"SF Mono"', 'Menlo', 'monospace']
+          },
           colors: {
-            sanjeevani: {
-              red: '#BE1E2D',
-              orange: '#F7941E',
-              darkRed: '#961520',
-              cream: '#FFF9F5',
-              gray: '#4A5568'
+            apple: {
+              canvas: '#fbfbfd',
+              card: '#ffffff',
+              border: '#e5e5ea',
+              subtle: '#8e8e93',
+              dark: '#1d1d1f',
+              accent: '#0071e3',
+              emerald: '#059669',
+              amber: '#d97706',
+              rose: '#e11d48'
+            },
+            notion: {
+              sidebar: '#f7f7f5',
+              border: '#ececeb',
+              hover: '#efefed',
+              text: '#37352f',
+              muted: '#787774'
             }
+          },
+          boxShadow: {
+            'apple': '0 2px 8px -2px rgba(0, 0, 0, 0.04), 0 1px 4px -1px rgba(0, 0, 0, 0.02)',
+            'apple-card': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+            'apple-float': '0 12px 32px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03)'
           }
         }
       }
     }
   </script>
+
+  <!-- React 18, ReactDOM, and Babel Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
-    /* Smooth transitions and scroll behavior */
-    html { scroll-behavior: smooth; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(1.03); }
+    /* Apple & Notion ultra-fine styling */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    .animate-recording {
-      animation: pulse-slow 1.5s infinite ease-in-out;
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fbfbfd;
+      color: #1d1d1f;
+      font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      touch-action: manipulation;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d1d1d6;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8e8e93;
+    }
+    .thin-border {
+      border: 1px solid rgba(0, 0, 0, 0.07);
+    }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    /* Apple iOS style bottom frosted glass tab bar */
+    .apple-bottom-bar {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+    }
+    .safe-bottom-nav {
+      padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
+    }
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    /* Hide scrollbar for horizontal chips */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Pulsing recording ring */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-record {
+      animation: pulse-ring 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
-<body class="bg-stone-50 text-stone-800 flex flex-col min-h-screen font-sans antialiased">
+<body class="h-full overflow-hidden select-none">
+  <div id="root" class="h-full w-full"></div>
 
-  <!-- ACCESSIBILITY TOP BAR (FR-1.6) -->
-  <aside aria-label="Accessibility & System Status" class="bg-stone-900 text-stone-200 text-xs py-1.5 px-4 border-b border-stone-800">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center space-x-3">
-        <div class="flex items-center space-x-1.5">
-          <span>Toll-Free National Helpline:</span>
-          <a href="tel:8691000800" class="font-bold text-amber-400 hover:underline">8691000800</a>
-        </div>
-        <span class="text-stone-600 hidden sm:inline">|</span>
-        <!-- Backend Health Status Indicator -->
-        <div id="backend-status-pill" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-stone-800 text-stone-300">
-          <span id="backend-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span id="backend-status-label" class="text-[11px] font-medium">Probing Backend...</span>
-        </div>
-      </div>
-      <div class="flex items-center space-x-3">
-        <span class="sr-only">Adjust Font Size</span>
-        <span class="hidden sm:inline text-stone-400">Font:</span>
-        <button onclick="setFontSize('small')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-stone-300" aria-label="Decrease font size">A-</button>
-        <button onclick="setFontSize('normal')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded font-bold text-white" aria-label="Reset font size">A</button>
-        <button onclick="setFontSize('large')" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-sm font-black text-white" aria-label="Increase font size">A+</button>
-      </div>
-    </div>
-  </aside>
+  <!-- React Application Source -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
 
-  <!-- SITE HEADER & NAVIGATION (FR-1.5) -->
-  <header class="bg-white border-b border-stone-200 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-20">
-        <!-- Brand Logo -->
-        <a href="#" class="flex items-center space-x-3" aria-label="Sanjeevani Life Beyond Cancer Portal">
-          <div class="w-10 h-10 rounded-full bg-sanjeevani-red flex items-center justify-center text-white font-black text-xl shadow-inner">
-            S
-          </div>
-          <div>
-            <span class="text-xl sm:text-2xl font-black tracking-tight text-sanjeevani-red block leading-none">SANJEEVANI</span>
-            <span class="text-xs sm:text-sm font-semibold text-stone-500 tracking-wide uppercase">Life Beyond Cancer</span>
-          </div>
-        </a>
+    // --- Minimalist Vector SVG Icons (No emojis anywhere) ---
+    const Icons = {
+      Logo: () => (
+        <svg className="w-7 h-7 text-neutral-900" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.25" />
+          <path d="M16 6C10.4772 6 6 10.4772 6 16C6 21.5228 10.4772 26 16 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M16 10C12.6863 10 10 12.6863 10 16C10 19.3137 12.6863 22 16 22C19.3137 22 22 19.3137 22 16" stroke="#059669" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="16" cy="16" r="3" fill="#059669" />
+          <path d="M16 4V8M16 24V28M4 16H8M24 16H28" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.3" />
+        </svg>
+      ),
+      SessionCheck: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          <path d="M8 9h8" />
+          <path d="M8 13h6" />
+        </svg>
+      ),
+      VoiceCheck: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <line x1="12" x2="12" y1="19" y2="22" />
+        </svg>
+      ),
+      AskSanjeevani: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+        </svg>
+      ),
+      Triage: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+          <path d="M12 8v4" />
+          <path d="M12 16h.01" />
+        </svg>
+      ),
+      Programs: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="7" height="9" x="3" y="3" rx="1" />
+          <rect width="7" height="5" x="14" y="3" rx="1" />
+          <rect width="7" height="9" x="14" y="12" rx="1" />
+          <rect width="7" height="5" x="3" y="16" rx="1" />
+        </svg>
+      ),
+      Soap: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" x2="8" y1="13" y2="13" />
+          <line x1="16" x2="8" y1="17" y2="17" />
+          <line x1="10" x2="8" y1="9" y2="9" />
+        </svg>
+      ),
+      Upload: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" x2="12" y1="3" y2="15" />
+        </svg>
+      ),
+      Play: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+      ),
+      Stop: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+          <rect width="14" height="14" x="5" y="5" rx="2" />
+        </svg>
+      ),
+      Check: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ),
+      ChevronRight: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      ),
+      Send: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="22" x2="11" y1="2" y2="13" />
+          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </svg>
+      ),
+      Activity: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+      ),
+      Search: ({ className = "w-4 h-4" }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" x2="16.65" y1="21" y2="16.65" />
+        </svg>
+      )
+    };
 
-        <!-- Desktop Navigation Tabs -->
-        <nav class="hidden md:flex space-x-1 lg:space-x-3" aria-label="Primary Navigation">
-          <button onclick="switchTab('programs')" id="nav-programs" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md transition text-sanjeevani-red bg-rose-50">
-            Programs (14)
-          </button>
-          <button onclick="switchTab('directory')" id="nav-directory" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red">
-            Hospitals & Volunteers
-          </button>
-          <button onclick="switchTab('education')" id="nav-education" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red">
-            Cancer Education
-          </button>
-          <button onclick="switchTab('counsellor')" id="nav-counsellor" class="nav-btn px-3.5 py-2 text-sm font-semibold rounded-md text-stone-600 hover:text-sanjeevani-red flex items-center gap-1.5">
-            <i data-lucide="shield" class="w-4 h-4 text-sanjeevani-red"></i>
-            Counselor Portal
-          </button>
-        </nav>
+    // --- Main Unified Sanjeevani Application ---
+    function SanjeevaniApp() {
+      const [activeTab, setActiveTab] = useState("session"); // "session", "voice", "rag", "triage", "programs"
+      const [backendHealthy, setBackendHealthy] = useState(false);
+      const [activeScenario, setActiveScenario] = useState("Health Concern & Physical Exhaustion (Hindi / Hinglish)");
+      const [scenariosList, setScenariosList] = useState([]);
 
-        <!-- Emergency / Quick Call Action -->
-        <div class="hidden lg:block">
-          <a href="tel:8691000800" class="inline-flex items-center gap-2 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-full shadow-sm transition">
-            <i data-lucide="phone-call" class="w-4 h-4"></i>
-            Talk to Counselor
-          </a>
-        </div>
+      // Global Drag & Drop: prevent browser from opening dropped files in a new tab
+      useEffect(() => {
+        const preventFileNav = (e) => {
+          e.preventDefault();
+        };
+        window.addEventListener("dragover", preventFileNav, false);
+        window.addEventListener("drop", preventFileNav, false);
+        return () => {
+          window.removeEventListener("dragover", preventFileNav);
+          window.removeEventListener("drop", preventFileNav);
+        };
+      }, []);
 
-        <!-- Mobile Menu Hamburger -->
-        <button onclick="toggleMobileNav()" class="md:hidden p-2 rounded-md text-stone-600 hover:text-stone-900" aria-label="Open navigation menu">
-          <i data-lucide="menu" class="w-6 h-6"></i>
-        </button>
-      </div>
-    </div>
+      // Check backend health on mount
+      useEffect(() => {
+        fetch("/v1/health")
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === "healthy" || data.status === "ok") setBackendHealthy(true);
+          })
+          .catch(() => setBackendHealthy(false));
 
-    <!-- Mobile Dropdown Navigation -->
-    <nav id="mobile-nav" class="hidden md:hidden border-t border-stone-200 bg-white px-4 pt-2 pb-4 space-y-1">
-      <button onclick="switchTab('programs'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
-        Programs Explorer (14)
-      </button>
-      <button onclick="switchTab('directory'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
-        Hospital & Volunteer Directory
-      </button>
-      <button onclick="switchTab('education'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red">
-        Cancer Resources & Guidance
-      </button>
-      <button onclick="switchTab('counsellor'); toggleMobileNav();" class="block w-full text-left px-3 py-2 rounded-md font-medium text-stone-700 hover:bg-rose-50 hover:text-sanjeevani-red flex items-center gap-2">
-        <i data-lucide="shield" class="w-4 h-4 text-sanjeevani-red"></i> Counselor Portal
-      </button>
-    </nav>
-  </header>
+        fetch("/v1/analyze/scenarios")
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.scenarios) {
+              setScenariosList(data.scenarios);
+            }
+          })
+          .catch(() => {});
+      }, []);
 
-  <!-- MAIN CONTENT CONTAINER -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      return (
+        <div className="flex h-full w-full bg-[#fbfbfd] text-neutral-900 font-sans">
+          {/* Notion/Apple-Style Minimalist Left Sidebar (Desktop Only: >= 768px) */}
+          <aside className="hidden md:flex w-[260px] flex-shrink-0 bg-[#f7f7f5] border-r border-[#ececeb] flex-col justify-between select-none">
+            {/* Top Brand & Navigation */}
+            <div className="p-4">
+              {/* Brand Logo & Title */}
+              <div className="flex items-center gap-3 px-2 py-2 mb-6">
+                <Icons.Logo />
+                <div>
+                  <div className="font-semibold text-sm tracking-[0.16em] uppercase text-neutral-900 font-sans">
+                    Sanjeevani
+                  </div>
+                  <div className="text-[10px] font-medium tracking-[0.08em] text-neutral-400 font-inter uppercase">
+                    Affective Intelligence
+                  </div>
+                </div>
+              </div>
 
-    <!-- ======================================================== -->
-    <!-- TAB 1: FR-1.1 PROGRAM EXPLORER (14 SANJEEVANI PROGRAMS)   -->
-    <!-- ======================================================== -->
-    <section id="tab-programs" class="tab-content active space-y-6" aria-labelledby="heading-programs">
-      <div class="border-b border-stone-200 pb-5">
-        <h1 id="heading-programs" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Sanjeevani Care Programs</h1>
-        <p class="text-stone-600 mt-2 max-w-3xl">
-          Browse through all 14 holistic interventions designed to assist cancer victors and their caregivers through handholding, counseling, nutrition, and rehabilitation. Free of charge, no login required.
-        </p>
-      </div>
+              {/* Navigation Items */}
+              <div className="space-y-1">
+                <div className="px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-400 font-inter">
+                  Consultation
+                </div>
 
-      <!-- Category Filter Pills -->
-      <div class="flex flex-wrap gap-2 pt-2" id="program-filters">
-        <button onclick="filterPrograms('all')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-sanjeevani-red text-white" data-cat="all">All (14)</button>
-        <button onclick="filterPrograms('patient')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="patient">Patient Care</button>
-        <button onclick="filterPrograms('wellness')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="wellness">Wellness & Nutrition</button>
-        <button onclick="filterPrograms('community')" class="prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300" data-cat="community">Awareness & Training</button>
-      </div>
+                <button
+                  onClick={() => setActiveTab("session")}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "session"
+                      ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/60"
+                      : "text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icons.SessionCheck className={`w-4 h-4 ${activeTab === "session" ? "text-emerald-600" : "text-neutral-500"}`} />
+                    <span>Session Checkup</span>
+                  </div>
+                  {activeTab === "session" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
+                </button>
 
-      <!-- Program Cards Grid -->
-      <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-        <!-- Populated via JavaScript -->
-      </div>
-    </section>
+                <button
+                  onClick={() => setActiveTab("voice")}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "voice"
+                      ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/60"
+                      : "text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icons.VoiceCheck className={`w-4 h-4 ${activeTab === "voice" ? "text-emerald-600" : "text-neutral-500"}`} />
+                    <span>Voice & Note Check</span>
+                  </div>
+                  {activeTab === "voice" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
+                </button>
 
-    <!-- ======================================================== -->
-    <!-- TAB 2: FR-1.2 HOSPITAL & VOLUNTEER DIRECTORY            -->
-    <!-- ======================================================== -->
-    <section id="tab-directory" class="tab-content space-y-6" aria-labelledby="heading-directory">
-      <div class="border-b border-stone-200 pb-5">
-        <h1 id="heading-directory" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Hospital & Volunteer Directory</h1>
-        <p class="text-stone-600 mt-2 max-w-3xl">
-          Find certified Sanjeevani counselors and Cancer Buddies stationed inside regional cancer centers across India.
-        </p>
-      </div>
+                <div className="pt-4 px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-400 font-inter">
+                  Clinical Care
+                </div>
 
-      <!-- Search & Filters -->
-      <div class="flex flex-col sm:flex-row gap-3">
-        <div class="relative flex-1">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3.5 text-stone-400"></i>
-          <input type="text" id="dir-search" oninput="filterDirectory()" placeholder="Search hospital name, city, or counselor..."
-                 class="w-full pl-9 pr-4 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
-        </div>
-        <select id="dir-city-filter" onchange="filterDirectory()" class="px-4 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red bg-white">
-          <option value="">All Cities / Regions</option>
-          <option value="mumbai">Mumbai</option>
-          <option value="delhi">Delhi / NCR</option>
-          <option value="kolkata">Kolkata</option>
-          <option value="ahmedabad">Ahmedabad</option>
-          <option value="jaipur">Jaipur</option>
-          <option value="bengaluru">Bengaluru</option>
-          <option value="guwahati">Guwahati</option>
-          <option value="varanasi">Varanasi</option>
-        </select>
-      </div>
+                <button
+                  onClick={() => setActiveTab("rag")}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "rag"
+                      ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/60"
+                      : "text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icons.AskSanjeevani className={`w-4 h-4 ${activeTab === "rag" ? "text-emerald-600" : "text-neutral-500"}`} />
+                    <span>Ask Sanjeevani</span>
+                  </div>
+                  {activeTab === "rag" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
+                </button>
 
-      <!-- Directory Cards Grid -->
-      <div id="directory-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-        <!-- Populated via JavaScript -->
-      </div>
-    </section>
+                <button
+                  onClick={() => setActiveTab("triage")}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "triage"
+                      ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/60"
+                      : "text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icons.Triage className={`w-4 h-4 ${activeTab === "triage" ? "text-emerald-600" : "text-neutral-500"}`} />
+                    <span>Counsellor Triage</span>
+                  </div>
+                  {activeTab === "triage" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
+                </button>
 
-    <!-- ======================================================== -->
-    <!-- TAB 3: FR-1.3 CANCER RESOURCES & GUIDANCE                -->
-    <!-- ======================================================== -->
-    <section id="tab-education" class="tab-content space-y-6" aria-labelledby="heading-education">
-      <div class="border-b border-stone-200 pb-5">
-        <h1 id="heading-education" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Cancer Resources & Guidance</h1>
-        <p class="text-stone-600 mt-2 max-w-3xl">
-          Verified educational primers on nutrition during chemotherapy, emotional self-regulation, government financial schemes, and caregiver guidance.
-        </p>
-      </div>
-
-      <!-- Sub-tabs for Education -->
-      <div class="flex border-b border-stone-200 space-x-6 text-sm font-bold">
-        <button onclick="switchEduSubTab('nutrition')" id="subnav-nutrition" class="edu-subnav-btn pb-3 border-b-2 border-sanjeevani-red text-sanjeevani-red">
-          Chemo Nutrition Guide
-        </button>
-        <button onclick="switchEduSubTab('coping')" id="subnav-coping" class="edu-subnav-btn pb-3 text-stone-500 hover:text-stone-800">
-          Mind & Breathwork (Satori)
-        </button>
-        <button onclick="switchEduSubTab('schemes')" id="subnav-schemes" class="edu-subnav-btn pb-3 text-stone-500 hover:text-stone-800">
-          Govt Grants & Schemes
-        </button>
-      </div>
-
-      <!-- Subtab 1: Chemo Nutrition -->
-      <article id="edu-nutrition" class="edu-subcontent space-y-4">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
-          <h2 class="text-xl font-bold text-stone-900">Essential Nutrition During Chemotherapy</h2>
-          <p class="text-sm text-stone-600 leading-relaxed">
-            Nutritional wellness during active oncological treatments plays an instrumental role in sustaining blood counts, repairing healthy tissues, and curbing nausea.
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-            <div class="p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <h3 class="font-bold text-amber-900 text-sm">Hydration & Electrolytes</h3>
-              <p class="text-xs text-amber-800 mt-1 leading-relaxed">Consume room-temperature coconut water, thin dal water, and lemon juice in frequent small sips.</p>
+                <button
+                  onClick={() => setActiveTab("programs")}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === "programs"
+                      ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/60"
+                      : "text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icons.Programs className={`w-4 h-4 ${activeTab === "programs" ? "text-emerald-600" : "text-neutral-500"}`} />
+                    <span>Support Programs</span>
+                  </div>
+                  {activeTab === "programs" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
+                </button>
+              </div>
             </div>
-            <div class="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
-              <h3 class="font-bold text-emerald-900 text-sm">Gentle Protein Intake</h3>
-              <p class="text-xs text-emerald-800 mt-1 leading-relaxed">Sattu water, thoroughly boiled eggs, boiled moong dal, and soft paneer aid tissue healing.</p>
+
+            {/* Bottom Status & System Info */}
+            <div className="p-4 border-t border-[#ececeb] space-y-2">
+              <div className="flex items-center justify-between text-xs px-2 text-neutral-500 font-inter">
+                <span>FastAPI Engine</span>
+                <span className="flex items-center gap-1.5">
+                  <span className={`w-2 h-2 rounded-full ${backendHealthy ? "bg-emerald-500" : "bg-emerald-400 animate-pulse"}`}></span>
+                  <span className="font-medium text-[11px]">{backendHealthy ? "Active :8000" : "Connecting..."}</span>
+                </span>
+              </div>
+              <div className="bg-white/80 border border-neutral-200/60 rounded-lg p-2.5 text-[11px] text-neutral-500 space-y-1 font-inter">
+                <div className="flex justify-between">
+                  <span>Whisper ASR:</span>
+                  <span className="font-semibold text-neutral-700">OpenAI Base</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>AudEERING SER:</span>
+                  <span className="font-semibold text-neutral-700">Wav2Vec2 ft</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Affect Matrix:</span>
+                  <span className="font-semibold text-neutral-700">PANAS-20</span>
+                </div>
+              </div>
             </div>
-            <div class="p-4 bg-rose-50 rounded-lg border border-rose-200">
-              <h3 class="font-bold text-rose-900 text-sm">What to Avoid</h3>
-              <p class="text-xs text-rose-800 mt-1 leading-relaxed">Strictly steer clear of raw unpeeled vegetables, unpasteurized milk, spicy oily curries, and stale food.</p>
+          </aside>
+
+          {/* Main Viewport Container */}
+          <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#fbfbfd] relative">
+            {/* Top Bar: Adaptive Mobile & Desktop */}
+            <header className="h-14 border-b border-[#e5e5ea] bg-white/80 backdrop-blur-xl px-4 md:px-8 flex items-center justify-between flex-shrink-0 z-20 sticky top-0">
+              <div className="flex items-center gap-2.5">
+                {/* Mobile Brand (Shown on Mobile only) */}
+                <div className="flex md:hidden items-center gap-2">
+                  <Icons.Logo />
+                  <div>
+                    <span className="font-semibold text-sm tracking-[0.12em] uppercase text-neutral-900 font-sans block leading-tight">
+                      Sanjeevani
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-[10px] font-semibold text-emerald-700 border border-emerald-200/50">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                    AI Active
+                  </span>
+                </div>
+
+                {/* Desktop Breadcrumbs (Hidden on Mobile) */}
+                <div className="hidden md:flex items-center gap-2 text-sm text-neutral-500">
+                  <span className="font-medium text-neutral-900">
+                    {activeTab === "session" && "Full Conversation Checkup (Session Analyzer)"}
+                    {activeTab === "voice" && "Single Message or Voice Note Check"}
+                    {activeTab === "rag" && "Ask Sanjeevani - Conversational Oncology Assistant"}
+                    {activeTab === "triage" && "Counsellor Triage & Escalation Dashboard"}
+                    {activeTab === "programs" && "Sanjeevani Verified Oncology Programs"}
+                  </span>
+                  <span className="text-neutral-300">/</span>
+                  <span className="text-xs text-neutral-400">Clinical Affective Engine</span>
+                </div>
+              </div>
+
+              {/* Emergency Helpline Badge */}
+              <div className="flex items-center gap-2">
+                <a
+                  href="tel:8691000800"
+                  className="flex items-center gap-1.5 text-xs font-inter font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-full hover:bg-emerald-100 active:scale-95 transition"
+                  title="24/7 CanSupport National Helpline"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="hidden sm:inline">Helpline:</span>
+                  <span>8691000800</span>
+                </a>
+              </div>
+            </header>
+
+            {/* Scrollable Workspace Content with generous padding above mobile tab bar */}
+            <div className="flex-1 overflow-y-auto px-3.5 py-4 sm:px-6 md:px-8 md:py-6 pb-28 md:pb-8 overscroll-contain">
+              {activeTab === "session" && (
+                <SessionCheckupView
+                  scenariosList={scenariosList}
+                  activeScenario={activeScenario}
+                  setActiveScenario={setActiveScenario}
+                />
+              )}
+              {activeTab === "voice" && <SingleVoiceCheckView />}
+              {activeTab === "rag" && <AskSanjeevaniView />}
+              {activeTab === "triage" && <CounsellorTriageView />}
+              {activeTab === "programs" && <ProgramsExplorerView />}
             </div>
-          </div>
+
+            {/* Apple / Notion Classic Bottom Tab Bar (Visible on Mobile only: < 768px) */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 apple-bottom-bar safe-bottom-nav px-2 pt-1.5 flex justify-around items-center select-none shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+              {[
+                { id: "session", label: "Checkup", icon: Icons.SessionCheck },
+                { id: "voice", label: "Voice", icon: Icons.VoiceCheck },
+                { id: "rag", label: "Ask AI", icon: Icons.AskSanjeevani },
+                { id: "triage", label: "Triage", icon: Icons.Triage },
+                { id: "programs", label: "Programs", icon: Icons.Programs },
+              ].map((tab) => {
+                const isActive = activeTab === tab.id;
+                const IconComp = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id);
+                      if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(10);
+                      }
+                    }}
+                    className={`flex-1 py-1 flex flex-col items-center justify-center transition-all duration-150 active:scale-90 touch-target ${
+                      isActive ? "text-emerald-700" : "text-neutral-400 hover:text-neutral-600"
+                    }`}
+                  >
+                    <div className={`p-1 rounded-full transition-all ${
+                      isActive ? "bg-emerald-50 text-emerald-700" : ""
+                    }`}>
+                      <IconComp className={`w-5 h-5 transition-transform ${isActive ? "scale-105" : ""}`} />
+                    </div>
+                    <span className={`text-[10px] mt-0.5 tracking-tight font-inter ${
+                      isActive ? "font-semibold text-neutral-900" : "font-medium text-neutral-400"
+                    }`}>
+                      {tab.label}
+                    </span>
+                    {isActive && (
+                      <span className="w-1 h-1 rounded-full bg-emerald-600 mt-0.5"></span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </main>
         </div>
-      </article>
+      );
+    }
 
-      <!-- Subtab 2: Satori Breathwork -->
-      <article id="edu-coping" class="edu-subcontent hidden space-y-4">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
-          <h2 class="text-xl font-bold text-stone-900">Satori Mind-Body Immunity: 4-7-8 Rhythmic Breathing</h2>
-          <p class="text-sm text-stone-600 leading-relaxed">
-            Emotional distress directly influences autonomic nervous tension. Sanjeevani’s Satori protocol introduces evidence-backed pranayama to reduce pre-chemo panic.
-          </p>
-          <div class="p-4 bg-stone-100 rounded-lg space-y-2 text-xs text-stone-700">
-            <p><strong>Step 1:</strong> Exhale completely through your mouth with a gentle whooshing sound.</p>
-            <p><strong>Step 2:</strong> Close your mouth and inhale quietly through your nose to a mental count of <strong>4</strong>.</p>
-            <p><strong>Step 3:</strong> Hold your breath calmly for a count of <strong>7</strong>.</p>
-            <p><strong>Step 4:</strong> Exhale completely through your mouth to a count of <strong>8</strong>. Repeat 4 cycles.</p>
-          </div>
-        </div>
-      </article>
+    // ==============================================================================
+    // AUDIO UTILITIES: PCM 16-BIT MONO RIFF WAV RECORDER (NO FFMPEG DEPENDENCY)
+    // ==============================================================================
+    function encodeWAV(samples, sampleRate) {
+      const buffer = new ArrayBuffer(44 + samples.length * 2);
+      const view = new DataView(buffer);
 
-      <!-- Subtab 3: Govt Schemes -->
-      <article id="edu-schemes" class="edu-subcontent hidden space-y-4">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 space-y-4 shadow-sm">
-          <h2 class="text-xl font-bold text-stone-900">Government Support & Financial Aid Navigation</h2>
-          <p class="text-sm text-stone-600 leading-relaxed">
-            Through Sanjeevani's CanDaan program, counselors help navigate central and state healthcare welfare schemes:
-          </p>
-          <ul class="list-disc list-inside space-y-2 text-xs text-stone-700 leading-relaxed">
-            <li><strong>Ayushman Bharat (PM-JAY):</strong> Up to ₹5 Lakhs per family per year for secondary and tertiary cancer care.</li>
-            <li><strong>Prime Minister's National Relief Fund (PMNRF):</strong> Partial grant assistance for life-threatening illnesses.</li>
-            <li><strong>Health Minister’s Cancer Patient Fund (HMCPF):</strong> Financial assistance up to ₹2 Lakhs for patients below poverty line.</li>
-          </ul>
-        </div>
-      </article>
-    </section>
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
 
-    <!-- ======================================================== -->
-    <!-- TAB 4: PHASE 4 COUNSELLOR DASHBOARD & ESCALATION FLOW    -->
-    <!-- ======================================================== -->
-    <section id="tab-counsellor" class="tab-content space-y-6" aria-labelledby="heading-counsellor">
-      <div class="border-b border-stone-200 pb-5 flex flex-wrap justify-between items-center gap-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 id="heading-counsellor" class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">Oncology Counselor Portal</h1>
-            <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider">Module 5: FR-5.1 to FR-5.6</span>
-          </div>
-          <p class="text-stone-600 mt-1 max-w-3xl text-sm">
-            Priority escalation triage queue, AI-drafted reply recommendations, and 30-day longitudinal recovery tracking. Protected access.
-          </p>
-        </div>
-        <div id="counsellor-auth-status" class="flex items-center gap-2">
-          <!-- Auth Badge / Lock Button -->
-        </div>
-      </div>
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + samples.length * 2, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true); // PCM format
+      view.setUint16(22, 1, true); // Mono
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 2, true); // Byte rate
+      view.setUint16(32, 2, true); // Block align
+      view.setUint16(34, 16, true); // Bits per sample
+      writeString(view, 36, 'data');
+      view.setUint32(40, samples.length * 2, true);
 
-      <!-- Counsellor Authentication Barrier (Token Guard) -->
-      <div id="counsellor-auth-wall" class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm max-w-lg mx-auto text-center space-y-4">
-        <div class="w-12 h-12 bg-rose-100 text-sanjeevani-red rounded-full flex items-center justify-center mx-auto">
-          <i data-lucide="lock" class="w-6 h-6"></i>
-        </div>
-        <div>
-          <h2 class="text-lg font-bold text-stone-900">Protected Counselor Access</h2>
-          <p class="text-xs text-stone-600 mt-1">Please enter your Sanjeevani counselor access key to unlock the live patient escalation queue.</p>
-        </div>
-        <form onsubmit="handleCounsellorAuth(event)" class="space-y-3">
-          <input type="password" id="counsellor-key-input" placeholder="Enter Counselor Access Key..." value="sanjeevani-counsellor-demo-2026"
-                 class="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
-          <button type="submit" class="w-full bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2.5 rounded-lg text-sm font-bold shadow-sm transition">
-            Unlock Counselor Dashboard
-          </button>
-        </form>
-        <p class="text-[11px] text-stone-400">Default demo key: <code class="bg-stone-100 px-1 py-0.5 rounded font-mono text-stone-600">sanjeevani-counsellor-demo-2026</code></p>
-      </div>
+      let offset = 44;
+      for (let i = 0; i < samples.length; i++) {
+        let s = Math.max(-1, Math.min(1, samples[i]));
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        offset += 2;
+      }
 
-      <!-- Authenticated Counselor View -->
-      <div id="counsellor-dashboard-view" class="hidden space-y-6">
-        <!-- KPI Analytics Metric Cards (FR-5.3) -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="counsellor-kpi-cards">
-          <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
-            <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Escalations</span>
-            <p id="kpi-total-cases" class="text-2xl font-black text-stone-900 mt-1">-</p>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-rose-200 shadow-sm bg-rose-50/40">
-            <span class="text-xs font-bold text-rose-700 uppercase tracking-wider">Pending Review</span>
-            <p id="kpi-pending-cases" class="text-2xl font-black text-rose-600 mt-1">-</p>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm bg-emerald-50/40">
-            <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Resolved</span>
-            <p id="kpi-resolved-cases" class="text-2xl font-black text-emerald-600 mt-1">-</p>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-amber-200 shadow-sm bg-amber-50/40">
-            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">Average EDS Distress</span>
-            <p id="kpi-avg-eds" class="text-2xl font-black text-amber-600 mt-1">-</p>
-          </div>
-        </div>
+      return new Blob([view], { type: 'audio/wav' });
+    }
 
-        <!-- Priority Escalation Queue (FR-5.1) -->
-        <div class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
-          <div class="p-4 border-b border-stone-200 flex justify-between items-center bg-stone-50">
-            <div class="flex items-center gap-2">
-              <i data-lucide="list-ordered" class="w-4 h-4 text-sanjeevani-red"></i>
-              <h2 class="text-sm font-bold text-stone-900 uppercase tracking-wider">Priority Escalation Queue (EDS &gt; 60%)</h2>
-            </div>
-            <button onclick="loadCounsellorQueue()" class="text-xs bg-white hover:bg-stone-100 text-stone-700 font-semibold px-3 py-1.5 rounded-lg border border-stone-300 flex items-center gap-1.5">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Queue
-            </button>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-stone-700">
-              <thead class="bg-stone-100 text-stone-600 uppercase font-bold text-[11px] border-b border-stone-200">
-                <tr>
-                  <th class="p-3">Case ID</th>
-                  <th class="p-3">Timestamp</th>
-                  <th class="p-3">Hospital / City</th>
-                  <th class="p-3">EDS Distress</th>
-                  <th class="p-3">Patient Query Snippet</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody id="counsellor-queue-tbody" class="divide-y divide-stone-100">
-                <tr><td colspan="7" class="p-6 text-center text-stone-500">Loading escalation cases...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+    class BrowserAudioRecorder {
+      constructor() {
+        this.stream = null;
+        this.audioCtx = null;
+        this.processor = null;
+        this.source = null;
+        this.chunks = [];
+        this.sampleRate = 16000;
+        this.isRecording = false;
+      }
 
-        <!-- Longitudinal Recovery Trajectory (FR-4.6, FR-4.7) -->
-        <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm space-y-4">
-          <div class="flex justify-between items-center border-b border-stone-100 pb-3">
-            <div>
-              <h2 class="text-base font-bold text-stone-900">30-Day Recovery Cohort Mood Trajectory</h2>
-              <p class="text-xs text-stone-500">Multimodal affect tracking across clinical checkups.</p>
-            </div>
-            <span id="longitudinal-trend-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-              Trend: Loading...
-            </span>
-          </div>
-          <div id="longitudinal-table-container" class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-stone-700">
-              <thead class="bg-stone-50 text-stone-600 font-bold border-b border-stone-200">
-                <tr>
-                  <th class="p-2.5">Day</th>
-                  <th class="p-2.5">Date</th>
-                  <th class="p-2.5">Care Stage</th>
-                  <th class="p-2.5">Positive Affect (PA)</th>
-                  <th class="p-2.5">Negative Affect (NA)</th>
-                  <th class="p-2.5">Distress (EDS)</th>
-                  <th class="p-2.5">Primary State</th>
-                </tr>
-              </thead>
-              <tbody id="longitudinal-tbody" class="divide-y divide-stone-100">
-                <!-- Populated via JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+      async start() {
+        this.chunks = [];
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Microphone API is not supported in this browser environment.");
+        }
 
-  </main>
-
-  <!-- ======================================================== -->
-  <!-- MODAL: ENROLMENT INFORMATION                             -->
-  <!-- ======================================================== -->
-  <div id="enroll-modal" class="hidden fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-      <button onclick="closeEnrollModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 p-1 rounded-full" aria-label="Close dialog">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <div id="modal-content">
-        <!-- Filled dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- MODAL: COUNSELOR CASE RESOLUTION (PHASE 4)               -->
-  <!-- ======================================================== -->
-  <div id="resolve-modal" class="hidden fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4">
-      <button onclick="closeResolveModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 p-1" aria-label="Close dialog">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <div>
-        <span class="text-xs uppercase font-bold text-sanjeevani-red" id="resolve-case-id-badge">CASE</span>
-        <h2 class="text-lg font-bold text-stone-900">Approve & Resolve Escalated Case</h2>
-        <p class="text-xs text-stone-500">Send verified guidance and close ticket in the clinical log.</p>
-      </div>
-      <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 text-xs space-y-1">
-        <p><strong>Patient Query:</strong> <span id="resolve-patient-query" class="text-stone-700"></span></p>
-        <p><strong>Distress Score:</strong> <span id="resolve-eds-badge" class="font-bold"></span></p>
-      </div>
-      <div>
-        <label for="resolve-counsellor-name" class="block text-xs font-bold text-stone-700 uppercase">Counselor Name</label>
-        <input type="text" id="resolve-counsellor-name" value="Senior Counselor Meena" class="w-full mt-1 px-3 py-2 border border-stone-300 rounded-lg text-xs" />
-      </div>
-      <div>
-        <label for="resolve-reply-text" class="block text-xs font-bold text-stone-700 uppercase">Counselor Reply / Resolution Notes</label>
-        <textarea id="resolve-reply-text" rows="4" class="w-full mt-1 p-3 border border-stone-300 rounded-lg text-xs leading-relaxed"></textarea>
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="submitCaseResolution()" class="flex-1 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2.5 rounded-lg text-xs font-bold shadow-sm">
-          Confirm & Close Ticket
-        </button>
-        <button onclick="closeResolveModal()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-semibold">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- FR-1.4: EMBEDDED PERSISTENT AI CHATBOT (TEXT & AUDIO)    -->
-  <!-- ======================================================== -->
-  <aside aria-label="Sanjeevani AI Help Assistant" class="fixed bottom-4 right-4 z-50">
-    <!-- Chat Launcher Floating Action Button -->
-    <button onclick="toggleChat()" id="chat-fab" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white p-3.5 rounded-full shadow-lg flex items-center gap-2 transition hover:scale-105" aria-expanded="false" aria-controls="chat-window">
-      <i data-lucide="message-circle" class="w-6 h-6"></i>
-      <span class="text-xs font-bold hidden sm:inline">Ask Sanjeevani AI</span>
-    </button>
-
-    <!-- Chat Box Window -->
-    <section id="chat-window" class="hidden flex flex-col bg-white w-[94vw] sm:w-[420px] h-[580px] max-h-[85vh] rounded-2xl shadow-2xl border border-stone-200 overflow-hidden mt-2">
-      <!-- Chat Header -->
-      <div class="bg-sanjeevani-red text-white p-3.5 flex justify-between items-center shadow-sm">
-        <div class="flex items-center space-x-2">
-          <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
-          <div>
-            <h2 class="text-sm font-bold flex items-center gap-1.5">
-              Sanjeevani Assistant
-              <span id="chat-backend-badge" class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-normal">FastAPI Live</span>
-            </h2>
-            <p class="text-[10px] text-rose-100">Supports English & हिंदी | Multimodal Affect</p>
-          </div>
-        </div>
-        <button onclick="toggleChat()" class="text-white hover:text-rose-200 p-1" aria-label="Minimize Chat">
-          <i data-lucide="minus" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Mode Switcher Tabs Inside Chat -->
-      <div class="bg-stone-100 border-b border-stone-200 p-1.5 flex gap-1 text-xs">
-        <button onclick="setChatMode('text')" id="mode-btn-text" class="flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1">
-          <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat (RAG)
-        </button>
-        <button onclick="setChatMode('voice')" id="mode-btn-voice" class="flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1">
-          <i data-lucide="mic" class="w-3.5 h-3.5"></i> Voice Affect
-        </button>
-      </div>
-
-      <!-- Quick prompts (Text Mode) -->
-      <div id="quick-prompts-bar" class="bg-stone-50 border-b border-stone-200 p-2 flex gap-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
-        <button onclick="sendQuickPrompt('What is CanAhaar nutrition program?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">CanAhaar?</button>
-        <button onclick="sendQuickPrompt('टाटा मेमोरियल अस्पताल मुंबई में काउंसलर संपर्क?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">टाटा अस्पताल (TMH)?</button>
-        <button onclick="sendQuickPrompt('How to join Satori breathwork?')" class="bg-white border border-stone-300 px-2 py-0.5 rounded-full text-stone-600 hover:border-sanjeevani-red">Satori Pranayama</button>
-      </div>
-
-      <!-- Voice Control Panel (Voice Mode) -->
-      <div id="voice-control-drawer" class="hidden bg-stone-50 border-b border-stone-200 p-3 space-y-2.5">
-        <!-- Explicit Consent Checkbox (FR-2.4 & Audio Safety Requirement) -->
-        <label class="flex items-start gap-2 text-[11px] text-stone-600 cursor-pointer bg-white p-2 rounded-lg border border-stone-200">
-          <input type="checkbox" id="audio-consent-cb" checked class="mt-0.5 rounded text-sanjeevani-red focus:ring-sanjeevani-red" />
-          <span>I consent to temporary acoustic prosody analysis (energy & pitch variation). Audio is never permanently retained.</span>
-        </label>
-
-        <!-- Voice Action Buttons -->
-        <div class="flex items-center gap-2">
-          <button id="btn-mic-toggle" onclick="toggleMicrophoneRecording()" class="flex-1 bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition">
-            <i data-lucide="mic" class="w-4 h-4"></i>
-            <span id="mic-btn-label">Record Voice</span>
-          </button>
-          <label class="flex-1 bg-white hover:bg-stone-100 text-stone-700 py-2 px-3 rounded-lg text-xs font-bold border border-stone-300 flex items-center justify-center gap-1.5 cursor-pointer text-center">
-            <i data-lucide="upload" class="w-4 h-4"></i>
-            <span>Upload File</span>
-            <input type="file" id="audio-file-input" accept="audio/*" onchange="handleAudioFileUpload(event)" class="hidden" />
-          </label>
-        </div>
-
-        <!-- Sample Audio Shortcuts for Mentor Evaluation -->
-        <div class="flex items-center gap-1 text-[10px] text-stone-500 pt-1">
-          <span class="shrink-0 font-medium">Test samples:</span>
-          <button onclick="sendBenchmarkAudioSample('shouting')" class="bg-white border border-stone-200 px-2 py-0.5 rounded hover:border-sanjeevani-red">Heated Conflict</button>
-          <button onclick="sendBenchmarkAudioSample('panic')" class="bg-white border border-stone-200 px-2 py-0.5 rounded hover:border-sanjeevani-red">Anxious Breathing</button>
-        </div>
-      </div>
-
-      <!-- Status / Processing Banner -->
-      <div id="chat-status-banner" class="hidden bg-amber-50 text-amber-800 border-b border-amber-200 px-3 py-1.5 text-[11px] flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-        <span id="chat-status-text">Processing affective inference...</span>
-      </div>
-
-      <!-- Messages Thread -->
-      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs bg-stone-50/70" aria-live="polite">
-        <!-- Initial Welcome Message -->
-        <div class="flex items-start gap-2">
-          <div class="w-7 h-7 rounded-full bg-sanjeevani-red text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">S</div>
-          <div class="bg-white p-3 rounded-xl rounded-tl-none border border-stone-200 shadow-sm text-stone-800 leading-relaxed space-y-1.5">
-            <p><strong>Namaste!</strong> I am the Sanjeevani AI Support Assistant, grounded in verified psycho-oncology guidelines.</p>
-            <p class="text-stone-600">You can ask questions about our 14 programs, hospital counselor desks, or share your feelings in <strong>English</strong> or <strong>हिंदी</strong>.</p>
-            <p class="text-[10px] text-stone-400 border-t border-stone-100 pt-1">
-              ⚠️ <em>Non-diagnostic guidance only. In clinical crises, call our toll-free helpline at 8691000800.</em>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chat Input Field (Text Mode) -->
-      <form id="chat-form" onsubmit="handleChatSubmit(event)" class="p-2.5 bg-white border-t border-stone-200 flex items-center gap-2">
-        <input type="text" id="chat-input" placeholder="Type query / प्रश्न लिखें..." required
-               class="flex-1 text-xs sm:text-sm px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sanjeevani-red" />
-        <button type="submit" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white p-2 rounded-lg" aria-label="Send message">
-          <i data-lucide="send" class="w-4 h-4"></i>
-        </button>
-      </form>
-    </section>
-  </aside>
-
-  <!-- FOOTER -->
-  <footer class="bg-white border-t border-stone-200 mt-12 text-stone-500 text-xs py-6">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-      <p>© 2026 Sanjeevani - Life Beyond Cancer. Open access patient welfare portal.</p>
-      <div class="flex space-x-4">
-        <span>Helpline: 8691000800</span>
-        <span>•</span>
-        <a href="mailto:info@sanjeevani-lifebeyondcancer.com" class="hover:underline">info@sanjeevani-lifebeyondcancer.com</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ======================================================== -->
-  <!-- JAVASCRIPT APPLICATION LOGIC                              -->
-  <!-- ======================================================== -->
-  <script>
-    // --- 0. CONFIGURABLE API BASE URL (NFR-11) ---
-    const API_BASE_URL = window.SANJEEVANI_API_BASE || (
-      window.location.port === "8000" ? window.location.origin : "http://127.0.0.1:8000"
-    );
-
-    let isBackendOnline = false;
-    let counsellorKey = "sanjeevani-counsellor-demo-2026";
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRecording = false;
-    let recordStartTime = 0;
-    let recordTimerInterval = null;
-    let currentChatMode = "text";
-    let runningEdsScore = 20.0;
-
-    // --- 1. STATIC CATALOG FALLBACK REPOSITORY ---
-    const PROGRAMS = [
-      { id: 1, title: "CanSahyogi", tag: "patient", badge: "In-Hospital Support", desc: "Handholding and emotional counseling sessions in regional hospital premises for cancer patients, led by certified victors.", eligibility: "Any cancer patient or immediate caregiver undergoing therapy in partnered hospitals.", enrollSteps: "Visit the Sanjeevani Desk at the OPD wing of the hospital or request an in-ward bed visit through nursing staff." },
-      { id: 2, title: "CanSaarthi", tag: "community", badge: "Caregiver Training", desc: "Specialized oncological caregiving certificate course training personnel to assist cancer patients professionally.", eligibility: "Cancer victors or high school/college graduates interested in oncology social service.", enrollSteps: "Fill out the CanSaarthi application on the Sanjeevani website or contact the training coordinator at 8691000800." },
-      { id: 3, title: "Satori", tag: "wellness", badge: "Holistic Immunity", desc: "Holistic healing initiative offering integrative coping techniques, breathwork, and emotional regulation to minimize recurrence risks.", eligibility: "Cancer survivors in post-treatment rehabilitation phase.", enrollSteps: "Free 4-session weekly online workshop. Register by dialling the helpline or via virtual referral." },
-      { id: 4, title: "Srjan", tag: "wellness", badge: "Comprehensive Rehab", desc: "Personalized integrative program blending 72 sessions (110 hours) of physical movement, breathwork, and clinical nutrition support.", eligibility: "Stage 1 to Stage 4 cancer survivors seeking sustained quality of life.", enrollSteps: "Assigned after a 1-on-1 physical wellness evaluation with our wellness mentors." },
-      { id: 5, title: "CanAhaar", tag: "wellness", badge: "Free Nutritional Kits", desc: "Nutritional supplement program delivering essential nutrient-dense ration boxes to underprivileged cancer fighters.", eligibility: "Underprivileged patients undergoing active chemo/radiation therapy.", enrollSteps: "Submit hospital prescription and income proof at any hospital Sanjeevani counter." },
-      { id: 6, title: "CanChetna", tag: "community", badge: "Early Detection", desc: "Mass cancer awareness and lifestyle education campaigns conducted in schools, colleges, and rural clusters.", eligibility: "Open to general public and institutions.", enrollSteps: "Institutions can invite Sanjeevani educators by emailing info@sanjeevani-lifebeyondcancer.com." },
-      { id: 7, title: "CanVaarta", tag: "community", badge: "Dialogues & Podcasts", desc: "Meaningful structured conversations, public seminars, and webinars demystifying cancer fears and taboos.", eligibility: "Open to all patients, relatives, and doctors.", enrollSteps: "Watch livestreams online or join monthly hospital auditoria panels." },
-      { id: 8, title: "CanUtsav", tag: "patient", badge: "Celebration of Life", desc: "Festive gatherings, art interventions, and talent galas celebrating the resilience and camaraderie of cancer victors.", eligibility: "All active patients and survivors.", enrollSteps: "Sign up at regional hospital chapters during festive calendar updates." },
-      { id: 9, title: "Sanjeevani Angels", tag: "community", badge: "Volunteer Youth", desc: "Dynamic volunteer cadre of youth and college students spreading cancer awareness and conducting blood donation camps.", eligibility: "College students and young professionals.", enrollSteps: "Register online via the Sanjeevani volunteer intake form." },
-      { id: 10, title: "CanRehab", tag: "patient", badge: "Physical Prosthetics", desc: "Distribution of customized silicone breast prostheses and supportive rehabilitation brassieres for post-mastectomy victors.", eligibility: "Mastectomy victors belonging to marginalized communities.", enrollSteps: "Measurements taken at partner hospital Sanjeevani OPD desks." },
-      { id: 11, title: "CanShiksha", tag: "community", badge: "School Education", desc: "Early intervention tobacco and lifestyle education for secondary school children.", eligibility: "Recognized educational institutions.", enrollSteps: "Principal or school coordinator requests via official inquiry." },
-      { id: 12, title: "CanHunar", tag: "wellness", badge: "Skill Livelihood", desc: "Vocational upskilling producing eco-friendly artifacts, enabling financial independence for cancer survivors.", eligibility: "Survivors looking for flexible work-from-home or workshop stipends.", enrollSteps: "Intake evaluation at regional Sanjeevani community centers." },
-      { id: 13, title: "CanDaan", tag: "patient", badge: "Navigating Aid", desc: "Financial guidance assisting impoverished patients in securing PM-JAY and state funding.", eligibility: "Low-income patients requiring tertiary oncological surgery.", enrollSteps: "Connect with the Sanjeevani desk with income and doctor prescription." },
-      { id: 14, title: "National Helpline", tag: "patient", badge: "8691000800", desc: "Multi-line dedicated tele-counseling support center answering inquiries across India in 9 regional languages.", eligibility: "All citizens, patients, caregivers, and doctors.", enrollSteps: "Dial 8691000800 (Mon-Sat, 9:00 AM - 6:00 PM)." }
-    ];
-
-    const DIRECTORY = [
-      { hospital: "Tata Memorial Hospital (TMH)", city: "Mumbai", state: "Maharashtra", counselor: "Sonal Virkayade", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM (OPD Wing)" },
-      { hospital: "ACTREC (Tata Memorial Centre)", city: "Navi Mumbai", state: "Maharashtra", counselor: "Pooja Kadam", contact: "+91 8691000800", schedule: "Mon - Fri: 9:30 AM - 4:30 PM (Main Atrium)" },
-      { hospital: "Delhi State Cancer Institute (DSCI)", city: "Delhi", state: "Delhi", counselor: "Rajesh Sharma", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM (Radiotherapy Block)" },
-      { hospital: "Gujarat Cancer & Research Institute (GCRI)", city: "Ahmedabad", state: "Gujarat", counselor: "Nehal Parikh", contact: "+91 8691000800", schedule: "Mon - Fri: 9:00 AM - 4:30 PM" },
-      { hospital: "Sawai Man Singh (SMS) Medical College", city: "Jaipur", state: "Rajasthan", counselor: "Kavita Rathore", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 4:00 PM (Sanjeevani Room)" },
-      { hospital: "Kidwai Memorial Institute of Oncology", city: "Bengaluru", state: "Karnataka", counselor: "Lakshmi Rao", contact: "+91 8691000800", schedule: "Mon - Fri: 9:30 AM - 5:00 PM" },
-      { hospital: "Chittaranjan National Cancer Institute (CNCI)", city: "Kolkata", state: "West Bengal", counselor: "Debolina Mukherjee", contact: "+91 8691000800", schedule: "Mon - Sat: 9:30 AM - 5:00 PM (New Campus)" },
-      { hospital: "Dr. B. Borooah Cancer Institute (BBCI)", city: "Guwahati", state: "Assam", counselor: "Maitreyi Bora", contact: "+91 8691000800", schedule: "Mon - Fri: 9:00 AM - 4:00 PM" },
-      { hospital: "Mahamana Pandit Madan Mohan Malviya Cancer Centre", city: "Varanasi", state: "Uttar Pradesh", counselor: "Anand Mishra (Care Counsellor)", contact: "+91 8691000800", schedule: "Mon - Sat: 9:00 AM - 5:00 PM" }
-    ];
-
-    // --- 2. BACKEND HEALTH CHECK ---
-    async function checkBackendConnectivity() {
-      const dot = document.getElementById("backend-status-dot");
-      const label = document.getElementById("backend-status-label");
-      const chatBadge = document.getElementById("chat-backend-badge");
-
-      try {
-        const res = await fetch(`${API_BASE_URL}/health`, { method: "GET" });
-        if (res.ok) {
-          const data = await res.json();
-          isBackendOnline = true;
-          dot.className = "w-2 h-2 rounded-full bg-emerald-400";
-          label.textContent = `Backend Online (v${data.version || '2.1'})`;
-          if (chatBadge) {
-            chatBadge.textContent = "FastAPI Connected";
-            chatBadge.className = "text-[9px] bg-emerald-500/30 text-emerald-100 px-1.5 py-0.2 rounded font-normal";
+        this.stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 1,
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
           }
-          return;
-        }
-      } catch (err) {
-        // Backend not reached
-      }
+        });
 
-      isBackendOnline = false;
-      dot.className = "w-2 h-2 rounded-full bg-amber-400";
-      label.textContent = "Offline Demo Mode";
-      if (chatBadge) {
-        chatBadge.textContent = "Offline Demo Mode";
-        chatBadge.className = "text-[9px] bg-amber-500/30 text-amber-100 px-1.5 py-0.2 rounded font-normal";
-      }
-    }
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = new AudioContextClass();
+        this.sampleRate = this.audioCtx.sampleRate;
+        this.source = this.audioCtx.createMediaStreamSource(this.stream);
 
-    // --- 3. TAB MANAGEMENT ---
-    function switchTab(tabId) {
-      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-      const target = document.getElementById(`tab-${tabId}`);
-      if (target) target.classList.add("active");
-
-      document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.classList.remove("text-sanjeevani-red", "bg-rose-50");
-        btn.classList.add("text-stone-600");
-      });
-      const activeBtn = document.getElementById(`nav-${tabId}`);
-      if (activeBtn) {
-        activeBtn.classList.add("text-sanjeevani-red", "bg-rose-50");
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      if (tabId === "counsellor" && isCounsellorAuthenticated()) {
-        loadCounsellorQueue();
-        loadLongitudinalHistory();
-      }
-    }
-
-    function switchEduSubTab(subId) {
-      document.querySelectorAll(".edu-subcontent").forEach(el => el.classList.add("hidden"));
-      const target = document.getElementById(`edu-${subId}`);
-      if (target) target.classList.remove("hidden");
-
-      document.querySelectorAll(".edu-subnav-btn").forEach(b => {
-        b.classList.remove("border-b-2", "border-sanjeevani-red", "text-sanjeevani-red");
-        b.classList.add("text-stone-500");
-      });
-      const activeBtn = document.getElementById(`subnav-${subId}`);
-      if (activeBtn) {
-        activeBtn.classList.add("border-b-2", "border-sanjeevani-red", "text-sanjeevani-red");
-      }
-    }
-
-    function toggleMobileNav() {
-      const m = document.getElementById("mobile-nav");
-      m.classList.toggle("hidden");
-    }
-
-    // --- 4. CATALOG RENDERING ---
-    function renderPrograms(list) {
-      const grid = document.getElementById("programs-grid");
-      grid.innerHTML = list.map(p => `
-        <article class="bg-white rounded-xl border border-stone-200 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-start gap-2 mb-2">
-              <span class="text-[11px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-rose-100 text-sanjeevani-red">
-                ${p.badge}
-              </span>
-              <span class="text-xs font-semibold text-stone-400">#${p.id}</span>
-            </div>
-            <h3 class="text-lg font-bold text-stone-900">${p.title}</h3>
-            <p class="text-xs text-stone-600 mt-2 line-clamp-3 leading-relaxed">${p.desc}</p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
-            <button onclick="openEnrollModal(${p.id})" class="text-xs font-bold text-sanjeevani-red hover:text-sanjeevani-darkRed flex items-center gap-1">
-              Eligibility & How to Join <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </article>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function renderDirectory(list) {
-      const container = document.getElementById("directory-container");
-      if (list.length === 0) {
-        container.innerHTML = `<p class="col-span-2 text-stone-500 text-center py-8">No hospital centers found matching your search.</p>`;
-        return;
-      }
-      container.innerHTML = list.map(d => `
-        <article class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-base text-stone-900">${d.hospital}</h3>
-              <span class="bg-stone-100 text-stone-700 text-xs px-2 py-0.5 rounded font-semibold">${d.city}</span>
-            </div>
-            <div class="mt-3 space-y-1.5 text-xs text-stone-600">
-              <p><strong class="text-stone-800">Counselor:</strong> ${d.counselor}</p>
-              <p><strong class="text-stone-800">Visiting Hours:</strong> ${d.schedule}</p>
-            </div>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
-            <span class="text-stone-500 truncate mr-2">${d.contact}</span>
-            <a href="tel:8691000800" class="shrink-0 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-3 py-1.5 rounded flex items-center gap-1">
-              <i data-lucide="phone" class="w-3.5 h-3.5"></i> Call Desk
-            </a>
-          </div>
-        </article>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function filterPrograms(cat) {
-      document.querySelectorAll(".prog-filter-btn").forEach(btn => {
-        if (btn.getAttribute("data-cat") === cat) {
-          btn.className = "prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-sanjeevani-red text-white";
-        } else {
-          btn.className = "prog-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-stone-200 text-stone-700 hover:bg-stone-300";
-        }
-      });
-      if (cat === "all") renderPrograms(PROGRAMS);
-      else renderPrograms(PROGRAMS.filter(p => p.tag === cat));
-    }
-
-    function filterDirectory() {
-      const q = document.getElementById("dir-search").value.toLowerCase();
-      const city = document.getElementById("dir-city-filter").value.toLowerCase();
-      const filtered = DIRECTORY.filter(d => {
-        const matchesQuery = d.hospital.toLowerCase().includes(q) || d.counselor.toLowerCase().includes(q);
-        const matchesCity = !city || d.city.toLowerCase() === city;
-        return matchesQuery && matchesCity;
-      });
-      renderDirectory(filtered);
-    }
-
-    // --- 5. MODALS ---
-    function openEnrollModal(id) {
-      const p = PROGRAMS.find(item => item.id === id);
-      const modal = document.getElementById("enroll-modal");
-      const content = document.getElementById("modal-content");
-      content.innerHTML = `
-        <div class="space-y-4">
-          <div class="pr-6">
-            <span class="text-xs uppercase font-bold text-sanjeevani-red">${p.badge}</span>
-            <h3 class="text-xl font-extrabold text-stone-900">${p.title}</h3>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500">Eligibility Criteria</h4>
-            <p class="text-sm text-stone-700 mt-1">${p.eligibility}</p>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500">How to Enrol (No Login Needed)</h4>
-            <p class="text-sm text-stone-700 mt-1 bg-stone-50 p-3 rounded-lg border border-stone-200 leading-relaxed">${p.enrollSteps}</p>
-          </div>
-          <div class="pt-2 flex flex-col gap-2">
-            <a href="tel:8691000800" class="w-full bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white text-center py-2.5 rounded-lg text-sm font-bold">
-              Call Helpline for Instant Enrolment
-            </a>
-            <button onclick="closeEnrollModal()" class="w-full bg-stone-100 hover:bg-stone-200 text-stone-700 py-2 rounded-lg text-xs font-semibold">Close</button>
-          </div>
-        </div>
-      `;
-      modal.classList.remove("hidden");
-      lucide.createIcons();
-    }
-    function closeEnrollModal() {
-      document.getElementById("enroll-modal").classList.add("hidden");
-    }
-
-    function setFontSize(size) {
-      const html = document.documentElement;
-      if (size === 'small') html.style.fontSize = '14px';
-      if (size === 'normal') html.style.fontSize = '16px';
-      if (size === 'large') html.style.fontSize = '18px';
-    }
-
-    // --- 6. CHATBOT INTERACTIONS (FR-1.4, PHASE 3) ---
-    function toggleChat() {
-      const box = document.getElementById("chat-window");
-      const btn = document.getElementById("chat-fab");
-      const isHidden = box.classList.contains("hidden");
-      box.classList.toggle("hidden");
-      btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
-    }
-
-    function setChatMode(mode) {
-      currentChatMode = mode;
-      const btnText = document.getElementById("mode-btn-text");
-      const btnVoice = document.getElementById("mode-btn-voice");
-      const quickBar = document.getElementById("quick-prompts-bar");
-      const voiceDrawer = document.getElementById("voice-control-drawer");
-
-      if (mode === "voice") {
-        btnVoice.className = "flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1";
-        btnText.className = "flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1";
-        quickBar.classList.add("hidden");
-        voiceDrawer.classList.remove("hidden");
-      } else {
-        btnText.className = "flex-1 py-1 px-2 rounded-md font-bold bg-white text-sanjeevani-red shadow-sm flex items-center justify-center gap-1";
-        btnVoice.className = "flex-1 py-1 px-2 rounded-md font-bold text-stone-600 hover:text-stone-900 flex items-center justify-center gap-1";
-        voiceDrawer.classList.add("hidden");
-        quickBar.classList.remove("hidden");
-      }
-    }
-
-    function sendQuickPrompt(txt) {
-      document.getElementById("chat-input").value = txt;
-      handleChatSubmit(new Event('submit'));
-    }
-
-    async function handleChatSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById("chat-input");
-      const query = input.value.trim();
-      if (!query) return;
-
-      appendChatMessage("user", query);
-      input.value = "";
-      showChatStatus("Consulting Sanjeevani verified knowledge base...");
-
-      if (isBackendOnline) {
-        try {
-          const res = await fetch(`${API_BASE_URL}/v1/chat`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: query, current_eds: runningEdsScore })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            runningEdsScore = data.running_eds;
-            renderChatRAGResponse(data);
-            hideChatStatus();
-            return;
-          }
-        } catch (err) {
-          console.warn("Backend chat request failed:", err);
-        }
-      }
-
-      // Offline demonstration fallback (Clearly labeled, non-fabricated)
-      hideChatStatus();
-      renderOfflineDemoChatReply(query);
-    }
-
-    function showChatStatus(text) {
-      const banner = document.getElementById("chat-status-banner");
-      const span = document.getElementById("chat-status-text");
-      span.textContent = text;
-      banner.classList.remove("hidden");
-    }
-
-    function hideChatStatus() {
-      document.getElementById("chat-status-banner").classList.add("hidden");
-    }
-
-    function appendChatMessage(sender, htmlContent) {
-      const thread = document.getElementById("chat-messages");
-      const div = document.createElement("div");
-
-      if (sender === "user") {
-        div.className = "flex justify-end";
-        div.innerHTML = `
-          <div class="bg-sanjeevani-red text-white p-3 rounded-xl rounded-tr-none text-xs max-w-[85%] leading-relaxed shadow-sm">
-            ${htmlContent}
-          </div>
-        `;
-      } else {
-        div.className = "flex items-start gap-2";
-        div.innerHTML = `
-          <div class="w-6 h-6 rounded-full bg-sanjeevani-red text-white flex items-center justify-center font-bold text-[10px] shrink-0 shadow-sm">S</div>
-          <div class="bg-white p-3 rounded-xl rounded-tl-none border border-stone-200 shadow-sm text-stone-800 text-xs max-w-[90%] leading-relaxed space-y-2">
-            ${htmlContent}
-          </div>
-        `;
-      }
-      thread.appendChild(div);
-      thread.scrollTop = thread.scrollHeight;
-      lucide.createIcons();
-    }
-
-    function renderChatRAGResponse(data) {
-      let citationsHtml = "";
-      if (data.citations && data.citations.length > 0) {
-        citationsHtml = `
-          <div class="pt-2 border-t border-stone-100 text-[11px] text-stone-500">
-            <span class="font-bold text-stone-700">📚 Source Citations:</span>
-            <ul class="list-disc list-inside mt-0.5 space-y-0.5">
-              ${data.citations.map(c => `<li><strong>${c.title}</strong> (${c.source})</li>`).join('')}
-            </ul>
-          </div>
-        `;
-      }
-
-      let escalationBanner = "";
-      if (data.is_escalated || data.running_eds > 60) {
-        escalationBanner = `
-          <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-lg text-rose-900 space-y-1.5 mt-2">
-            <div class="flex items-center gap-1 font-bold text-xs">
-              <i data-lucide="alert-circle" class="w-4 h-4 text-sanjeevani-red"></i>
-              <span>High Distress Prioritization (EDS: ${data.running_eds}%)</span>
-            </div>
-            <p class="text-[11px] text-rose-800 leading-snug">Our oncology counselor is available for immediate personal support.</p>
-            <div class="flex gap-1.5 pt-1">
-              <a href="tel:8691000800" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white px-2.5 py-1 rounded text-[11px] font-bold">Call 8691000800</a>
-              <button onclick="requestCounselorEscalation('${data.running_eds}')" class="bg-white border border-rose-300 text-rose-800 px-2 py-1 rounded text-[11px] font-semibold">Request Call</button>
-            </div>
-          </div>
-        `;
-      }
-
-      const content = `
-        <div class="space-y-1">
-          <div class="flex justify-between items-center text-[10px] text-stone-400">
-            <span>Lang: <strong>${data.detected_language}</strong></span>
-            <span class="px-1.5 py-0.5 rounded font-bold ${data.running_eds > 60 ? 'bg-rose-100 text-rose-800' : 'bg-stone-100 text-stone-700'}">
-              EDS: ${data.running_eds}%
-            </span>
-          </div>
-          <div class="text-stone-800 text-xs leading-relaxed whitespace-pre-line">${data.reply}</div>
-          ${citationsHtml}
-          ${escalationBanner}
-          <div class="text-[10px] text-stone-400 pt-1">⚠️ <em>Non-Diagnostic Signal: Guidance only.</em></div>
-        </div>
-      `;
-      appendChatMessage("bot", content);
-    }
-
-    function renderOfflineDemoChatReply(query) {
-      const lq = query.toLowerCase();
-      let reply = "Sanjeevani offers 14 dedicated programs including CanSahyogi (counseling), Satori (wellness), and CanAhaar (nutrition). For direct assistance at your regional hospital desk, call 8691000800.";
-      let citations = ["Sanjeevani Care Guidelines (Offline Cache)"];
-
-      if (lq.includes("आहार") || lq.includes("canahaar") || lq.includes("nutrition")) {
-        reply = "CanAhaar provides free, nutrient-dense ration kits to underprivileged cancer patients undergoing chemotherapy. Available at partnered hospital Sanjeevani desks.";
-        citations = ["CanAhaar Program Overview, Annual Yearbook 2025"];
-      } else if (lq.includes("टाटा") || lq.includes("tmh") || lq.includes("mumbai")) {
-        reply = "Sanjeevani counselors are present at Tata Memorial Hospital (TMH) Parel OPD and Golden Jubilee wards, Mon-Sat 9am-5pm.";
-        citations = ["Hospital Directory - TMH Mumbai Regional Office"];
-      }
-
-      const content = `
-        <div class="space-y-1.5">
-          <span class="text-[10px] uppercase font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">[DEMO / SYNTHETIC EXAMPLE - BACKEND OFFLINE]</span>
-          <p class="text-stone-800 text-xs leading-relaxed">${reply}</p>
-          <div class="text-[10px] text-stone-400">📚 Source: ${citations[0]}</div>
-        </div>
-      `;
-      appendChatMessage("bot", content);
-    }
-
-    // --- 7. AUDIO RECORDING & FILE UPLOAD (STAGE C, PHASE 3) ---
-    async function toggleMicrophoneRecording() {
-      const consentCb = document.getElementById("audio-consent-cb");
-      if (!consentCb.checked) {
-        alert("Explicit Consent Required: Please check the consent box before activating voice analysis.");
-        return;
-      }
-
-      if (!isRecording) {
-        startRecording();
-      } else {
-        stopRecording();
-      }
-    }
-
-    async function startRecording() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        audioChunks = [];
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
-        mediaRecorder.onstop = () => {
-          const blob = new Blob(audioChunks, { type: 'audio/wav' });
-          submitAudioPayload(blob, "mic_voice_sample.wav");
+        this.processor = this.audioCtx.createScriptProcessor(4096, 1, 1);
+        this.processor.onaudioprocess = (e) => {
+          if (!this.isRecording) return;
+          const input = e.inputBuffer.getChannelData(0);
+          this.chunks.push(new Float32Array(input));
         };
 
-        mediaRecorder.start();
-        isRecording = true;
-        recordStartTime = Date.now();
-
-        const btn = document.getElementById("btn-mic-toggle");
-        btn.classList.add("bg-red-600", "animate-recording");
-        document.getElementById("mic-btn-label").textContent = "Stop Recording (00:00)";
-
-        recordTimerInterval = setInterval(() => {
-          const sec = Math.floor((Date.now() - recordStartTime) / 1000);
-          const mm = String(Math.floor(sec / 60)).padStart(2, '0');
-          const ss = String(sec % 60).padStart(2, '0');
-          document.getElementById("mic-btn-label").textContent = `Stop Recording (${mm}:${ss})`;
-          if (sec >= 59) stopRecording();
-        }, 1000);
-
-      } catch (err) {
-        console.error("Microphone access error:", err);
-        alert("Microphone Access Notice: Could not access microphone. Please allow audio access in your browser or test with 'Upload File' / sample buttons.");
+        this.source.connect(this.processor);
+        this.processor.connect(this.audioCtx.destination);
+        this.isRecording = true;
       }
-    }
 
-    function stopRecording() {
-      if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(t => t.stop());
-      }
-      isRecording = false;
-      clearInterval(recordTimerInterval);
-
-      const btn = document.getElementById("btn-mic-toggle");
-      btn.classList.remove("bg-red-600", "animate-recording");
-      document.getElementById("mic-btn-label").textContent = "Record Voice";
-    }
-
-    function handleAudioFileUpload(e) {
-      const consentCb = document.getElementById("audio-consent-cb");
-      if (!consentCb.checked) {
-        alert("Explicit Consent Required: Please agree to the temporary voice analysis consent policy.");
-        e.target.value = "";
-        return;
-      }
-      const file = e.target.files[0];
-      if (!file) return;
-      submitAudioPayload(file, file.name);
-      e.target.value = "";
-    }
-
-    async function sendBenchmarkAudioSample(style) {
-      showChatStatus(`Loading clinical benchmark sample: ${style}...`);
-      try {
-        const sampleUrl = style === "shouting"
-          ? "/static/benchmark_samples/SAMPLE_SHOUTING_ANGER.wav"
-          : "/static/benchmark_samples/SAMPLE_HEAVY_BREATHING_PANIC.wav";
-
-        const res = await fetch(sampleUrl);
-        if (res.ok) {
-          const blob = await res.blob();
-          submitAudioPayload(blob, `${style}_benchmark.wav`);
-          return;
+      async stop() {
+        this.isRecording = false;
+        if (this.processor) {
+          try { this.processor.disconnect(); } catch (e) {}
+          this.processor = null;
         }
-      } catch (err) {
-        // Fallback to synthetic demonstration payload
-      }
+        if (this.source) {
+          try { this.source.disconnect(); } catch (e) {}
+          this.source = null;
+        }
+        if (this.audioCtx && this.audioCtx.state !== 'closed') {
+          try { await this.audioCtx.close(); } catch (e) {}
+          this.audioCtx = null;
+        }
+        if (this.stream) {
+          try { this.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+          this.stream = null;
+        }
 
-      hideChatStatus();
-      renderSyntheticAudioDemoCard(style);
+        let totalLen = 0;
+        for (const c of this.chunks) totalLen += c.length;
+        if (totalLen === 0) {
+          throw new Error("No audio was captured. Please check microphone and try speaking again.");
+        }
+
+        const merged = new Float32Array(totalLen);
+        let offset = 0;
+        for (const c of this.chunks) {
+          merged.set(c, offset);
+          offset += c.length;
+        }
+
+        let finalSamples = merged;
+        let finalRate = this.sampleRate;
+        if (this.sampleRate > 16000) {
+          const targetRate = 16000;
+          const ratio = this.sampleRate / targetRate;
+          const newLen = Math.round(merged.length / ratio);
+          const downsampled = new Float32Array(newLen);
+          for (let i = 0; i < newLen; i++) {
+            const srcIdx = Math.floor(i * ratio);
+            downsampled[i] = merged[srcIdx] || 0;
+          }
+          finalSamples = downsampled;
+          finalRate = targetRate;
+        }
+
+        return encodeWAV(finalSamples, finalRate);
+      }
     }
 
-    async function submitAudioPayload(audioBlobOrFile, filename) {
-      appendChatMessage("user", `🎙️ <em>Submitted voice recording: <strong>${filename}</strong></em>`);
-      showChatStatus("Analyzing speech prosody, pitch variation (F0), and cross-attention synchrony...");
+    function formatAudioTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
 
-      if (isBackendOnline) {
+    // ==============================================================================
+    // VIEW 1: FULL CONVERSATION CHECKUP (SESSION ANALYZER)
+    // ==============================================================================
+    function SessionCheckupView({ scenariosList, activeScenario, setActiveScenario }) {
+      const [audioFile, setAudioFile] = useState(null);
+      const [audioPreviewUrl, setAudioPreviewUrl] = useState(null);
+      const [audioMode, setAudioMode] = useState("file"); // "file" or "record"
+      const [isDragging, setIsDragging] = useState(false);
+      const [isRecording, setIsRecording] = useState(false);
+      const [recordingTime, setRecordingTime] = useState(0);
+      const [micError, setMicError] = useState(null);
+      const [language, setLanguage] = useState("auto");
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+      const [error, setError] = useState(null);
+
+      const fileInputRef = useRef(null);
+      const recorderRef = useRef(null);
+      const timerRef = useRef(null);
+
+      // Clean up object URLs on unmount
+      useEffect(() => {
+        return () => {
+          if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+          if (timerRef.current) clearInterval(timerRef.current);
+          if (recorderRef.current && recorderRef.current.isRecording) {
+            recorderRef.current.stop().catch(() => {});
+          }
+        };
+      }, [audioPreviewUrl]);
+
+      const handleAudioSelected = (file) => {
+        if (!file) return;
+        if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+        setAudioFile(file);
+        setAudioPreviewUrl(URL.createObjectURL(file));
+        setMicError(null);
+      };
+
+      const handleClearAudio = (e) => {
+        if (e) e.stopPropagation();
+        if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+        setAudioFile(null);
+        setAudioPreviewUrl(null);
+        setRecordingTime(0);
+        setMicError(null);
+      };
+
+      const startRecording = async () => {
+        setMicError(null);
+        try {
+          if (!recorderRef.current) {
+            recorderRef.current = new BrowserAudioRecorder();
+          }
+          await recorderRef.current.start();
+          setIsRecording(true);
+          setRecordingTime(0);
+
+          if (timerRef.current) clearInterval(timerRef.current);
+          timerRef.current = setInterval(() => {
+            setRecordingTime(prev => prev + 1);
+          }, 1000);
+        } catch (err) {
+          if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+            setMicError("Microphone permission was denied. Please allow microphone access in your browser's address bar and try again.");
+          } else {
+            setMicError("Could not access microphone: " + (err.message || err.name));
+          }
+          setIsRecording(false);
+        }
+      };
+
+      const stopRecording = async () => {
+        if (!recorderRef.current || !isRecording) return;
+        if (timerRef.current) clearInterval(timerRef.current);
+        setIsRecording(false);
+        try {
+          const wavBlob = await recorderRef.current.stop();
+          const recordedFile = new File([wavBlob], `consultation_recording_${Date.now()}.wav`, { type: "audio/wav" });
+          handleAudioSelected(recordedFile);
+        } catch (err) {
+          setMicError("Failed to save audio recording: " + err.message);
+        }
+      };
+
+      const runAnalysis = async () => {
+        setLoading(true);
+        setError(null);
         try {
           const formData = new FormData();
-          formData.append("file", audioBlobOrFile, filename);
-          formData.append("language", "auto");
+          if (audioFile) {
+            formData.append("file", audioFile);
+          } else {
+            formData.append("scenario", activeScenario);
+          }
+          formData.append("language", language);
 
-          const res = await fetch(`${API_BASE_URL}/v1/analyze/audio`, {
+          const res = await fetch("/v1/analyze/consultation", {
             method: "POST",
             body: formData
           });
 
-          if (res.ok) {
-            const data = await res.json();
-            hideChatStatus();
-            renderAudioAnalysisCard(data);
-            return;
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.detail || "Consultation evaluation failed");
+          }
+
+          const data = await res.json();
+          setResult(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="max-w-6xl mx-auto space-y-6">
+          {/* Header Card */}
+          <div className="bg-white border border-neutral-200/70 rounded-2xl p-4 sm:p-6 shadow-apple space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5">
+              <div>
+                <h1 className="text-lg sm:text-xl font-semibold text-neutral-900 tracking-tight">
+                  Full Consultation Checkup & Dialogue Timeline
+                </h1>
+                <p className="text-xs sm:text-sm text-neutral-500 font-inter mt-1 leading-relaxed">
+                  Upload recorded doctor-patient audio, drop an audio file, or record live through your browser microphone for continuous prosodic tracking.
+                </p>
+              </div>
+              <span className="self-start text-[11px] sm:text-xs font-inter font-medium px-2.5 py-1 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200 whitespace-nowrap">
+                Multi-Turn Diagnostic Mode
+              </span>
+            </div>
+
+            {/* Input Options Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              {/* Option A: Audio Input (Drop, Upload, or Live Record) */}
+              <div className="border border-neutral-200/80 rounded-xl p-4 bg-white flex flex-col justify-between space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider font-inter">
+                    Audio Stream Input
+                  </label>
+                  {/* Mode Selector Tabs */}
+                  <div className="inline-flex rounded-lg bg-neutral-100 p-0.5 text-xs font-inter font-medium">
+                    <button
+                      type="button"
+                      onClick={() => { setAudioMode("file"); setMicError(null); }}
+                      className={`px-3 py-1 rounded-md transition flex items-center gap-1.5 ${
+                        audioMode === "file" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-900"
+                      }`}
+                    >
+                      <Icons.Upload className="w-3.5 h-3.5" />
+                      <span>Drop / Browse</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setAudioMode("record"); setMicError(null); }}
+                      className={`px-3 py-1 rounded-md transition flex items-center gap-1.5 ${
+                        audioMode === "record" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-900"
+                      }`}
+                    >
+                      <Icons.VoiceCheck className="w-3.5 h-3.5 text-rose-500" />
+                      <span>Record Mic</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Sub-mode 1: Drop & Browse File */}
+                {audioMode === "file" && (
+                  <div
+                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                    onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsDragging(false);
+                      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                        handleAudioSelected(e.dataTransfer.files[0]);
+                      }
+                    }}
+                    className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
+                      isDragging
+                        ? "border-emerald-500 bg-emerald-50/80 ring-4 ring-emerald-500/20 scale-[1.01]"
+                        : audioFile
+                          ? "border-emerald-500/80 bg-emerald-50/40"
+                          : "border-neutral-200 hover:border-neutral-300 bg-neutral-50/50"
+                    }`}
+                  >
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="audio/*,.wav,.mp3,.ogg,.m4a,.flac"
+                      onChange={e => {
+                        if (e.target.files && e.target.files[0]) {
+                          handleAudioSelected(e.target.files[0]);
+                        }
+                      }}
+                    />
+                    <Icons.Upload className={`w-6 h-6 mx-auto mb-1.5 ${audioFile ? "text-emerald-600" : "text-neutral-400"}`} />
+                    <div className="text-sm font-medium text-neutral-800 truncate px-2">
+                      {isDragging ? "Drop your audio file right here!" : (audioFile ? audioFile.name : "Drop audio file or click to browse")}
+                    </div>
+                    <div className="text-xs text-neutral-400 font-inter mt-0.5">
+                      {audioFile
+                        ? `${(audioFile.size / (1024 * 1024)).toFixed(2)} MB • Audio Loaded & Ready`
+                        : "Drag audio directly from computer (WAV, MP3, M4A, OGG)"}
+                    </div>
+
+                    {audioFile && audioPreviewUrl && (
+                      <div className="mt-3 pt-2 border-t border-emerald-200/60" onClick={e => e.stopPropagation()}>
+                        <audio controls src={audioPreviewUrl} className="w-full h-8 max-h-8" />
+                        <div className="flex justify-end mt-1.5">
+                          <button
+                            type="button"
+                            onClick={handleClearAudio}
+                            className="text-xs text-rose-600 hover:underline font-inter font-medium"
+                          >
+                            Remove / Replace Audio
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Sub-mode 2: Live Mic Recording */}
+                {audioMode === "record" && (
+                  <div className="border border-neutral-200 rounded-xl p-4 text-center bg-neutral-50/40 flex flex-col items-center justify-center space-y-3 min-h-[140px]">
+                    {micError && (
+                      <div className="w-full text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2.5 rounded-lg text-left font-inter">
+                        {micError}
+                      </div>
+                    )}
+
+                    {!isRecording && !audioFile && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={startRecording}
+                          className="w-14 h-14 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow-apple transition-transform hover:scale-105 active:scale-95"
+                          title="Start Recording Consultation"
+                        >
+                          <Icons.VoiceCheck className="w-6 h-6 text-white" />
+                        </button>
+                        <div>
+                          <div className="text-sm font-medium text-neutral-800">
+                            Click to record consultation audio
+                          </div>
+                          <div className="text-xs text-neutral-400 font-inter mt-0.5">
+                            Browser will ask for microphone permission. Speak clearly.
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {isRecording && (
+                      <>
+                        <div className="relative">
+                          <div className="absolute inset-0 rounded-full bg-rose-400 pulse-record"></div>
+                          <button
+                            type="button"
+                            onClick={stopRecording}
+                            className="relative z-10 w-14 h-14 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-apple transition-transform hover:scale-105"
+                            title="Stop Recording"
+                          >
+                            <Icons.Stop className="w-6 h-6 text-white" />
+                          </button>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-inter font-medium">
+                            <span className="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+                            <span>Recording audio live...</span>
+                          </div>
+                          <div className="text-lg font-mono font-semibold text-neutral-900 tracking-wider">
+                            {formatAudioTime(recordingTime)}
+                          </div>
+                          {/* Pulsing visualizer bars */}
+                          <div className="flex items-center justify-center gap-1 h-3 pt-0.5">
+                            {[35, 70, 50, 90, 60, 80, 40, 65, 95, 45].map((h, i) => (
+                              <div
+                                key={i}
+                                className="w-1 bg-rose-500 rounded-full animate-pulse"
+                                style={{ height: `${h}%`, animationDelay: `${i * 90}ms` }}
+                              ></div>
+                            ))}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={stopRecording}
+                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-medium font-inter shadow-sm"
+                        >
+                          <Icons.Stop className="w-3.5 h-3.5" />
+                          <span>Stop & Save Recording</span>
+                        </button>
+                      </>
+                    )}
+
+                    {!isRecording && audioFile && (
+                      <div className="w-full space-y-2">
+                        <div className="flex items-center justify-between px-1">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 font-inter">
+                            <Icons.Check className="w-4 h-4 text-emerald-600" />
+                            <span>Voice Recording Captured ({formatAudioTime(recordingTime || 0)})</span>
+                          </div>
+                          <span className="text-[11px] text-neutral-400 font-mono">
+                            {(audioFile.size / 1024).toFixed(1)} KB WAV
+                          </span>
+                        </div>
+
+                        {audioPreviewUrl && (
+                          <audio controls src={audioPreviewUrl} className="w-full h-8" />
+                        )}
+
+                        <div className="flex items-center justify-between pt-1">
+                          <button
+                            type="button"
+                            onClick={startRecording}
+                            className="text-xs text-neutral-600 hover:text-neutral-900 font-inter flex items-center gap-1"
+                          >
+                            <Icons.VoiceCheck className="w-3.5 h-3.5" />
+                            <span>Record Again</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleClearAudio}
+                            className="text-xs text-rose-600 hover:underline font-inter font-medium"
+                          >
+                            Remove Recording
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Option B: Preloaded Clinical Scenarios */}
+              <div className="border border-neutral-200/80 rounded-xl p-4 bg-white space-y-2">
+                <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider font-inter block">
+                  Or select verified benchmark scenario
+                </label>
+                <select
+                  disabled={!!audioFile}
+                  value={activeScenario}
+                  onChange={e => setActiveScenario(e.target.value)}
+                  className="w-full text-sm border border-neutral-200 rounded-lg p-2.5 bg-neutral-50/50 focus:outline-none focus:border-neutral-400 transition"
+                >
+                  {scenariosList.length > 0 ? (
+                    scenariosList.map((sc, i) => <option key={i} value={sc}>{sc}</option>)
+                  ) : (
+                    <>
+                      <option value="Health Concern & Physical Exhaustion (Hindi / Hinglish)">Health Concern & Physical Exhaustion (Hindi / Hinglish)</option>
+                      <option value="Job Success & Joyful Relief (Hindi / English)">Job Success & Joyful Relief (Hindi / English)</option>
+                      <option value="Workplace Burnout & Impending Deadline Panic (High Stress)">Workplace Burnout & Impending Deadline Panic (High Stress)</option>
+                      <option value="Heated Interpersonal Argument & Shouting (High Conflict)">Heated Interpersonal Argument & Shouting (High Conflict)</option>
+                    </>
+                  )}
+                </select>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <span className="text-xs text-neutral-400 font-inter">Language:</span>
+                  <select
+                    value={language}
+                    onChange={e => setLanguage(e.target.value)}
+                    className="text-xs border border-neutral-200 rounded p-1 font-inter bg-white"
+                  >
+                    <option value="auto">Auto-Detect</option>
+                    <option value="hi">Hindi (हिंदी)</option>
+                    <option value="en">English / Hinglish</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Run Button */}
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={runAnalysis}
+                disabled={loading}
+                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-3 rounded-xl bg-neutral-900 text-white font-medium text-sm hover:bg-neutral-800 active:scale-98 transition disabled:opacity-50 shadow-sm"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Computing Neural Affect & Prosody...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.Play className="w-3.5 h-3.5" />
+                    <span>Run Full Consultation Checkup</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-sm font-inter">
+              Error during analysis: {error}
+            </div>
+          )}
+
+          {/* Results Display */}
+          {result && (
+            <div className="space-y-6">
+              {/* Overview Metrics Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {/* Card 1: Overall Vocal Affect & High Positive Energy Tag */}
+                <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple flex flex-col justify-between">
+                  <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Overall Vocal Affect</div>
+                  <div className="mt-1.5 flex items-center">
+                    {result.overall_vocal_status ? (
+                      <span dangerouslySetInnerHTML={{ __html: result.overall_vocal_status }} />
+                    ) : (result.evaluated_turns && result.evaluated_turns.length > 0 && result.evaluated_turns[0].vocal_status) ? (
+                      <span dangerouslySetInnerHTML={{ __html: result.evaluated_turns[0].vocal_status }} />
+                    ) : (
+                      <span className={`inline-block px-2.5 py-1 rounded text-xs font-bold font-inter ${
+                        result.session_eds <= 30
+                          ? "bg-emerald-100 text-emerald-800"
+                          : result.session_eds >= 70
+                          ? "bg-rose-100 text-rose-800"
+                          : "bg-amber-100 text-amber-800"
+                      }`}>
+                        {result.session_eds <= 30 ? "Animated & Joyful (High Positive Energy)" : "Normal Cadence / Composed"}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-1 font-inter truncate">
+                    {result.peak_moment && result.peak_moment.text ? `"${result.peak_moment.text}"` : "Continuous Affective Tracking"}
+                  </div>
+                </div>
+
+                {/* Card 2: Session Distress */}
+                <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                  <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Session Distress</div>
+                  <div className="text-3xl font-bold text-neutral-900 mt-1">
+                    {result.session_eds}%
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-1 font-inter">
+                    Section 8 EDS Index
+                  </div>
+                </div>
+
+                {/* Card 3: Triage Priority */}
+                <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                  <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Triage Priority</div>
+                  <div className="text-base font-semibold text-neutral-900 mt-2 truncate">
+                    {result.urgency_category || `Level ${result.triage_level}`}
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-1 font-inter">
+                    Level {result.triage_level} Actionable Protocol
+                  </div>
+                </div>
+
+                {/* Card 4: Dialogue Turns */}
+                <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                  <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Dialogue Turns</div>
+                  <div className="text-3xl font-bold text-neutral-900 mt-1">
+                    {result.turn_count || (result.evaluated_turns ? result.evaluated_turns.length : 0)}
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-1 font-inter">
+                    Duration: {result.total_duration}s
+                  </div>
+                </div>
+              </div>
+
+              {/* Mood Trajectory Curve */}
+              {result.svg_html && (
+                <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 shadow-apple space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-700 font-inter">
+                      Affective Mood Trajectory & Distress Curve
+                    </h3>
+                    <span className="text-xs text-neutral-400 font-inter">Synchronized over timeline</span>
+                  </div>
+                  <div
+                    className="w-full overflow-x-auto flex justify-center py-2"
+                    dangerouslySetInnerHTML={{ __html: result.svg_html }}
+                  />
+                </div>
+              )}
+
+              {/* Synchronized Turn Cards */}
+              <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 shadow-apple space-y-4">
+                <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-700 font-inter">
+                    Synchronized Dialogue Transcript & Acoustic Biomarkers
+                  </h3>
+                  <span className="text-xs text-neutral-400 font-inter">
+                    {result.evaluated_turns ? result.evaluated_turns.length : 0} Turns Processed
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {result.evaluated_turns && result.evaluated_turns.map((turn, idx) => (
+                    <div
+                      key={idx}
+                      className="border border-neutral-200/70 rounded-xl p-4 hover:border-neutral-300 transition bg-neutral-50/30 space-y-2"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-neutral-800 bg-neutral-200/70 px-2 py-0.5 rounded font-inter">
+                            Turn #{turn.turn_num || idx + 1}
+                          </span>
+                          <span className="text-neutral-400 font-inter font-mono">
+                            {turn.timestamp || `${turn.start}s - ${turn.end}s`}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {turn.vocal_status && (
+                            <span dangerouslySetInnerHTML={{ __html: turn.vocal_status }} />
+                          )}
+                          <span className="font-bold text-neutral-700 bg-white border border-neutral-200 px-2 py-0.5 rounded text-[11px] font-inter">
+                            EDS: {turn.turn_eds !== undefined ? turn.turn_eds : (turn.distress !== undefined ? turn.distress : 0)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-neutral-900 font-sans leading-relaxed">
+                        {turn.text}
+                      </div>
+
+                      {turn.prosody && (
+                        <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-neutral-500 font-inter border-t border-neutral-100 mt-2">
+                          <span>Pitch F0: <b className="text-neutral-700">{turn.prosody.f0_mean_hz ? turn.prosody.f0_mean_hz.toFixed(1) : 140.0} Hz</b> (±{turn.prosody.f0_std_hz ? turn.prosody.f0_std_hz.toFixed(1) : 10.0} Hz)</span>
+                          <span>RMS Volume: <b className="text-neutral-700">{turn.prosody.rms_mean ? turn.prosody.rms_mean.toFixed(3) : 0.04}</b></span>
+                          <span>ZCR Frication: <b className="text-neutral-700">{turn.prosody.zcr_mean ? turn.prosody.zcr_mean.toFixed(3) : 0.04}</b></span>
+                          <span>Tremor Proxy: <b className="text-neutral-700">{turn.prosody.jitter_proxy ? turn.prosody.jitter_proxy.toFixed(3) : 0.015}</b></span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Counselor Action Plan */}
+              {result.counselor_plan && (
+                <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 shadow-apple space-y-3">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-emerald-800 font-inter">
+                    Clinical Counselor Guidance & Action Plan
+                  </h3>
+                  <div className="prose prose-sm max-w-none text-neutral-700 font-sans whitespace-pre-wrap leading-relaxed">
+                    {result.counselor_plan}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==============================================================================
+    // VIEW 2: SINGLE MESSAGE OR VOICE NOTE CHECK
+    // ==============================================================================
+    function SingleVoiceCheckView() {
+      const [inputMode, setInputMode] = useState("mic"); // "mic", "file", "text"
+      const [textInput, setTextInput] = useState("");
+      const [audioFile, setAudioFile] = useState(null);
+      const [audioPreviewUrl, setAudioPreviewUrl] = useState(null);
+      const [isDragging, setIsDragging] = useState(false);
+      const [isRecording, setIsRecording] = useState(false);
+      const [recordingTime, setRecordingTime] = useState(0);
+      const [recordedBlob, setRecordedBlob] = useState(null);
+      const [recordedBlobUrl, setRecordedBlobUrl] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+      const [error, setError] = useState(null);
+
+      const recorderRef = useRef(null);
+      const timerIntervalRef = useRef(null);
+      const fileInputRef = useRef(null);
+
+      // Clean up object URLs on unmount
+      useEffect(() => {
+        return () => {
+          if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+          if (recordedBlobUrl) URL.revokeObjectURL(recordedBlobUrl);
+          if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+          if (recorderRef.current && recorderRef.current.isRecording) {
+            recorderRef.current.stop().catch(() => {});
+          }
+        };
+      }, [audioPreviewUrl, recordedBlobUrl]);
+
+      // Start live mic recording
+      const startRecording = async () => {
+        setError(null);
+        try {
+          if (!recorderRef.current) {
+            recorderRef.current = new BrowserAudioRecorder();
+          }
+          await recorderRef.current.start();
+          setIsRecording(true);
+          setRecordingTime(0);
+
+          if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+          timerIntervalRef.current = setInterval(() => {
+            setRecordingTime(prev => prev + 1);
+          }, 1000);
+        } catch (err) {
+          if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+            setError("Microphone permission was denied. Please allow microphone access in your browser's address bar and try again.");
           } else {
-            const errData = await res.json();
-            hideChatStatus();
-            appendChatMessage("bot", `<div class="text-rose-600 font-semibold">⚠️ Audio Analysis Notice: ${errData.detail || 'Processing failed'}</div>`);
-            return;
+            setError("Microphone access error: " + (err.message || err.name));
+          }
+          setIsRecording(false);
+        }
+      };
+
+      // Stop live mic recording
+      const stopRecording = async () => {
+        if (!recorderRef.current || !isRecording) return;
+        if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+        setIsRecording(false);
+        try {
+          const wavBlob = await recorderRef.current.stop();
+          if (recordedBlobUrl) URL.revokeObjectURL(recordedBlobUrl);
+          setRecordedBlob(wavBlob);
+          setRecordedBlobUrl(URL.createObjectURL(wavBlob));
+        } catch (err) {
+          setError("Failed to process recorded audio: " + err.message);
+        }
+      };
+
+      // Submit checkup
+      const analyzeSingle = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          if (inputMode === "text") {
+            if (!textInput.trim()) throw new Error("Please enter text message to evaluate.");
+            const res = await fetch("/v1/analyze/text", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text: textInput, language: "auto" })
+            });
+            if (!res.ok) throw new Error("Text analysis failed");
+            const data = await res.json();
+            setResult({ isText: true, ...data });
+          } else {
+            const fileToUpload = inputMode === "mic" ? recordedBlob : audioFile;
+            if (!fileToUpload) throw new Error("Please record audio or upload an audio file.");
+            
+            const formData = new FormData();
+            formData.append("file", fileToUpload, "recording.wav");
+            formData.append("language", "auto");
+
+            const res = await fetch("/v1/analyze/audio", {
+              method: "POST",
+              body: formData
+            });
+
+            if (!res.ok) {
+              const errData = await res.json().catch(() => ({}));
+              throw new Error(errData.detail || "Audio analysis failed");
+            }
+
+            const data = await res.json();
+            setResult({ isText: false, ...data });
           }
         } catch (err) {
-          console.error("Audio API error:", err);
+          setError(err.message);
+        } finally {
+          setLoading(false);
         }
-      }
+      };
 
-      hideChatStatus();
-      renderSyntheticAudioDemoCard("sample");
-    }
-
-    function renderAudioAnalysisCard(data) {
-      const bio = data.biomarkers || {};
-      const triage = data.eds_triage || {};
-      const panas = data.panas20 || {};
-      runningEdsScore = triage.eds || runningEdsScore;
-
-      let crossAttnBadge = "";
-      if (data.cross_attention && data.cross_attention.cross_attention_synchrony) {
-        crossAttnBadge = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-bold">Cross-Attention Synchrony: Active</span>`;
-      }
-
-      let escalationNotice = "";
-      if (triage.escalate_to_counsellor) {
-        escalationNotice = `
-          <div class="bg-rose-50 border border-rose-200 p-2.5 rounded-lg text-rose-900 space-y-1 mt-2">
-            <div class="flex items-center gap-1 font-bold text-xs">
-              <i data-lucide="alert-triangle" class="w-4 h-4 text-sanjeevani-red"></i>
-              <span>Counsellor Attention Recommended (EDS: ${triage.eds}%)</span>
+      return (
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Header Card */}
+          <div className="bg-white border border-neutral-200/70 rounded-2xl p-4 sm:p-6 shadow-apple space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div>
+                <h1 className="text-lg sm:text-xl font-semibold text-neutral-900 tracking-tight">
+                  Single Message or Voice Note Check
+                </h1>
+                <p className="text-xs sm:text-sm text-neutral-500 font-inter mt-1 leading-relaxed">
+                  Instant affective screening for spoken audio clips or text notes. Computes PANAS-20 affect, continuous VAD, and Section 8 EDS score.
+                </p>
+              </div>
+              <div className="flex w-full sm:w-auto bg-neutral-100 p-1 rounded-xl border border-neutral-200 text-xs font-inter font-medium self-start">
+                <button
+                  onClick={() => setInputMode("mic")}
+                  className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg transition active:scale-95 ${inputMode === "mic" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-900"}`}
+                >
+                  Live Mic
+                </button>
+                <button
+                  onClick={() => setInputMode("file")}
+                  className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg transition active:scale-95 ${inputMode === "file" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-900"}`}
+                >
+                  Upload Audio
+                </button>
+                <button
+                  onClick={() => setInputMode("text")}
+                  className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg transition active:scale-95 ${inputMode === "text" ? "bg-white text-neutral-900 shadow-sm" : "text-neutral-500 hover:text-neutral-900"}`}
+                >
+                  Text Message
+                </button>
+              </div>
             </div>
-            <p class="text-[11px] text-rose-800">High acoustic strain detected. We recommend direct counseling connection.</p>
-            <a href="tel:8691000800" class="inline-block mt-1 bg-sanjeevani-red text-white px-2.5 py-1 rounded text-[11px] font-bold">Call Helpline 8691000800</a>
-          </div>
-        `;
-      }
 
-      const cardHtml = `
-        <div class="space-y-2">
-          <div class="flex justify-between items-center text-[10px] text-stone-500 border-b border-stone-100 pb-1.5">
-            <span>Duration: <strong>${data.duration_sec}s</strong> (${data.format})</span>
-            ${crossAttnBadge}
-          </div>
-          <div>
-            <span class="text-[10px] font-bold uppercase text-stone-400">Whisper ASR Transcription</span>
-            <p class="text-stone-800 font-medium italic text-xs mt-0.5 bg-stone-50 p-2 rounded border border-stone-200">
-              "${data.transcript || 'Non-verbal vocal sample analyzed'}"
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-2 text-[11px]">
-            <div class="bg-stone-50 p-2 rounded border border-stone-200">
-              <span class="text-stone-500 block text-[10px] uppercase font-bold">Primary Emotion</span>
-              <span class="font-bold text-stone-900">${data.primary_emotion}</span>
+            {/* Input Container */}
+            <div className="pt-2">
+              {inputMode === "mic" && (
+                <div className="border border-neutral-200 rounded-xl p-8 text-center bg-neutral-50/40 flex flex-col items-center justify-center space-y-4">
+                  <div className="relative">
+                    {isRecording && <div className="absolute inset-0 rounded-full bg-rose-400 pulse-record"></div>}
+                    <button
+                      onClick={isRecording ? stopRecording : startRecording}
+                      className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition shadow-apple ${
+                        isRecording ? "bg-rose-600 text-white" : "bg-neutral-900 text-white hover:bg-neutral-800"
+                      }`}
+                    >
+                      {isRecording ? <Icons.Stop className="w-6 h-6" /> : <Icons.VoiceCheck className="w-6 h-6" />}
+                    </button>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-neutral-800">
+                      {isRecording ? "Recording audio live..." : (recordedBlob ? "Recording ready for checkup" : "Click microphone to start recording")}
+                    </div>
+                    <div className="text-xs text-neutral-400 font-inter mt-1 font-mono">
+                      {isRecording ? `00:${recordingTime < 10 ? "0" : ""}${recordingTime}` : (recordedBlob ? "Audio captured successfully" : "Speak naturally for 5–20 seconds")}
+                    </div>
+                  </div>
+                  {recordedBlob && recordedBlobUrl && (
+                    <div className="flex flex-col items-center gap-2">
+                      <audio controls src={recordedBlobUrl} className="h-8 max-w-xs mt-2" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (recordedBlobUrl) URL.revokeObjectURL(recordedBlobUrl);
+                          setRecordedBlob(null);
+                          setRecordedBlobUrl(null);
+                        }}
+                        className="text-xs text-rose-600 hover:underline font-inter"
+                      >
+                        Clear recording
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {inputMode === "file" && (
+                <div
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
+                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDragging(false);
+                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                      const file = e.dataTransfer.files[0];
+                      if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+                      setAudioFile(file);
+                      setAudioPreviewUrl(URL.createObjectURL(file));
+                    }
+                  }}
+                  className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
+                    isDragging
+                      ? "border-emerald-500 bg-emerald-50/70 ring-4 ring-emerald-500/20 scale-[1.01]"
+                      : audioFile
+                        ? "border-emerald-500 bg-emerald-50/30"
+                        : "border-neutral-200 hover:border-neutral-300 bg-neutral-50/50"
+                  }`}
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="audio/*,.wav,.mp3,.ogg,.m4a,.flac"
+                    onChange={e => {
+                      if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+                        setAudioFile(file);
+                        setAudioPreviewUrl(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                  <Icons.Upload className={`w-6 h-6 mx-auto mb-2 ${audioFile ? "text-emerald-600" : "text-neutral-400"}`} />
+                  <div className="text-sm font-medium text-neutral-800">
+                    {isDragging ? "Drop your audio file here!" : (audioFile ? audioFile.name : "Choose or drop audio note file")}
+                  </div>
+                  <div className="text-xs text-neutral-400 font-inter mt-1">
+                    {audioFile ? `${(audioFile.size / 1024).toFixed(1)} KB • Ready for checkup` : "Supports WAV, MP3, M4A, OGG up to 25 MB (drag & drop)"}
+                  </div>
+                  {audioFile && audioPreviewUrl && (
+                    <div className="mt-3 pt-2 border-t border-emerald-200/50" onClick={e => e.stopPropagation()}>
+                      <audio controls src={audioPreviewUrl} className="h-8 max-w-xs mx-auto" />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (audioPreviewUrl) URL.revokeObjectURL(audioPreviewUrl);
+                          setAudioFile(null);
+                          setAudioPreviewUrl(null);
+                        }}
+                        className="mt-2 text-xs text-rose-600 hover:underline font-inter"
+                      >
+                        Remove file
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {inputMode === "text" && (
+                <textarea
+                  rows="3"
+                  value={textInput}
+                  onChange={e => setTextInput(e.target.value)}
+                  placeholder="Enter patient note or message (e.g., 'Aaj subah final interview round ka result email aaya hai, mai bohot khush hu!')..."
+                  className="w-full text-sm border border-neutral-200 rounded-xl p-3.5 focus:outline-none focus:border-neutral-400 transition font-sans"
+                />
+              )}
             </div>
-            <div class="bg-stone-50 p-2 rounded border border-stone-200">
-              <span class="text-stone-500 block text-[10px] uppercase font-bold">EDS Distress</span>
-              <span class="font-bold text-sanjeevani-red">${triage.eds}% (${triage.level})</span>
-            </div>
-          </div>
-          <div class="bg-stone-50 p-2 rounded border border-stone-200 text-[10px] text-stone-600 space-y-0.5">
-            <div class="font-bold text-stone-700">Acoustic Biomarkers:</div>
-            <div>RMS Energy: <strong>${bio.rms_mean}</strong> | Pitch Variation (F0 std): <strong>${bio.f0_std_hz} Hz</strong></div>
-            <div>PANAS Scores: PA: <strong>${panas.pa_sum}</strong> / 50 | NA: <strong>${panas.na_sum}</strong> / 50</div>
-          </div>
-          ${escalationNotice}
-          <div class="text-[10px] text-stone-400 pt-1">
-            ⚠️ <em>${data.safety_disclaimer || 'Non-Diagnostic Signal: Guidance only.'}</em>
-          </div>
-        </div>
-      `;
-      appendChatMessage("bot", cardHtml);
-    }
 
-    function renderSyntheticAudioDemoCard(style) {
-      const cardHtml = `
-        <div class="space-y-2">
-          <span class="text-[10px] uppercase font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">[DEMO / SYNTHETIC EXAMPLE - BACKEND OFFLINE]</span>
-          <div>
-            <span class="text-[10px] font-bold uppercase text-stone-400">Simulated Transcription</span>
-            <p class="text-stone-800 font-medium italic text-xs mt-0.5 bg-stone-50 p-2 rounded border border-stone-200">
-              "Doctor please help us, we are crying and terrified, we have no funds left for chemo!"
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-2 text-[11px]">
-            <div class="bg-stone-50 p-2 rounded border border-stone-200">
-              <span class="text-stone-500 block text-[10px]">Primary Emotion</span>
-              <span class="font-bold text-rose-700">🔴 Severe Anxiety</span>
-            </div>
-            <div class="bg-stone-50 p-2 rounded border border-stone-200">
-              <span class="text-stone-500 block text-[10px]">EDS Score</span>
-              <span class="font-bold text-rose-700">74.5% (Priority 3)</span>
-            </div>
-          </div>
-          <div class="text-[10px] text-stone-400">⚠️ <em>Non-Diagnostic Demonstration Signal.</em></div>
-        </div>
-      `;
-      appendChatMessage("bot", cardHtml);
-    }
-
-    function requestCounselorEscalation(edsScore) {
-      appendChatMessage("bot", `
-        <div class="bg-emerald-50 text-emerald-900 p-2.5 rounded-lg text-xs space-y-1">
-          <strong>✅ Escalation Request Registered:</strong>
-          <p>Your session distress (${edsScore}%) has been flagged on the counselor escalation board. Senior Counselor Sonal Virkayade will review your inquiry shortly. You can also dial <strong>8691000800</strong> directly.</p>
-        </div>
-      `);
-    }
-
-    // --- 8. COUNSELOR DASHBOARD & SESSION FLOW (PHASE 4) ---
-    function isCounsellorAuthenticated() {
-      return Boolean(counsellorKey);
-    }
-
-    function handleCounsellorAuth(e) {
-      e.preventDefault();
-      const val = document.getElementById("counsellor-key-input").value.trim();
-      if (!val) return;
-      counsellorKey = val;
-      loadCounsellorQueue();
-      loadLongitudinalHistory();
-    }
-
-    function renderCounsellorAuthStatus() {
-      const container = document.getElementById("counsellor-auth-status");
-      if (isCounsellorAuthenticated()) {
-        container.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-1 rounded">Counselor Active</span>
-            <button onclick="lockCounsellorView()" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2 py-1 rounded">Lock</button>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `<span class="text-xs text-stone-400">Unauthorized</span>`;
-      }
-    }
-
-    function lockCounsellorView() {
-      counsellorKey = "";
-      document.getElementById("counsellor-auth-wall").classList.remove("hidden");
-      document.getElementById("counsellor-dashboard-view").classList.add("hidden");
-      renderCounsellorAuthStatus();
-    }
-
-    async function loadCounsellorQueue() {
-      if (!counsellorKey) return;
-      try {
-        const res = await fetch(`${API_BASE_URL}/v1/counsellor/queue`, {
-          method: "GET",
-          headers: { "X-Counsellor-Key": counsellorKey }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          document.getElementById("counsellor-auth-wall").classList.add("hidden");
-          document.getElementById("counsellor-dashboard-view").classList.remove("hidden");
-          renderCounsellorAuthStatus();
-
-          document.getElementById("kpi-total-cases").textContent = data.total_cases;
-          document.getElementById("kpi-pending-cases").textContent = data.pending_count;
-          document.getElementById("kpi-resolved-cases").textContent = data.resolved_count;
-
-          const avgEds = data.cases.length > 0
-            ? Math.round(data.cases.reduce((acc, c) => acc + c.eds, 0) / data.cases.length)
-            : 0;
-          document.getElementById("kpi-avg-eds").textContent = `${avgEds}%`;
-
-          renderQueueTable(data.cases);
-          return;
-        } else if (res.status === 401) {
-          alert("Access Denied: Invalid Counselor Access Key.");
-          lockCounsellorView();
-          return;
-        }
-      } catch (err) {
-        console.warn("Queue fetch error:", err);
-      }
-
-      // Offline demonstration fallback for counselor dashboard
-      document.getElementById("counsellor-auth-wall").classList.add("hidden");
-      document.getElementById("counsellor-dashboard-view").classList.remove("hidden");
-      renderDemoQueueTable();
-    }
-
-    function renderQueueTable(cases) {
-      const tbody = document.getElementById("counsellor-queue-tbody");
-      if (!cases || cases.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-stone-400">No active escalation cases in queue.</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = cases.map(c => `
-        <tr class="hover:bg-stone-50 transition">
-          <td class="p-3 font-mono font-bold text-sanjeevani-red">${c.id}</td>
-          <td class="p-3 text-stone-500">${c.timestamp}</td>
-          <td class="p-3"><strong>${c.hospital}</strong><br><span class="text-stone-400">${c.city}</span></td>
-          <td class="p-3">
-            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${c.eds > 80 ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800'}">
-              ${c.eds}%
-            </span>
-          </td>
-          <td class="p-3 max-w-xs truncate" title="${c.patient_query}">${c.patient_query}</td>
-          <td class="p-3">
-            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${c.status === 'RESOLVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-              ${c.status}
-            </span>
-          </td>
-          <td class="p-3 text-right">
-            ${c.status === 'PENDING' ? `
-              <button onclick="openResolveModal('${c.id}', '${encodeURIComponent(c.patient_query)}', '${c.eds}', '${encodeURIComponent(c.suggested_reply || '')}')" class="bg-sanjeevani-red hover:bg-sanjeevani-darkRed text-white px-2.5 py-1 rounded text-[11px] font-bold">
-                Resolve
+            {/* Submit Button */}
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={analyzeSingle}
+                disabled={loading || (inputMode === "mic" && !recordedBlob) || (inputMode === "file" && !audioFile) || (inputMode === "text" && !textInput.trim())}
+                className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-3 rounded-xl bg-neutral-900 text-white font-medium text-sm hover:bg-neutral-800 active:scale-98 transition disabled:opacity-40 shadow-sm"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Evaluating Affect...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.Activity className="w-3.5 h-3.5" />
+                    <span>Evaluate Voice & Affect</span>
+                  </>
+                )}
               </button>
-            ` : `
-              <span class="text-stone-400 text-[11px]">Closed</span>
-            `}
-          </td>
-        </tr>
-      `).join('');
-      lucide.createIcons();
+            </div>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-sm font-inter">
+              {error}
+            </div>
+          )}
+
+          {/* Output Presentation */}
+          {result && (
+            <div className="space-y-6">
+              {/* Primary Emotion Hero Card */}
+              {result.primary_emotion && (
+                <div
+                  className="bg-white border rounded-2xl p-6 shadow-apple space-y-3"
+                  style={{ borderColor: result.primary_emotion.color || "#059669" }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-inter font-semibold uppercase tracking-wider text-neutral-400">
+                      Primary Emotional State
+                    </span>
+                    <span
+                      className="px-3 py-1 rounded-full text-xs font-bold font-inter"
+                      style={{
+                        backgroundColor: `${result.primary_emotion.color || "#059669"}15`,
+                        color: result.primary_emotion.color || "#059669"
+                      }}
+                    >
+                      {result.primary_emotion.label}
+                    </span>
+                  </div>
+
+                  <div className="flex items-baseline gap-3">
+                    <div className="text-4xl font-extrabold tracking-tight" style={{ color: result.primary_emotion.color }}>
+                      {result.primary_emotion.score_pct}%
+                    </div>
+                    <div className="text-sm font-medium text-neutral-500 font-inter">
+                      {result.primary_emotion.metric_name}
+                    </div>
+                  </div>
+
+                  <div className="w-full bg-neutral-100 h-2 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${result.primary_emotion.score_pct}%`,
+                        backgroundColor: result.primary_emotion.color
+                      }}
+                    ></div>
+                  </div>
+
+                  <div className="text-sm text-neutral-700 font-sans pt-1">
+                    <span className="font-semibold text-neutral-900">Actionable Guidance: </span>
+                    {result.primary_emotion.action_guidance}
+                  </div>
+                </div>
+              )}
+
+              {/* Triage & EDS Summary */}
+              {result.triage && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                    <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Distress Score (EDS)</div>
+                    <div className="text-3xl font-bold text-neutral-900 mt-1">
+                      {result.triage.eds}%
+                    </div>
+                    <div className="text-xs text-neutral-500 font-inter mt-1">
+                      Section 8 Emotional Distress Index
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                    <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Triage Category</div>
+                    <div className="text-base font-semibold text-neutral-900 mt-2 truncate">
+                      {result.triage.category}
+                    </div>
+                    <div className="text-xs text-neutral-500 font-inter mt-1">
+                      Level {result.triage.level} Protocol
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-neutral-200/70 rounded-xl p-4 shadow-apple">
+                    <div className="text-xs font-inter text-neutral-400 uppercase font-medium">Affect Sums</div>
+                    <div className="flex items-center gap-4 mt-2">
+                      <div>
+                        <span className="text-xs text-emerald-700 font-semibold">Positive: </span>
+                        <span className="text-base font-bold text-emerald-700">{result.pa_sum}/50</span>
+                      </div>
+                      <div>
+                        <span className="text-xs text-rose-700 font-semibold">Negative: </span>
+                        <span className="text-base font-bold text-rose-700">{result.na_sum}/50</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Spoken Transcription (if audio) */}
+              {result.transcription && result.transcription.transcript && (
+                <div className="bg-white border border-neutral-200/70 rounded-2xl p-5 shadow-apple space-y-2">
+                  <div className="text-xs font-inter text-neutral-400 uppercase font-medium">
+                    Recognized Speech Transcription (Whisper ASR)
+                  </div>
+                  <div className="text-base font-medium text-neutral-900 font-sans">
+                    "{result.transcription.transcript}"
+                  </div>
+                  {result.transcription.english_translation && (
+                    <div className="text-xs text-neutral-500 font-inter">
+                      Translation: {result.transcription.english_translation}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Acoustic Biomarkers & VAD (if audio) */}
+              {result.biomarkers && (
+                <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 shadow-apple space-y-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-700 font-inter">
+                    Handcrafted Acoustic Biomarkers & Continuous Affect
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-inter">
+                    <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200/60">
+                      <div className="text-neutral-400">Pitch F0 Mean</div>
+                      <div className="text-base font-bold text-neutral-800 mt-1">{result.biomarkers.f0_mean_hz.toFixed(1)} Hz</div>
+                      <div className="text-[10px] text-neutral-400">Std: ±{result.biomarkers.f0_std_hz.toFixed(1)} Hz</div>
+                    </div>
+                    <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200/60">
+                      <div className="text-neutral-400">Energy (RMS)</div>
+                      <div className="text-base font-bold text-neutral-800 mt-1">{result.biomarkers.rms_mean.toFixed(3)}</div>
+                      <div className="text-[10px] text-neutral-400">Signal volume</div>
+                    </div>
+                    <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200/60">
+                      <div className="text-neutral-400">Zero-Crossing Rate</div>
+                      <div className="text-base font-bold text-neutral-800 mt-1">{result.biomarkers.zcr_mean.toFixed(3)}</div>
+                      <div className="text-[10px] text-neutral-400">Breathiness / frication</div>
+                    </div>
+                    <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200/60">
+                      <div className="text-neutral-400">Micro-Tremor Proxy</div>
+                      <div className="text-base font-bold text-neutral-800 mt-1">{result.biomarkers.jitter_proxy.toFixed(3)}</div>
+                      <div className="text-[10px] text-neutral-400">Autonomic shakiness</div>
+                    </div>
+                  </div>
+
+                  {result.vad && (
+                    <div className="pt-2 border-t border-neutral-100 flex items-center justify-between text-xs font-inter text-neutral-500">
+                      <span>audEERING Continuous VAD:</span>
+                      <div className="flex gap-4">
+                        <span>Arousal: <b className="text-neutral-800">{result.vad.arousal.toFixed(2)}</b></span>
+                        <span>Dominance: <b className="text-neutral-800">{result.vad.dominance.toFixed(2)}</b></span>
+                        <span>Valence: <b className="text-neutral-800">{result.vad.valence.toFixed(2)}</b></span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Complete PANAS-20 Matrix */}
+              {result.panas20_scores && (
+                <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 shadow-apple space-y-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-700 font-inter">
+                    Complete PANAS-20 Matrix (20-Scale Full Emotional Profile)
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Positive Affect */}
+                    <div className="space-y-2.5">
+                      <div className="text-xs font-bold text-emerald-800 uppercase tracking-wider font-inter mb-3">
+                        10 Positive Affect Scales (सकारात्मक भावनाएं)
+                      </div>
+                      {["enthusiastic", "interested", "determined", "excited", "inspired", "alert", "active", "strong", "proud", "attentive"].map((item) => {
+                        const val = result.panas20_scores[item] || 1.0;
+                        const pct = Math.round(((val - 1.0) / 4.0) * 100);
+                        return (
+                          <div key={item} className="space-y-1">
+                            <div className="flex justify-between text-xs font-inter">
+                              <span className="capitalize font-medium text-neutral-700">{item}</span>
+                              <span className="font-semibold text-emerald-700">{val.toFixed(1)} / 5.0 ({pct}%)</span>
+                            </div>
+                            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden">
+                              <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${pct}%` }}></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Negative Affect */}
+                    <div className="space-y-2.5">
+                      <div className="text-xs font-bold text-rose-800 uppercase tracking-wider font-inter mb-3">
+                        10 Negative Affect Scales (नकारात्मक भावनाएं)
+                      </div>
+                      {["scared", "afraid", "upset", "distressed", "jittery", "nervous", "ashamed", "guilty", "hostile", "irritable"].map((item) => {
+                        const val = result.panas20_scores[item] || 1.0;
+                        const pct = Math.round(((val - 1.0) / 4.0) * 100);
+                        return (
+                          <div key={item} className="space-y-1">
+                            <div className="flex justify-between text-xs font-inter">
+                              <span className="capitalize font-medium text-neutral-700">{item}</span>
+                              <span className="font-semibold text-rose-700">{val.toFixed(1)} / 5.0 ({pct}%)</span>
+                            </div>
+                            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden">
+                              <div className="bg-rose-500 h-full rounded-full" style={{ width: `${pct}%` }}></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
     }
 
-    function renderDemoQueueTable() {
-      const demoCases = [
-        { id: "ESC-101", timestamp: "2026-10-24 16:15", hospital: "Tata Memorial Hospital (TMH)", city: "Mumbai", eds: 86.5, patient_query: "Chemo side effects are unbearable, patient stopped eating and crying constantly.", status: "PENDING", suggested_reply: "Senior counselor informed at TMH Golden Jubilee Ward. Please call 8691000800 immediately." },
-        { id: "ESC-102", timestamp: "2026-10-24 17:40", hospital: "Delhi State Cancer Institute (DSCI)", city: "Delhi", eds: 74.0, patient_query: "Surgery se dar lag raha hai kya karu", status: "PENDING", suggested_reply: "DSCI Radiotherapy Block counselor Rajesh Sharma available at 9am." }
-      ];
-      renderQueueTable(demoCases);
-    }
+    // ==============================================================================
+    // VIEW 3: ASK SANJEEVANI (CONVERSATIONAL RAG & VOICE AI)
+    // ==============================================================================
+    function AskSanjeevaniView() {
+      const [messages, setMessages] = useState([
+        {
+          role: "assistant",
+          text: "Namaste. I am Sanjeevani, your oncology and emotional wellness assistant. How may I support you or your family today?",
+          sources: []
+        }
+      ]);
+      const [input, setInput] = useState("");
+      const [loading, setLoading] = useState(false);
+      const messagesEndRef = useRef(null);
 
-    let activeResolveCaseId = "";
-    function openResolveModal(id, queryEnc, eds, draftEnc) {
-      activeResolveCaseId = id;
-      document.getElementById("resolve-case-id-badge").textContent = id;
-      document.getElementById("resolve-patient-query").textContent = decodeURIComponent(queryEnc);
-      document.getElementById("resolve-eds-badge").textContent = `${eds}%`;
-      document.getElementById("resolve-reply-text").value = decodeURIComponent(draftEnc) || "Dear Patient/Caregiver, we acknowledge your inquiry. A dedicated Sanjeevani counselor has been alerted to review your case.";
-      document.getElementById("resolve-modal").classList.remove("hidden");
-    }
+      const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      };
 
-    function closeResolveModal() {
-      document.getElementById("resolve-modal").classList.add("hidden");
-    }
+      useEffect(() => {
+        scrollToBottom();
+      }, [messages]);
 
-    async function submitCaseResolution() {
-      const cName = document.getElementById("resolve-counsellor-name").value.trim();
-      const notes = document.getElementById("resolve-reply-text").value.trim();
-      if (!cName || !notes) return;
+      const sendMessage = async (userText) => {
+        const queryText = userText || input;
+        if (!queryText.trim()) return;
 
-      if (isBackendOnline && counsellorKey) {
+        const newMessages = [...messages, { role: "user", text: queryText }];
+        setMessages(newMessages);
+        setInput("");
+        setLoading(true);
+
         try {
-          const res = await fetch(`${API_BASE_URL}/v1/counsellor/resolve`, {
+          const apiBase = window.location.protocol === 'file:' ? 'http://localhost:8000' : '';
+          const res = await fetch(apiBase + "/v1/chat", {
             method: "POST",
-            headers: { "Content-Type": "application/json", "X-Counsellor-Key": counsellorKey },
-            body: JSON.stringify({ case_id: activeResolveCaseId, counsellor_name: cName, resolution_notes: notes })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: queryText, query: queryText, language: "auto" })
+          });
+
+          if (!res.ok) throw new Error("Chat service unavailable (" + res.status + ")");
+          const data = await res.json();
+
+          const replyText = data.answer || data.reply || "No response received.";
+          const replySources = data.sources || (data.citations ? data.citations.map(c => c.source || c.title) : []);
+          const replyEds = data.turn_eds !== undefined ? data.turn_eds : (data.running_eds !== undefined ? data.running_eds : 20.0);
+
+          setMessages([
+            ...newMessages,
+            {
+              role: "assistant",
+              text: replyText,
+              sources: replySources,
+              eds: replyEds
+            }
+          ]);
+        } catch (err) {
+          setMessages([
+            ...newMessages,
+            {
+              role: "assistant",
+              text: "I apologize, but I encountered an error connecting to the clinical knowledge base. Please try asking again or contact our 24/7 helpline at 8691000800.",
+              sources: []
+            }
+          ]);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const prompts = [
+        "What are common side effects of chemotherapy?",
+        "How can CanSupport help our family in Delhi?",
+        "My mother feels very exhausted and scared after radiation. How can we support her?",
+        "What nutrition guidelines should cancer patients follow?"
+      ];
+
+      return (
+        <div className="max-w-4xl mx-auto h-[calc(100dvh-175px)] md:h-[calc(100vh-140px)] flex flex-col bg-white border border-neutral-200/70 rounded-2xl shadow-apple overflow-hidden">
+          {/* Assistant Header */}
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50 flex-shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-600/10 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                <Icons.AskSanjeevani className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-neutral-900 leading-tight">Ask Sanjeevani AI</div>
+                <div className="text-[11px] sm:text-xs text-neutral-400 font-inter truncate max-w-[210px] sm:max-w-none">
+                  Grounded in CanSupport Clinical Protocol & 14 Programs
+                </div>
+              </div>
+            </div>
+            <span className="text-[10px] sm:text-xs font-inter font-medium text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60 whitespace-nowrap">
+              Active RAG
+            </span>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-3 sm:space-y-4">
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[88%] sm:max-w-[80%] rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed ${
+                    msg.role === "user"
+                      ? "bg-neutral-900 text-white font-sans rounded-br-none"
+                      : "bg-[#f7f7f5] text-neutral-800 font-sans rounded-bl-none border border-neutral-200/60"
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap">{msg.text}</div>
+
+                  {msg.sources && msg.sources.length > 0 && (
+                    <div className="mt-3 pt-2 border-t border-neutral-200/60 text-xs font-inter space-y-1">
+                      <div className="font-semibold text-neutral-500 uppercase tracking-wider text-[10px]">
+                        Verified Clinical Sources:
+                      </div>
+                      {msg.sources.map((src, sIdx) => (
+                        <div key={sIdx} className="text-neutral-600 flex items-center gap-1.5">
+                          <span className="w-1 h-1 rounded-full bg-emerald-600"></span>
+                          <span>{src.title || src}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-[#f7f7f5] border border-neutral-200/60 rounded-2xl p-4 rounded-bl-none flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-600 animate-bounce"></div>
+                  <div className="w-2 h-2 rounded-full bg-emerald-600 animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                  <div className="w-2 h-2 rounded-full bg-emerald-600 animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Quick Prompts: Horizontal Scrolling Strip for Mobile */}
+          {messages.length <= 2 && (
+            <div className="px-3 sm:px-6 py-2 flex items-center gap-2 border-t border-neutral-100 bg-neutral-50/40 overflow-x-auto no-scrollbar flex-nowrap flex-shrink-0">
+              {prompts.map((p, pIdx) => (
+                <button
+                  key={pIdx}
+                  onClick={() => sendMessage(p)}
+                  className="text-xs font-inter text-neutral-600 bg-white border border-neutral-200/80 px-3 py-1.5 rounded-full hover:bg-neutral-100 active:scale-95 transition whitespace-nowrap flex-shrink-0 shadow-xs"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Message Input Bar */}
+          <div className="p-2.5 sm:p-4 border-t border-neutral-200/80 bg-white flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <input
+              type="text"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && sendMessage()}
+              placeholder="Ask about symptoms, chemo, diet, or support..."
+              className="flex-1 text-sm border border-neutral-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-neutral-400 font-sans transition"
+            />
+            <button
+              onClick={() => sendMessage()}
+              disabled={!input.trim() || loading}
+              className="w-10 h-10 rounded-xl bg-neutral-900 text-white flex items-center justify-center hover:bg-neutral-800 active:scale-95 transition disabled:opacity-40 flex-shrink-0"
+              title="Send message"
+            >
+              <Icons.Send className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==============================================================================
+    // VIEW 4: COUNSELLOR TRIAGE & ESCALATION DASHBOARD
+    // ==============================================================================
+    function CounsellorTriageView() {
+      const [queue, setQueue] = useState([]);
+      const [loading, setLoading] = useState(false);
+      const [authKey, setAuthKey] = useState("sanjeevani-counsellor-demo-2026");
+
+      const fetchQueue = async () => {
+        setLoading(true);
+        try {
+          const res = await fetch("/v1/counsellor/queue", {
+            headers: { "X-Counsellor-Key": authKey }
           });
           if (res.ok) {
-            closeResolveModal();
-            loadCounsellorQueue();
-            return;
+            const data = await res.json();
+            setQueue(data.cases || []);
           }
         } catch (err) {
-          console.warn("Resolve error:", err);
+          console.error(err);
+        } finally {
+          setLoading(false);
         }
-      }
+      };
 
-      closeResolveModal();
-      alert(`Case ${activeResolveCaseId} resolved successfully.`);
-      loadCounsellorQueue();
-    }
+      useEffect(() => {
+        fetchQueue();
+      }, []);
 
-    async function loadLongitudinalHistory() {
-      if (!counsellorKey) return;
-      try {
-        const res = await fetch(`${API_BASE_URL}/v1/counsellor/longitudinal`, {
-          method: "GET",
-          headers: { "X-Counsellor-Key": counsellorKey }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          document.getElementById("longitudinal-trend-badge").textContent = `Trend: ${data.recovery_trend}`;
-          renderLongitudinalTable(data.trajectory);
-          return;
+      const resolveCase = async (id) => {
+        try {
+          await fetch("/v1/counsellor/resolve", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Counsellor-Key": authKey
+            },
+            body: JSON.stringify({
+              case_id: id,
+              counsellor_name: "Senior Clinical Counsellor",
+              resolution_notes: "Completed tele-counseling stabilization protocol."
+            })
+          });
+          fetchQueue();
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.warn("Longitudinal error:", err);
-      }
-      renderDemoLongitudinalTable();
+      };
+
+      return (
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-neutral-200/70 rounded-2xl p-4 sm:p-6 shadow-apple">
+            <div>
+              <h1 className="text-lg sm:text-xl font-semibold text-neutral-900 tracking-tight">
+                Counsellor Priority Review & Escalation Queue
+              </h1>
+              <p className="text-xs sm:text-sm text-neutral-500 font-inter mt-1 leading-relaxed">
+                Monitors patients flagged by Section 8 EDS algorithm (EDS &gt; 60%) requiring human clinical intervention.
+              </p>
+            </div>
+            <button
+              onClick={fetchQueue}
+              className="self-start sm:self-auto text-xs font-inter font-medium text-neutral-600 bg-neutral-100 border border-neutral-200 px-3 py-1.5 rounded-lg hover:bg-neutral-200 active:scale-95 transition"
+            >
+              Refresh Queue
+            </button>
+          </div>
+
+          <div className="bg-white border border-neutral-200/70 rounded-2xl shadow-apple overflow-hidden">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-100 flex justify-between items-center bg-neutral-50/50">
+              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 font-inter">
+                Active Cases ({queue.length})
+              </span>
+              <span className="text-[11px] sm:text-xs text-neutral-400 font-inter">Auto-sorted by severity</span>
+            </div>
+
+            {queue.length === 0 ? (
+              <div className="p-8 sm:p-12 text-center text-neutral-400 text-sm font-inter">
+                No pending escalation cases in the queue. All patients within healthy limits.
+              </div>
+            ) : (
+              <div className="divide-y divide-neutral-100">
+                {queue.map((item, idx) => (
+                  <div key={idx} className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:bg-neutral-50/40 transition">
+                    <div className="space-y-1 max-w-2xl w-full">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-neutral-700 bg-neutral-100 px-2 py-0.5 rounded">
+                          {item.id}
+                        </span>
+                        <span className={`text-xs font-bold font-inter px-2 py-0.5 rounded-full ${
+                          item.eds >= 80 ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"
+                        }`}>
+                          EDS: {item.eds}% (Level {item.level || (item.eds >= 80 ? 4 : 3)})
+                        </span>
+                        <span className="text-xs text-neutral-400 font-inter">
+                          {item.city} • {item.hospital}
+                        </span>
+                      </div>
+                      <div className="text-sm font-medium text-neutral-900 pt-1 leading-snug">
+                        "{item.patient_query}"
+                      </div>
+                      <div className="text-[11px] text-neutral-400 font-inter">
+                        Timestamp: {item.timestamp}
+                      </div>
+                    </div>
+
+                    <div className="w-full sm:w-auto self-end sm:self-center">
+                      {item.status === "RESOLVED" ? (
+                        <span className="inline-block text-xs font-inter text-emerald-700 font-semibold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                          Resolved
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => resolveCase(item.id)}
+                          className="w-full sm:w-auto text-xs font-inter font-medium text-white bg-neutral-900 hover:bg-neutral-800 active:scale-95 px-4 py-2 rounded-xl transition shadow-sm"
+                        >
+                          Mark Resolved
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
     }
 
-    function renderLongitudinalTable(items) {
-      const tbody = document.getElementById("longitudinal-tbody");
-      tbody.innerHTML = items.map(r => `
-        <tr class="hover:bg-stone-50">
-          <td class="p-2.5 font-bold">Day ${r.day}</td>
-          <td class="p-2.5 text-stone-500">${r.date}</td>
-          <td class="p-2.5 font-medium text-stone-800">${r.stage}</td>
-          <td class="p-2.5 text-emerald-600 font-bold">${r.pa}</td>
-          <td class="p-2.5 text-rose-600 font-bold">${r.na}</td>
-          <td class="p-2.5 font-mono font-bold ${r.eds > 60 ? 'text-rose-700' : 'text-emerald-700'}">${r.eds}%</td>
-          <td class="p-2.5">${r.primary_emotion}</td>
-        </tr>
-      `).join('');
+    // ==============================================================================
+    // VIEW 5: PATIENT PROGRAMS & CLINICAL PATHWAYS (14 PROGRAMS)
+    // ==============================================================================
+    function ProgramsExplorerView() {
+      const [programs, setPrograms] = useState([]);
+      const [search, setSearch] = useState("");
+      const [loading, setLoading] = useState(false);
+
+      useEffect(() => {
+        setLoading(true);
+        fetch("/v1/programs")
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.programs) setPrograms(data.programs);
+          })
+          .catch(err => console.error(err))
+          .finally(() => setLoading(false));
+      }, []);
+
+      const filtered = programs.filter(p =>
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        (p.category && p.category.toLowerCase().includes(search.toLowerCase())) ||
+        (p.description && p.description.toLowerCase().includes(search.toLowerCase()))
+      );
+
+      return (
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 bg-white border border-neutral-200/70 rounded-2xl p-4 sm:p-6 shadow-apple">
+            <div>
+              <h1 className="text-lg sm:text-xl font-semibold text-neutral-900 tracking-tight">
+                Verified Oncology Support Programs (14)
+              </h1>
+              <p className="text-xs sm:text-sm text-neutral-500 font-inter mt-1 leading-relaxed">
+                Community care programs established by Sanjeevani – Life Beyond Cancer across India.
+              </p>
+            </div>
+            <div className="relative w-full md:w-72">
+              <Icons.Search className="w-4 h-4 absolute left-3 top-3 text-neutral-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search programs..."
+                className="w-full text-xs border border-neutral-200 rounded-xl pl-9 pr-3 py-2.5 focus:outline-none focus:border-neutral-400 font-inter transition"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+            {filtered.map((prog, idx) => (
+              <div key={idx} className="bg-white border border-neutral-200/70 rounded-2xl p-4 sm:p-5 shadow-apple flex flex-col justify-between space-y-4 hover:border-neutral-300 transition">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded uppercase font-semibold">
+                      {prog.id || `PROG-${idx + 1}`}
+                    </span>
+                    <span className="text-[11px] font-inter font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                      {prog.category || "Care Pathway"}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-neutral-900 text-sm leading-snug">
+                    {prog.title}
+                  </h3>
+                  <p className="text-xs text-neutral-600 font-inter leading-relaxed line-clamp-3">
+                    {prog.description}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-neutral-100 text-[11px] text-neutral-400 font-inter space-y-1">
+                  <div>Eligibility: <span className="text-neutral-700 font-medium">{prog.eligibility || "Open to all cancer patients"}</span></div>
+                  <div>Contact: <span className="text-neutral-700 font-medium">{prog.contact || "National Desk 8691000800"}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
     }
 
-    function renderDemoLongitudinalTable() {
-      const demoItems = [
-        { day: 1, date: "2026-10-01", stage: "Pre-Biopsy Panic", pa: 14, na: 42, eds: 82.0, primary_emotion: "🔴 Severe Anxiety" },
-        { day: 7, date: "2026-10-07", stage: "Post-Diagnosis Shock", pa: 18, na: 36, eds: 72.0, primary_emotion: "🟠 Moderate Distress" },
-        { day: 14, date: "2026-10-14", stage: "Chemo Cycle 1 Support", pa: 26, na: 28, eds: 54.0, primary_emotion: "🟡 Cautious Hope" },
-        { day: 21, date: "2026-10-21", stage: "Satori Pranayama Started", pa: 34, na: 20, eds: 38.0, primary_emotion: "🟢 Calm & Stabilizing" },
-        { day: 30, date: "2026-10-24", stage: "CanSahyogi Fellowship", pa: 41, na: 15, eds: 24.0, primary_emotion: "🌟 Happy & Resilient" }
-      ];
-      document.getElementById("longitudinal-trend-badge").textContent = "Trend: Stabilizing & Positive Recovery";
-      renderLongitudinalTable(demoItems);
-    }
+    // Render the React application
+    ReactDOM.createRoot(document.getElementById("root")).render(<SanjeevaniApp />);
 
-    // --- 9. INITIALIZE ON LOAD ---
-    document.addEventListener("DOMContentLoaded", () => {
-      renderPrograms(PROGRAMS);
-      renderDirectory(DIRECTORY);
-      renderCounsellorAuthStatus();
-      checkBackendConnectivity();
-      lucide.createIcons();
-    });
+    // Progressive Web App (PWA) Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('[PWA] Sanjeevani Service Worker active with scope:', registration.scope);
+          })
+          .catch(err => {
+            console.log('[PWA] Service Worker registration note:', err);
+          });
+      });
+    }
   </script>
 </body>
 </html>

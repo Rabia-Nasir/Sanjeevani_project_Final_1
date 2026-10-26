@@ -1760,22 +1760,27 @@
         setLoading(true);
 
         try {
-          const res = await fetch("/v1/chat", {
+          const apiBase = window.location.protocol === 'file:' ? 'http://localhost:8000' : '';
+          const res = await fetch(apiBase + "/v1/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: queryText, language: "auto" })
+            body: JSON.stringify({ message: queryText, query: queryText, language: "auto" })
           });
 
-          if (!res.ok) throw new Error("Chat service unavailable");
+          if (!res.ok) throw new Error("Chat service unavailable (" + res.status + ")");
           const data = await res.json();
+
+          const replyText = data.answer || data.reply || "No response received.";
+          const replySources = data.sources || (data.citations ? data.citations.map(c => c.source || c.title) : []);
+          const replyEds = data.turn_eds !== undefined ? data.turn_eds : (data.running_eds !== undefined ? data.running_eds : 20.0);
 
           setMessages([
             ...newMessages,
             {
               role: "assistant",
-              text: data.answer,
-              sources: data.sources || [],
-              eds: data.turn_eds
+              text: replyText,
+              sources: replySources,
+              eds: replyEds
             }
           ]);
         } catch (err) {

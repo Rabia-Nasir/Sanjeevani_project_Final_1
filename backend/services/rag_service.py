@@ -66,6 +66,14 @@ class RAGInferenceService:
                 eligibility=meta.get("eligibility")
             ))
 
+        # Simple string sources for frontend compatibility
+        sources_list: List[str] = [
+            p.get("metadata", {}).get("source", p.get("title", "Sanjeevani Knowledge Base"))
+            for p in passages
+        ]
+        if not sources_list and rag_output.get("citations"):
+            sources_list = list(rag_output["citations"])
+
         # 7. AI-drafted reply suggestion if escalated
         suggested_counsellor = None
         if is_escalated:
@@ -81,13 +89,16 @@ class RAGInferenceService:
             request_id=request_id,
             session_id=session_id,
             reply=reply,
+            answer=reply,
             detected_language=lang,
             detected_intent=intent,
             intent_confidence=round(intent_conf, 2),
             running_eds=new_eds,
+            turn_eds=new_eds,
             triage_tier=tier,
             is_escalated=is_escalated,
             citations=citations_list,
+            sources=sources_list,
             suggested_counsellor_reply=suggested_counsellor,
             safety_disclaimer=settings.SAFETY_DISCLAIMER,
             processing_time_ms=elapsed_ms
