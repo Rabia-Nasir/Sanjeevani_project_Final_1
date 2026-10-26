@@ -1,15 +1,25 @@
-@echo off
+﻿@echo off
+chcp 65001 > nul
 title Sanjeevani AI Platform
 echo ======================================================================
 echo       Sanjeevani AI - Clinical Affective Intelligence Platform
 echo ======================================================================
 echo.
-echo [1/2] Checking and installing dependencies...
-pip install -r requirements.txt
+
+:: Free ports 8000 and 7860 if occupied by lingering processes
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8000 "') do taskkill /f /pid %%a >nul 2>&1
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":7860 "') do taskkill /f /pid %%a >nul 2>&1
+
+echo [1/2] Starting Sanjeevani AI Platform (FastAPI + Gradio Dashboard)...
+echo  - Patient Portal:  http://localhost:8000/portal
+echo  - REST API Docs:   http://localhost:8000/docs
+echo  - Evaluation UI:   http://localhost:7860
 echo.
-echo [2/2] Starting Sanjeevani AI Platform...
-echo  - Patient Portal: http://localhost:8000
-echo  - Evaluation UI: http://localhost:7860
-echo.
+
+:: Open the Patient Portal in default browser after 3 seconds
+start "" cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:8000/portal"
+
+:: Run platform
+set PYTHONIOENCODING=utf-8
 python run_sanjeevani_platform.py
 pause

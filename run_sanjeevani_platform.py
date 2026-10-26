@@ -56,7 +56,7 @@ def run_gradio_dashboard():
 def print_banner():
     banner = f"""
 ========================================================================================
-             🌿 SANJEEVANI AI — MULTIMODAL AFFECTIVE COMPUTING PLATFORM 🌿
+             SANJEEVANI AI - MULTIMODAL AFFECTIVE COMPUTING PLATFORM
                       Life Beyond Cancer | CanSupport AI Ecosystem
 ========================================================================================
 

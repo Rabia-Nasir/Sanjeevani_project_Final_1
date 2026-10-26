@@ -12,13 +12,6 @@ class Settings(BaseModel):
     VERSION: str = "1.0.0"
     API_V1_PREFIX: str = "/v1"
     
-    # Server & Port
-    HOST: str = os.getenv("HOST", "0.0.0.0")
-    PORT: int = int(os.getenv("PORT", "8000"))
-
-    # Security
-    COUNSELLOR_AUTH_KEY: str = os.getenv("COUNSELLOR_AUTH_KEY", "sanjeevani-counsellor-demo-2026")
-
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
@@ -37,6 +30,10 @@ class Settings(BaseModel):
     # Request limits
     MAX_TEXT_LENGTH: int = 4000  # Characters
     MAX_AUDIO_BYTES: int = 15 * 1024 * 1024  # 15 MB
+    # Network & Auth
+    HOST: str = os.getenv("HOST", "0.0.0.0")
+    PORT: int = int(os.getenv("PORT", "8000"))
+    COUNSELLOR_AUTH_KEY: str = os.getenv("COUNSELLOR_AUTH_KEY", "sanjeevani-counsellor-demo-2026")
     
     # Non-clinical safety notice
     SAFETY_DISCLAIMER: str = (
