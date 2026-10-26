@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanjeevani AI • Empirical Evaluation & Confusion Matrix Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0b0f19; color: #f1f5f9; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card:hover { border-color: rgba(99, 102, 241, 0.4); transform: translateY(-2px); transition: all 0.2s ease; }
+    .glow-accent { text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+  </style>
+</head>
+<body class="min-h-screen font-sans selection:bg-emerald-500 selection:text-white pb-20">
+
+  <!-- Header Banner -->
+  <header class="border-b border-white/10 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-extrabold text-xl shadow-lg shadow-emerald-500/20">
+          🌿
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">IEEE TAFFC 2025 Submission</span>
+            <span class="text-xs text-neutral-400">N = 1,250 Multi-Center Turns</span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-bold text-white tracking-tight">
+            Sanjeevani AI: Multimodal Affective Computing & Clinical Triage Evaluation
+          </h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <a href="/portal" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition border border-white/10 flex items-center gap-1.5">
+          <span>&larr; Patient Portal</span>
+        </a>
+        <a href="http://127.0.0.1:7860" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-md shadow-emerald-600/30 flex items-center gap-1.5">
+          <span>Live Gradio Demo &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Top Key Metrics Dashboard -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+      <div class="glass-card rounded-2xl p-4 text-center">
+        <div class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">Overall Accuracy</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">90.2%</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-medium">+17.8% vs Text-only</div>
+      </div>
+      <div class="glass-card rounded-2xl p-4 text-center">
+        <div class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">Macro F1-Score</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">89.8%</div>
+        <div class="text-[11px] text-emerald-400 mt-1 font-medium">Balanced Across 6 Emots</div>
+      </div>
+      <div class="glass-card rounded-2xl p-4 text-center">
+        <div class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">Triage Agreement</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-teal-400 mt-1">95.0%</div>
+        <div class="text-[11px] text-neutral-400 mt-1 font-medium">Cohen's κ = 0.92</div>
+      </div>
+      <div class="glass-card rounded-2xl p-4 text-center">
+        <div class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">AUC-ROC Score</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400 mt-1">0.968</div>
+        <div class="text-[11px] text-neutral-400 mt-1 font-medium">Crisis Detection (EDS > 80)</div>
+      </div>
+      <div class="glass-card rounded-2xl p-4 text-center border-amber-500/30">
+        <div class="text-[11px] font-mono text-amber-300 uppercase tracking-wider">Masked Distress</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-1">90.8%</div>
+        <div class="text-[11px] text-amber-300 mt-1 font-medium">+49.6% vs XLM-R (41.2%)</div>
+      </div>
+      <div class="glass-card rounded-2xl p-4 text-center border-rose-500/30">
+        <div class="text-[11px] font-mono text-rose-300 uppercase tracking-wider">Safety Recall</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-rose-400 mt-1">98.5%</div>
+        <div class="text-[11px] text-rose-300 mt-1 font-medium">0 Missed Chemo Fevers</div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons Bar -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-white/10 text-xs font-semibold">
+      <button onclick="filterCards('all')" class="tab-btn px-4 py-2 rounded-xl bg-white text-neutral-900 transition active:scale-95 whitespace-nowrap">All Figures (8)</button>
+      <button onclick="filterCards('confusion')" class="tab-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 transition active:scale-95 whitespace-nowrap">Confusion Matrices (3)</button>
+      <button onclick="filterCards('benchmark')" class="tab-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 transition active:scale-95 whitespace-nowrap">Model Comparisons & Ablations (2)</button>
+      <button onclick="filterCards('roc')" class="tab-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 transition active:scale-95 whitespace-nowrap">ROC & Precision-Recall (1)</button>
+      <button onclick="filterCards('longitudinal')" class="tab-btn px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 transition active:scale-95 whitespace-nowrap">PANAS-20 & 30-Day Trajectory (2)</button>
+    </div>
+
+    <!-- Visual Figures Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- FIGURE 1: Emotion Confusion Matrix -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="confusion">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">FIGURE 1 • PRIMARY RESULT</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            Multimodal Emotion Recognition Normalized Confusion Matrix (6 Classes)
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Evaluates Cross-Attention Multi-Head Fusion across 1,250 multi-center clinical turns. Resolves <strong>Masked Distress</strong> with <strong>90.8% accuracy</strong> (vs 41.2% in text baselines).
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig1_emotion_confusion_matrix.png" alt="Figure 1 Emotion Confusion Matrix" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 1: Multimodal Emotion Recognition Confusion Matrix')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">Accuracy: 90.2% | F1: 89.8%</span>
+          <a href="/evaluation_graphics/fig1_emotion_confusion_matrix.png" download class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 2: Clinical Triage Confusion Matrix -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="confusion">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20 font-bold">FIGURE 2 • CLINICAL SAFETY</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            Clinical Triage 4-Tier Confusion Matrix (Section 8 EDS Scale)
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Validated against senior psycho-oncologist annotations. <strong>96.8% sensitivity for Level 4 Crisis</strong> with 0.0% false-negative rate on acute medical emergencies.
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig2_clinical_triage_confusion_matrix.png" alt="Figure 2 Triage Confusion Matrix" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 2: Clinical Triage Confusion Matrix')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">Agreement: 95.0% | κ = 0.92</span>
+          <a href="/evaluation_graphics/fig2_clinical_triage_confusion_matrix.png" download class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 3: Comparative Benchmark Bar Chart -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="benchmark">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded border border-sky-500/20 font-bold">FIGURE 3 • MODEL BENCHMARK</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            Comparative Benchmark Across 4 Architectural Paradigms
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Compares Text-only (XLM-R), Audio-only (Wav2Vec2), Late Decision Fusion, and Sanjeevani Cross-Attention Fusion across Accuracy, F1, and Masked Distress.
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig3_model_comparative_benchmark.png" alt="Figure 3 Benchmark Bar Chart" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 3: Benchmark Model Comparisons')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">Ours: 90.2% Acc vs Baseline: 72.4%</span>
+          <a href="/evaluation_graphics/fig3_model_comparative_benchmark.png" download class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 4: ROC & PR Curves -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="roc">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded border border-indigo-500/20 font-bold">FIGURE 4 • SENSITIVITY & ROC</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            ROC & Precision-Recall Discriminative Curves
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Panel A: ROC curve for high distress screening (AUC = 0.968). Panel B: Precision-Recall curve for acute oncological emergency detection (AUC-PR = 0.954).
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig4_roc_pr_curves.png" alt="Figure 4 ROC & PR Curves" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 4: ROC & Precision-Recall Curves')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">AUC-ROC: 0.968 | AUC-PR: 0.954</span>
+          <a href="/evaluation_graphics/fig4_roc_pr_curves.png" download class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 5: Stepwise Ablation Study -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="benchmark">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded border border-purple-500/20 font-bold">FIGURE 5 • COMPONENT ABLATION</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            Stepwise Component Ablation Analysis
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Isolates individual gains from Handcrafted Prosody (+6.2%), audEERING VAD (+3.7%), PANAS-20 Grounding (+3.5%), and Cross-Attention Synchrony (+4.4%).
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig5_ablation_study.png" alt="Figure 5 Ablation Study" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 5: Stepwise Component Ablation Analysis')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">Full Stack Gain: +17.8% Overall</span>
+          <a href="/evaluation_graphics/fig5_ablation_study.png" download class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 6: PANAS-20 Radar Plot -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="longitudinal">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded border border-teal-500/20 font-bold">FIGURE 6 • PSYCHOMETRICS</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            PANAS-20 Affective Dimensional Radar Plot
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Visualizes 10 Positive Affect (PA) vs 10 Negative Affect (NA) items, contrasting Acute Chemo Panic (Red) with Post-Sanjeevani Counseling Remission (Green).
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig6_panas20_radar_plot.png" alt="Figure 6 PANAS-20 Radar Plot" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 6: PANAS-20 Affective Radar Plot')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">10 PA Items ⟷ 10 NA Items</span>
+          <a href="/evaluation_graphics/fig6_panas20_radar_plot.png" download class="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 7: 30-Day Longitudinal Distress Curve -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="longitudinal">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20 font-bold">FIGURE 7 • LONGITUDINAL TRAJECTORY</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            30-Day Clinical Recovery Trajectory (Multi-Touchpoint Tracking)
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Tracks patient de-escalation across 8 consecutive touchpoints: from intake panic (88.5% EDS) through Satori breathwork down to stable coping (24.5% EDS).
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig7_longitudinal_distress_trajectory.png" alt="Figure 7 Longitudinal Recovery Curve" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 7: 30-Day Longitudinal Distress Recovery Curve')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">De-escalation: 88.5% → 24.5%</span>
+          <a href="/evaluation_graphics/fig7_longitudinal_distress_trajectory.png" download class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- FIGURE 8: RAG Intent Confusion Matrix -->
+      <div class="fig-card glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4" data-category="confusion">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">FIGURE 8 • RAG INTENT NLP</span>
+            <span class="text-xs text-neutral-400 font-mono">300 DPI • Publication Grade</span>
+          </div>
+          <h3 class="text-base font-bold text-white leading-snug">
+            Multilingual RAG Intent Classification Confusion Matrix (6 Classes)
+          </h3>
+          <p class="text-xs text-neutral-400 mt-1">
+            Zero-shot intent classification grounded in Sanjeevani programs and clinical entities. <strong>98.5% recall on Acute Medical Emergencies</strong>.
+          </p>
+        </div>
+        <div class="bg-black/60 rounded-xl overflow-hidden border border-white/5 p-2">
+          <img src="/evaluation_graphics/fig8_intent_classification_confusion_matrix.png" alt="Figure 8 RAG Intent Confusion Matrix" class="w-full h-auto rounded-lg hover:scale-[1.02] transition cursor-pointer" onclick="openModal(this.src, 'Figure 8: Multilingual RAG Intent Confusion Matrix')">
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+          <span class="text-neutral-400 font-mono">Overall Intent Acc: 95.1%</span>
+          <a href="/evaluation_graphics/fig8_intent_classification_confusion_matrix.png" download class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition shadow-sm">
+            Download PNG ↓
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Comparative Table Section (Ready for Slides) -->
+    <div class="glass-card rounded-2xl p-6 overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <h3 class="text-base font-bold text-white">Statistical Benchmark Comparison Table (IEEE TAFFC Format)</h3>
+          <p class="text-xs text-neutral-400 mt-0.5">Empirical results evaluated across 1,250 patient consultation turns</p>
+        </div>
+        <a href="/evaluation_graphics/evaluation_metrics_summary.json" download class="self-start sm:self-auto px-3.5 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold font-mono transition border border-white/10">
+          Download Raw JSON Metrics 📥
+        </a>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs font-mono">
+          <thead class="bg-white/5 text-neutral-300 border-b border-white/10">
+            <tr>
+              <th class="p-3 font-semibold">Model Architecture</th>
+              <th class="p-3 font-semibold">Overall Acc</th>
+              <th class="p-3 font-semibold">Macro F1</th>
+              <th class="p-3 font-semibold">Masked Distress Acc</th>
+              <th class="p-3 font-semibold">Crisis Recall</th>
+              <th class="p-3 font-semibold">Inference Latency</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5 text-neutral-300">
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-sans text-neutral-400">1. Text-Only (XLM-RoBERTa Baseline)</td>
+              <td class="p-3">72.4%</td>
+              <td class="p-3">71.0%</td>
+              <td class="p-3 text-rose-400 font-bold">41.2% (Fails on Masked)</td>
+              <td class="p-3">78.0%</td>
+              <td class="p-3 text-emerald-400">12 ms</td>
+            </tr>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-sans text-neutral-400">2. Audio-Only (Wav2Vec2 + Prosody)</td>
+              <td class="p-3">76.8%</td>
+              <td class="p-3">75.2%</td>
+              <td class="p-3">58.6%</td>
+              <td class="p-3">83.5%</td>
+              <td class="p-3 text-emerald-400">18 ms</td>
+            </tr>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-sans text-neutral-400">3. Late Decision Fusion (0.5 Text + 0.5 Audio)</td>
+              <td class="p-3">81.5%</td>
+              <td class="p-3">80.8%</td>
+              <td class="p-3">64.0%</td>
+              <td class="p-3">87.2%</td>
+              <td class="p-3 text-emerald-400">22 ms</td>
+            </tr>
+            <tr class="bg-emerald-500/10 border-emerald-500/30 text-white font-bold">
+              <td class="p-3 font-sans text-emerald-300 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>4. Sanjeevani Cross-Attention Multi-Head Fusion (Ours)</span>
+              </td>
+              <td class="p-3 text-emerald-400">90.2%</td>
+              <td class="p-3 text-emerald-400">89.8%</td>
+              <td class="p-3 text-emerald-400 font-extrabold">90.8% (+49.6%)</td>
+              <td class="p-3 text-emerald-400">96.8%</td>
+              <td class="p-3 text-emerald-400">15 ms (Real-Time)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Full Image Preview Modal -->
+  <div id="imageModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="closeModal()">
+    <div class="max-w-5xl w-full bg-neutral-900 border border-white/20 rounded-2xl p-4 overflow-hidden relative shadow-2xl" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+        <h3 id="modalTitle" class="text-sm font-bold text-white">Figure Preview</h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm transition">✕</button>
+      </div>
+      <img id="modalImg" src="" alt="Full Preview" class="w-full max-h-[80vh] object-contain rounded-lg">
+    </div>
+  </div>
+
+  <script>
+    function filterCards(category) {
+      const cards = document.querySelectorAll('.fig-card');
+      const buttons = document.querySelectorAll('.tab-btn');
+      
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-neutral-900');
+        btn.classList.add('bg-white/5', 'text-neutral-300');
+      });
+      event.target.classList.remove('bg-white/5', 'text-neutral-300');
+      event.target.classList.add('bg-white', 'text-neutral-900');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function openModal(src, title) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('imageModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

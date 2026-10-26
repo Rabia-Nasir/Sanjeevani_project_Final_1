@@ -398,6 +398,25 @@
                   </div>
                   {activeTab === "programs" && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600"></div>}
                 </button>
+
+                <div className="pt-4 px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-400 font-inter">
+                  Research & Benchmark
+                </div>
+
+                <a
+                  href="/evaluation"
+                  target="_blank"
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all text-neutral-600 hover:bg-[#efefed] hover:text-neutral-900 group"
+                  title="View IEEE TAFFC Confusion Matrices & Benchmark Figures"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-sm">📊</span>
+                    <span>Confusion Matrix & Metrics</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200/60">
+                    TAFFC
+                  </span>
+                </a>
               </div>
             </div>
 
@@ -460,8 +479,17 @@
                 </div>
               </div>
 
-              {/* Emergency Helpline Badge */}
+              {/* Top Bar Action Badges */}
               <div className="flex items-center gap-2">
+                <a
+                  href="/evaluation"
+                  target="_blank"
+                  className="flex items-center gap-1.5 text-xs font-inter font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2.5 py-1 rounded-full hover:bg-indigo-100 active:scale-95 transition"
+                  title="View IEEE TAFFC Confusion Matrices & Graphical Data"
+                >
+                  <span>📊</span>
+                  <span className="hidden sm:inline">Research Charts & CM</span>
+                </a>
                 <a
                   href="tel:8691000800"
                   className="flex items-center gap-1.5 text-xs font-inter font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-full hover:bg-emerald-100 active:scale-95 transition"

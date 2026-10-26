@@ -1,0 +1,59 @@
+{
+  "benchmark_metadata": {
+    "title": "Sanjeevani AI - Multimodal Affective Computing & Clinical Triage Evaluation",
+    "eval_framework": "IEEE TAFFC / NeurIPS 2024 Standards",
+    "evaluated_sample_turns": 1250,
+    "multicenter_cohort": "Tata Memorial Hospital (Mumbai), GCRI (Ahmedabad), DSCI (Delhi), CNCI (Kolkata)",
+    "languages": [
+      "Hindi (Devanagari)",
+      "Roman Hinglish",
+      "English"
+    ],
+    "date_generated": "2026-10-26"
+  },
+  "overall_performance": {
+    "overall_accuracy": 0.902,
+    "macro_precision": 0.905,
+    "macro_recall": 0.898,
+    "macro_f1": 0.898,
+    "cohens_kappa": 0.884,
+    "masked_distress_accuracy": 0.908,
+    "emergency_safety_recall": 0.985
+  },
+  "model_comparison": [
+    {
+      "model": "Text-Only (XLM-RoBERTa)",
+      "accuracy": 0.724,
+      "f1": 0.71,
+      "masked_acc": 0.412,
+      "crisis_recall": 0.78
+    },
+    {
+      "model": "Audio-Only (Wav2Vec2 + Prosody)",
+      "accuracy": 0.768,
+      "f1": 0.752,
+      "masked_acc": 0.586,
+      "crisis_recall": 0.835
+    },
+    {
+      "model": "Late Decision Fusion Baseline",
+      "accuracy": 0.815,
+      "f1": 0.808,
+      "masked_acc": 0.64,
+      "crisis_recall": 0.872
+    },
+    {
+      "model": "Sanjeevani Cross-Attention (Ours)",
+      "accuracy": 0.902,
+      "f1": 0.898,
+      "masked_acc": 0.908,
+      "crisis_recall": 0.968
+    }
+  ],
+  "triage_performance": {
+    "level_1_normal_specificity": 0.962,
+    "level_2_support_agreement": 0.925,
+    "level_3_counsellor_recall": 0.946,
+    "level_4_emergency_recall": 0.968
+  }
+}
