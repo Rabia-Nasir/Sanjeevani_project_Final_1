@@ -5,6 +5,12 @@
 
 ---
 
+### 🇮🇳 The Great Indian AI Internship Challenge (Gnani.ai Submission)
+- 📄 **[Read the 1-Page Challenge Pitch Document](GNANI_CHALLENGE_PITCH.md)**
+- 🎙️ **Gnani Prisma v3.0 STT Integration:** [`gnani_prisma_stt.py`](gnani_prisma_stt.py) — Ultra low-latency multilingual speech recognition for Indian vernacular & Hinglish cancer patient audio.
+
+---
+
 ## 🚀 Quick Start (Run Locally in 2 Minutes)
 
 Anyone can clone and run this project immediately on their computer (Windows, macOS, or Linux). All AI models and acoustic feature extractors load automatically on launch.
